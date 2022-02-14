@@ -1,0 +1,28 @@
+.monitorTitle {
+    border: 5px outset white;
+    background-color: lightgray;
+    text-align: center;
+    alignment: center;
+}
+#monitors {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#monitors td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#monitors tr:nth-child(even){background-color: #f2f2f2;}
+
+#monitors tr:hover {background-color: #ddd;}
+
+#monitors th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #114e80;
+    color: white;
+}
