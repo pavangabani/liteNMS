@@ -13,8 +13,7 @@ public class Login extends ActionSupport {
 
     private String username;
     private String password;
-    String status="";
-
+    private String status="";
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
@@ -24,9 +23,12 @@ public class Login extends ActionSupport {
     public void setUsername(String username) {
         this.username = username;
     }
+    public String getStatus() {return status;}
+    public void setStatus(String status) {this.status = status;}
 
     public String login()
     {
+        System.out.println(username+password);
         Database database=new Database();
         Connection connection= database.getCon();
         try {
@@ -36,16 +38,16 @@ public class Login extends ActionSupport {
             ResultSet resultSet=preparedStatement.executeQuery();
 
             if(resultSet.next()){
-                status="SUCCESS";
+                status="SUCCESS1";
             }
             else {
-                status="FAILURE";
+                status="FAILURE1";
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return status;
+        return "LOGIN";
     }
 
 }
