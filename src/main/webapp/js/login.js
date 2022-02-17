@@ -7,8 +7,7 @@ function login(){
         data : "username="+username+"&password="+password,
         success : function(data) {
             alert(data.status);
-            if(data.status == "SUCCESS1"){
-                alert("pavan");
+            if(data.status=="Success"){
                 window.location.replace('welcome.jsp');
             }
         },

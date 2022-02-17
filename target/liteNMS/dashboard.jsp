@@ -1,7 +1,10 @@
 <html>
     <body>
+
     <link rel="stylesheet" href="css/dashboardstyle.css">
+
     <jsp:include page="navigation.jsp" />
+
     <h3>Availability</h3>
     <div class="square">
         <div class="content">
@@ -33,7 +36,7 @@
             </div>
         </div>
     </div><br>
-    <h3>Health</h3><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <h3>Health</h3>
     <div class="square">
         <div class="content">
             <div class="table">

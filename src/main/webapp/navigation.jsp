@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <link rel="stylesheet" href="css/navigationstyle.css">
+
 <nav class="navbar">
     <div class="logo">NMS</div>
     <ul class="nav-links">
