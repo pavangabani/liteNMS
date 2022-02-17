@@ -13,6 +13,16 @@ $(document).ready(function () {
             modal.style.display = "none";
         }
     }
+    $.ajax({
+        type: "GET",
+        url: "MonitorLoad.action",
+        success: function (data) {
+            adddata(data);
+        },
+        error: function (data) {
+            alert("Some error occured.");
+        }
+    });
 })
 
 function showssh() {
@@ -26,6 +36,7 @@ function showssh() {
 
 function add() {
 
+    var modal = document.getElementById("myModal");
     var name = $("#name").val();
     var ip = $("#ip").val();
     var type = $("#type").val();
@@ -41,7 +52,6 @@ function add() {
             url: "AddMonitor.action",
             data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
             success: function (data) {
-                alert(data.status);
                 adddata(data);
             },
             error: function (data) {
@@ -54,7 +64,6 @@ function add() {
             url: "AddMonitor.action",
             data: "name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
             success: function (data) {
-                alert(data.status);
                 adddata(data);
             },
             error: function (data) {
@@ -62,26 +71,26 @@ function add() {
             }
         });
     }
+    modal.style.display = "none";
 }
 
 function adddata(data){
     var tabledata = "";
-    $.forEach(data.monitorList, function () {
-        console.log("monitor print....");
+    $.each(data.monitorList, function () {
         tabledata += "<tr>" +
             "<td>" + this.name + "</td>" +
             "<td>" + this.ip + "</td>" +
             "<td>" + this.type + "</td>" +
             "<td>" + this.tag + "</td>" +
             "<td>" +
-            "<button className='btn'><i className='fa-solid fa-plus'></i></button>" +
-            "<button className='btn'><i className='fa-solid fa-play'></i></button>" +
-            "<button className='btn'><i className='fa-solid fa-pen'></i></button>" +
-            "<button className='btn'><i className='fa-solid fa-trash-can'></i></button>" +
+            "<button className='btn'>Run</button>" +
+            "<button className='btn'>Add</button>" +
+            "<button className='btn'>Edit</button>" +
+            "<button className='btn'>Delete</button>" +
             "</td>" +
             "</tr>";
     });
-    $("monitors").append(tabledata);
+    $("#tablebody").html(tabledata);
 }
 
 function validate(name,ip,type,tag){

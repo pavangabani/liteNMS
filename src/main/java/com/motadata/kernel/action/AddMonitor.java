@@ -2,6 +2,7 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
+import com.opensymphony.xwork2.ModelDriven;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class AddMonitor {
 
     private String password;
 
-    List<MonitorBean> monitorList=new ArrayList<>();
+    List<MonitorBean> monitorList = new ArrayList<>();
 
     private String status;
 
@@ -80,37 +81,47 @@ public class AddMonitor {
         this.password = password;
     }
 
+
     public List<MonitorBean> getMonitorList() {
         return monitorList;
     }
 
     public void setMonitorList(List<MonitorBean> monitorList) {
+
         this.monitorList = monitorList;
     }
 
 
-    public String add(){
+    public String add() {
 
-        Database database=new Database(name,ip,type,tag,username,password);
+        Database database = new Database(name, ip, type, tag, username, password);
 
-        if(type.equals("ping")){
+        if (type.equals("ping")) {
 
-            if(database.addPingMonitor()){
+            if (database.addPingMonitor()) {
 
-                status="Added Ping";
+                status = "Added Ping";
+            }
+        } else {
+
+            if (database.addSshMonitor()) {
+
+                status = "Added SSH";
             }
         }
-        else{
 
-            if(database.addSshMonitor()){
-
-                status="Added SSH";
-            }
-        }
-
-        monitorList= database.getAllMonitor();
+        this.setMonitorList(database.getAllMonitor());
 
         return "ADDED";
+    }
+
+    public String load(){
+
+        Database database=new Database();
+
+        this.setMonitorList(database.getAllMonitor());
+
+        return "LOADED";
     }
 
 }

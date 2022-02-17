@@ -5,7 +5,9 @@
 <link rel="stylesheet" href="css/discoverystyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/discoveryscript.js"></script>
-<script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous"></script>
+
+<script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
+
 
 <jsp:include page="navigation.jsp"/>
 
@@ -21,6 +23,8 @@
         <th>Tag</th>
         <th>Operation</th>
     </tr>
+    <tbody id="tablebody">
+    </tbody>
 </table>
 
 <a href="#" class="float" id="myBtn">
@@ -46,7 +50,7 @@
                 Password: <input id="password" name="password" type="password"><br><br>
             </div>
             Tag: <input id="tag" name="tag" type="text"><br><br>
-            <button type="submit" value="Check" onclick="add()">Add</button>
+            <button type="button" value="Check" onclick="add()">Add</button>
         </form>
     </div>
 </div>

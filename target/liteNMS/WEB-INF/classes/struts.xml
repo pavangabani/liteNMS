@@ -9,5 +9,8 @@
         <action name="AddMonitor" class="com.motadata.kernel.action.AddMonitor" method="add">
             <result name="ADDED" type="json"></result>
         </action>
+        <action name="MonitorLoad" class="com.motadata.kernel.action.AddMonitor" method="load">
+            <result name="LOADED" type="json"></result>
+        </action>
     </package>
 </struts>

@@ -24,6 +24,10 @@ public class Database {
 
     private String password;
 
+    public Database(){
+
+    }
+
     public Database(String name, String ip, String type, String tag) {
 
         this.name = name;
@@ -194,6 +198,8 @@ public class Database {
                 MonitorBean monitorBean = new MonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 
                 monitorList.add(monitorBean);
+
+                monitorBean.display();
 
             }
 
