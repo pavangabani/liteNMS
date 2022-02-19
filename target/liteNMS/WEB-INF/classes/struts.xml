@@ -12,5 +12,14 @@
         <action name="MonitorLoad" class="com.motadata.kernel.action.AddMonitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
+        <action name="Discovery" class="com.motadata.kernel.action.Discovery" method="discovery">
+            <result name="DISCOVER" type="json"></result>
+        </action>
+        <action name="AddPolling" class="com.motadata.kernel.action.AddPolling" method="addPolling">
+            <result name="ADDED" type="json"></result>
+        </action>
+        <action name="PllingMonitorLoad" class="com.motadata.kernel.action.AddPolling" method="load">
+            <result name="LOADED" type="json"></result>
+        </action>
     </package>
 </struts>

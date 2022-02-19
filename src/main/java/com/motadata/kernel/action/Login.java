@@ -1,13 +1,6 @@
 package com.motadata.kernel.action;
-
-
 import com.motadata.kernel.dao.Database;
 import com.opensymphony.xwork2.ActionSupport;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Login extends ActionSupport {
 

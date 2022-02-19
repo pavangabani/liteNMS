@@ -1,6 +1,7 @@
 package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.MonitorBean;
+import com.motadata.kernel.bean.PollingMonitorBean;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -93,6 +94,52 @@ public class Database {
         }
 
     }
+
+    public boolean addPollingMonitor(){
+
+        getConnection();
+
+        int i=0;
+
+        try {
+
+            preparedStatement = connection.prepareStatement("insert into pollingmonitor values(?,?,?,?,?,?)");
+
+            preparedStatement.setString(1, name);
+
+            preparedStatement.setString(2, ip);
+
+            preparedStatement.setString(3, type);
+
+            preparedStatement.setString(4, tag);
+
+            preparedStatement.setString(5, "unknown");
+
+            preparedStatement.setString(6, "unknown");
+
+            i = preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        if(i>0){
+
+            return true;
+
+        }
+
+        else {
+
+            return false;
+
+        }
+
+
+
+    }
     public boolean addPingMonitor() {
 
         getConnection();
@@ -181,6 +228,34 @@ public class Database {
         }
     }
 
+    public List<PollingMonitorBean> getAllPollingMonitor(){
+
+        getConnection();
+
+        List<PollingMonitorBean> pollingmonitorList = new ArrayList<>();
+
+        try {
+
+            preparedStatement = connection.prepareStatement("select * from pollingmonitor");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6));
+
+                pollingmonitorList.add(pollingmonitorBean);
+
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        return pollingmonitorList;
+    }
     public List<MonitorBean> getAllMonitor() {
 
         getConnection();
@@ -198,8 +273,6 @@ public class Database {
                 MonitorBean monitorBean = new MonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 
                 monitorList.add(monitorBean);
-
-                monitorBean.display();
 
             }
 

@@ -14,7 +14,7 @@
             <a href="discovery.jsp" style="text-decoration: none;">Discovery</a>
             <a href="monitor.jsp" style="text-decoration: none;">Monitors</a>
             <a href="dashboard.jsp" style="text-decoration: none;">Dashboard</a>
-            <a href="/" style="text-decoration: none;">Logout</a>
+            <a href="login.jsp" style="text-decoration: none;">Logout</a>
         </div>
     </ul>
 </nav>

@@ -1,0 +1,31 @@
+$(document).ready(function () {
+    $.ajax({
+        type: "GET",
+        url: "PllingMonitorLoad.action",
+        success: function (data) {
+            adddata(data);
+        },
+        error: function (data) {
+            alert("Some error occured.");
+        }
+    });
+})
+
+function adddata(data) {
+    var tabledata = "";
+    $.each(data.pollingMonitorBeanList, function () {
+        tabledata += "<tr>" +
+            "<td>" + this.name + "</td>" +
+            "<td>" + this.ip + "</td>" +
+            "<td>" + this.type + "</td>" +
+            "<td>" + this.tag + "</td>" +
+            "<td>" + this.health + "</td>" +
+            "<td>" + this.availability + "</td>" +
+            "<td>" +
+            "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Show</button>" +
+            "<button onclick='addforpolling(this)' className='btn' style='margin-left: 5px'>Delete</button>" +
+            "</td>" +
+            "</tr>";
+    });
+    $("#tablebody").html(tabledata);
+}
