@@ -3,26 +3,53 @@
 
 <struts>
     <package name="Main" extends="json-default,struts-default">
+
         <action name="Login" class="com.motadata.kernel.action.Login" method="login">
             <result name="LOGIN" type="json"></result>
         </action>
-        <action name="AddMonitor" class="com.motadata.kernel.action.AddMonitor" method="add">
-            <result name="ADDED" type="json"></result>
-        </action>
-        <action name="MonitorLoad" class="com.motadata.kernel.action.AddMonitor" method="load">
+
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <action name="Load" class="com.motadata.kernel.action.Monitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
-        <action name="DeleteMonitor" class="com.motadata.kernel.action.AddMonitor" method="delete">
+        <action name="Add" class="com.motadata.kernel.action.Monitor" method="add">
+            <result name="ADDED" type="json"></result>
+        </action>
+        <action name="Run" class="com.motadata.kernel.action.Monitor" method="run">
+            <result name="RUN" type="json"></result>
+        </action>
+        <action name="AddPolling" class="com.motadata.kernel.action.Monitor" method="addPolling">
+            <result name="ADDED" type="json"></result>
+        </action>
+        <action name="Delete" class="com.motadata.kernel.action.Monitor" method="delete">
             <result name="DELETED" type="json"></result>
         </action>
-        <action name="Discovery" class="com.motadata.kernel.action.Discovery" method="discovery">
-            <result name="DISCOVER" type="json"></result>
-        </action>
-        <action name="AddPolling" class="com.motadata.kernel.action.AddPolling" method="addPolling">
-            <result name="ADDED" type="json"></result>
-        </action>
-        <action name="PllingMonitorLoad" class="com.motadata.kernel.action.AddPolling" method="load">
+
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
+
+
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+        <action name="Welcome" >
+            <result>WEB-INF/welcome.jsp</result>
+        </action>
+        <action name="Discovery" >
+            <result>WEB-INF/discovery.jsp</result>
+        </action>
+        <action name="Monitor" >
+            <result>WEB-INF/monitor.jsp</result>
+        </action>
+        <action name="Dashboard" >
+            <result>WEB-INF/dashboard.jsp</result>
+        </action>
+        <action name="Logout" >
+            <result>login.jsp</result>
+        </action>
+
     </package>
 </struts>

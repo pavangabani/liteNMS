@@ -1,5 +1,6 @@
 <html>
 <body>
+
 <link rel="stylesheet" href="css/dashboardstyle.css">
 
 <jsp:include page="navigation.jsp"/>

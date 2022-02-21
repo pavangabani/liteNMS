@@ -1,44 +1,30 @@
 package com.motadata.kernel.action;
+import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.dao.Database;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
 
-public class Login extends ActionSupport {
+public class Login extends ActionSupport implements ModelDriven {
 
-    private String username;
-
-    private String password;
-
-    private String status;
-
-    public String getPassword() {return password;}
-
-    public void setPassword(String password) {this.password = password;}
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getStatus() {return status;}
-
-    public void setStatus(String status) {this.status = status;}
+    LoginBean loginBean=new LoginBean();
 
     public String login()
     {
-        Database database=new Database(username,password);
+        Database database=new Database();
+
+        database.setUsername(loginBean.getUsername());
+
+        database.setPassword(loginBean.getPassword());
 
         if (database.validateLogin()){
 
-            status="Success";
+            loginBean.setStatus("Success");
 
         }
 
         else{
 
-            status="Failure";
+            loginBean.setStatus("Failure");
 
         }
 
@@ -46,4 +32,10 @@ public class Login extends ActionSupport {
 
     }
 
+    @Override
+    public Object getModel() {
+
+        return loginBean;
+
+    }
 }

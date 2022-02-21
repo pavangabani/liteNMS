@@ -1,6 +1,10 @@
 package com.motadata.kernel.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PollingMonitorBean {
+    private String id;
 
     private String name;
 
@@ -10,24 +14,20 @@ public class PollingMonitorBean {
 
     private String tag;
 
+    private String status;
+
     private String availability;
 
     private String health;
 
-    public PollingMonitorBean(String name, String ip, String type, String tag,String health,String availability){
+    private List<PollingMonitorBean> pollingMonitorBeanList=new ArrayList<>();
 
-        this.name=name;
+    public List<PollingMonitorBean> getPollingMonitorBeanList() {
+        return pollingMonitorBeanList;
+    }
 
-        this.ip=ip;
-
-        this.type=type;
-
-        this.tag=tag;
-
-        this.health=health;
-
-        this.availability=availability;
-
+    public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
+        this.pollingMonitorBeanList = pollingMonitorBeanList;
     }
 
     public String getName() {
@@ -62,6 +62,22 @@ public class PollingMonitorBean {
         this.tag = tag;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getAvailability() {
         return availability;
     }
@@ -76,10 +92,6 @@ public class PollingMonitorBean {
 
     public void setHealth(String health) {
         this.health = health;
-    }
-
-    public void display(){
-        System.out.println(this.name+" "+this.ip+" "+this.type+" "+this.tag);
     }
 
 }

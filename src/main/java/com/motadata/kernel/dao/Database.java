@@ -27,50 +27,63 @@ public class Database {
 
     private String password;
 
-    public Database(){
-
+    public String getId() {
+        return id;
     }
 
-    public Database(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Database(String id,String name, String ip, String type, String tag) {
+    public String getName() {
+        return name;
+    }
 
-        this.id=id;
-
+    public void setName(String name) {
         this.name = name;
+    }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
         this.ip = ip;
+    }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
         this.type = type;
+    }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
-    public Database(String name, String ip, String type, String tag, String password, String username) {
+    public String getUsername() {
+        return username;
+    }
 
-        this.name = name;
-
-        this.ip = ip;
-
-        this.type = type;
-
-        this.tag = tag;
-
+    public void setUsername(String username) {
         this.username = username;
+    }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public Database(String username, String password) {
-
-        this.username = username;
-
-        this.password = password;
-    }
-
-     void getConnection() {
+    void getConnection() {
 
         try {
 
@@ -87,7 +100,7 @@ public class Database {
 
     }
 
-    void closeConnection(){
+    void closeConnection() {
 
         try {
 
@@ -103,11 +116,11 @@ public class Database {
 
     }
 
-    public boolean addPollingMonitor(){
+    public boolean addPollingMonitor() {
 
         getConnection();
 
-        int i=0;
+        int i = 0;
 
         try {
 
@@ -135,34 +148,32 @@ public class Database {
 
         }
 
-        if(i>0){
+        if (i > 0) {
 
             return true;
 
-        }
-
-        else {
+        } else {
 
             return false;
 
         }
 
 
-
     }
-    public boolean deleteMonitor(){
 
-        int test=0;
+    public boolean deleteMonitor() {
+
+        int test = 0;
 
         getConnection();
 
         try {
 
-            preparedStatement=connection.prepareStatement("delete from monitor where id=?");
+            preparedStatement = connection.prepareStatement("delete from monitor where id=?");
 
-            preparedStatement.setString(1,this.id);
+            preparedStatement.setString(1, this.id);
 
-            test=preparedStatement.executeUpdate();
+            test = preparedStatement.executeUpdate();
 
 
         } catch (SQLException e) {
@@ -171,7 +182,7 @@ public class Database {
 
         }
 
-        if(test>0){
+        if (test > 0) {
 
             return true;
 
@@ -182,11 +193,12 @@ public class Database {
         }
 
     }
+
     public boolean addPingMonitor() {
 
         getConnection();
 
-        int i=0;
+        int i = 0;
 
         try {
 
@@ -208,13 +220,11 @@ public class Database {
 
         }
 
-        if(i>0){
+        if (i > 0) {
 
             return true;
 
-        }
-
-        else {
+        } else {
 
             return false;
 
@@ -226,7 +236,7 @@ public class Database {
 
         getConnection();
 
-        int i=0,j=0;
+        int i = 0, j = 0;
 
         try {
 
@@ -257,20 +267,18 @@ public class Database {
             e.printStackTrace();
         }
 
-        if(i>0 && j>0){
+        if (i > 0 && j > 0) {
 
             return true;
 
-        }
-
-        else {
+        } else {
 
             return false;
 
         }
     }
 
-    public List<PollingMonitorBean> getAllPollingMonitor(){
+    public List<PollingMonitorBean> getAllPollingMonitor() {
 
         getConnection();
 
@@ -284,7 +292,19 @@ public class Database {
 
             while (resultSet.next()) {
 
-                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean( resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6),resultSet.getString(7));
+                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
+
+                pollingmonitorBean.setName(resultSet.getString(2));
+
+                pollingmonitorBean.setIp(resultSet.getString(3));
+
+                pollingmonitorBean.setType(resultSet.getString(4));
+
+                pollingmonitorBean.setTag(resultSet.getString(5));
+
+                pollingmonitorBean.setHealth(resultSet.getString(6));
+
+                pollingmonitorBean.setAvailability(resultSet.getString(7));
 
                 pollingmonitorList.add(pollingmonitorBean);
 
@@ -298,6 +318,7 @@ public class Database {
 
         return pollingmonitorList;
     }
+
     public List<MonitorBean> getAllMonitor() {
 
         getConnection();
@@ -312,7 +333,17 @@ public class Database {
 
             while (resultSet.next()) {
 
-                MonitorBean monitorBean = new MonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5));
+                MonitorBean monitorBean = new MonitorBean();
+
+                monitorBean.setId(resultSet.getString(1));
+
+                monitorBean.setName(resultSet.getString(2));
+
+                monitorBean.setIp(resultSet.getString(3));
+
+                monitorBean.setType(resultSet.getString(4));
+
+                monitorBean.setTag(resultSet.getString(5));
 
                 monitorList.add(monitorBean);
 
@@ -327,7 +358,7 @@ public class Database {
         return monitorList;
     }
 
-    public boolean validateLogin(){
+    public boolean validateLogin() {
 
         getConnection();
 
@@ -335,19 +366,17 @@ public class Database {
 
             preparedStatement = connection.prepareStatement("SELECT * FROM login WHERE user=? AND pass=?");
 
-            preparedStatement.setString(1,username);
+            preparedStatement.setString(1, username);
 
-            preparedStatement.setString(2,password);
+            preparedStatement.setString(2, password);
 
-            ResultSet resultSet=preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()){
+            if (resultSet.next()) {
 
                 return true;
 
-            }
-
-            else {
+            } else {
 
                 return false;
 

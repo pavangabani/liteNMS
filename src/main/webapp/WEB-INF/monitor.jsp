@@ -8,7 +8,6 @@
 
         <jsp:include page="navigation.jsp" />
 
-
         <div class="monitorTitle2">
             <h1 style="color: black">Polling Monitors</h1>
         </div><br>

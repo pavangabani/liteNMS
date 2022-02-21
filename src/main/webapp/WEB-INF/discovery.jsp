@@ -1,10 +1,12 @@
 <html>
 <body>
 
-<link rel="stylesheet" href="css/discoverystyle.css">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="js/discovery.js"></script>
 <script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
+<script type="text/javascript" src="js/discovery.js"></script>
+<link rel="stylesheet" href="css/discoverystyle.css">
+
 
 <jsp:include page="navigation.jsp"/>
 
@@ -35,23 +37,34 @@
         <span class="close">&times;</span>
         <h3>Add Monitor</h3>
         <form name="monitor">
-            Name: <input id="name" name="name" type="text"><br><br>
-            IP: <input id="ip" name="ip" type="text"><br><br>
-            Type:
+            <label>Name: </label>
+            <input id="name" name="name" type="text"><br><br>
+
+            <label>IP: </label>
+            <input id="ip" name="ip" type="text"><br><br>
+
+            <label>Type:</label>
             <select name="type" id="type" onchange="showssh()">
                 <option value="ping">Ping</option>
                 <option value="ssh">SSH</option>
             </select><br><br>
+
             <div id="sshdivision" style="display:none;">
-                Username: <input id="username" name="username" type="text">
-                Password: <input id="password" name="password" type="password"><br><br>
+
+                <label>Username:</label>
+                <input id="username" name="username" type="text">
+
+                <label>Password:</label>
+                <input id="password" name="password" type="password"><br><br>
+
             </div>
-            Tag: <input id="tag" name="tag" type="text"><br><br>
+
+            <label>Tag:</label>
+            <input id="tag" name="tag" type="text"><br><br>
             <button type="button" value="Check" onclick="add()">Add</button>
         </form>
     </div>
 </div>
-
 
 
 </body>

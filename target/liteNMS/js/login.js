@@ -8,7 +8,7 @@ function login(){
         success : function(data) {
             alert(data.status);
             if(data.status=="Success"){
-                window.location.replace('welcome.jsp');
+                window.location.replace('Welcome.action');
             }
         },
         error : function(data) {

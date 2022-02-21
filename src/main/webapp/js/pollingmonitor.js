@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $.ajax({
         type: "GET",
-        url: "PllingMonitorLoad.action",
+        url: "LoadPolling.action",
         success: function (data) {
             adddata(data);
         },

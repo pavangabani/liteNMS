@@ -1,5 +1,8 @@
 package com.motadata.kernel.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MonitorBean {
 
     private String id;
@@ -12,17 +15,20 @@ public class MonitorBean {
 
     private String tag;
 
-    public MonitorBean(String id,String name, String ip, String type, String tag){
+    private String username;
 
-        this.id=id;
+    private String password;
 
-        this.name=name;
+    List<MonitorBean> monitorList = new ArrayList<>();
 
-        this.ip=ip;
+    private String status;
 
-        this.type=type;
+    public String getStatus() {
+        return status;
+    }
 
-        this.tag=tag;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getName() {
@@ -57,11 +63,37 @@ public class MonitorBean {
         this.tag = tag;
     }
 
-    public String getId() {return id;}
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public void setId(String id) {
         this.id = id;
     }
 
+    public List<MonitorBean> getMonitorList() {
+        return monitorList;
+    }
+
+    public void setMonitorList(List<MonitorBean> monitorList) {
+
+        this.monitorList = monitorList;
+    }
 
 }

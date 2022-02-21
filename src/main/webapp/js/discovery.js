@@ -1,17 +1,3 @@
-function ajaxpost(request){
-    $.ajax({
-        type:'POST',
-        url: request.url,
-        data: request.data,
-        success: function (data){
-            request.runfunction(data);
-        },
-        error: function (data) {
-            alert("Some error occured.");
-        }
-    });
-}
-
 $(document).ready(function () {
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
@@ -28,14 +14,29 @@ $(document).ready(function () {
         }
     }
     var request={
-      url:"MonitorLoad.action",
-      data:"",
-      runfunction:function (data){
-          adddata(data);
-      },
+        url:"Load.action",
+        data:"",
+        runfunction:function (data){
+            adddata(data);
+        },
     };
     ajaxpost(request);
 })
+
+function ajaxpost(request){
+    $.ajax({
+        type:'POST',
+        url: request.url,
+        data: request.data,
+        success: function (data){
+            request.runfunction(data);
+        },
+        error: function (data) {
+            alert("Some error occured.");
+        }
+    });
+}
+
 
 function showssh() {
     var type = document.monitor.type.value;
@@ -60,7 +61,7 @@ function add() {
 
         if (type == "ssh") {
             var request={
-                url:"AddMonitor.action",
+                url:"Add.action",
                 data:"username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
                 runfunction:function (data){
                     adddata(data);
@@ -69,7 +70,7 @@ function add() {
             ajaxpost(request);
         } else {
             var request={
-                url:"AddMonitor.action",
+                url:"Add.action",
                 data: "name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
                 runfunction:function (data) {
                     adddata(data);
@@ -99,10 +100,13 @@ function adddata(data){
     });
     $("#tablebody").html(tabledata);
 }
-function deletemonitor(id){
+
+function run(that){
+    var ip=$(that).parent().prev().prev().prev().text();
+    var type=$(that).parent().prev().prev().text();
     var request={
-        url:"DeleteMonitor.action",
-        data: "id="+id,
+        url:"Run.action",
+        data: "ip="+ip+"&type="+type,
         runfunction:function (data){
             alert(data.status);
         },
@@ -124,18 +128,23 @@ function addforpolling(that,id){
     };
     ajaxpost(request);
 }
-function run(that){
-    var ip=$(that).parent().prev().prev().prev().text();
-    var type=$(that).parent().prev().prev().text();
+
+function edit(){
+
+}
+
+function deletemonitor(id){
     var request={
-        url:"Discovery.action",
-        data: "ip="+ip+"&type="+type,
+        url:"Delete.action",
+        data: "id="+id,
         runfunction:function (data){
             alert(data.status);
         },
     };
     ajaxpost(request);
+    location.reload();
 }
+
 
 function validate(name,ip,type,tag){
 
