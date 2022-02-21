@@ -8,6 +8,8 @@ import java.util.List;
 
 public class AddPolling {
 
+    private String id;
+
     private String name;
 
     private String ip;
@@ -68,17 +70,26 @@ public class AddPolling {
         this.status = status;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
     public String addPolling(){
 
-        Database database=new Database(name,ip,type,tag);
+        Database database=new Database(id,name,ip,type,tag);
 
         if(database.addPollingMonitor()) {
 
-            status = "monitor added for polling";
+            status = "Monitor added for polling";
 
         }else {
 
-            status = "fails to add";
+            status = "Fails to add";
 
         }
         return "ADDED";

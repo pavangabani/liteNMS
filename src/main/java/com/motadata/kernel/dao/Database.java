@@ -13,6 +13,8 @@ public class Database {
 
     PreparedStatement preparedStatement;
 
+    private String id;
+
     private String name;
 
     private String ip;
@@ -29,7 +31,13 @@ public class Database {
 
     }
 
-    public Database(String name, String ip, String type, String tag) {
+    public Database(String id){
+        this.id=id;
+    }
+
+    public Database(String id,String name, String ip, String type, String tag) {
+
+        this.id=id;
 
         this.name = name;
 
@@ -103,19 +111,21 @@ public class Database {
 
         try {
 
-            preparedStatement = connection.prepareStatement("insert into pollingmonitor values(?,?,?,?,?,?)");
+            preparedStatement = connection.prepareStatement("insert into pollingmonitor  values(?,?,?,?,?,?,?)");
 
-            preparedStatement.setString(1, name);
+            preparedStatement.setString(1, id);
 
-            preparedStatement.setString(2, ip);
+            preparedStatement.setString(2, name);
 
-            preparedStatement.setString(3, type);
+            preparedStatement.setString(3, ip);
 
-            preparedStatement.setString(4, tag);
+            preparedStatement.setString(4, type);
 
-            preparedStatement.setString(5, "unknown");
+            preparedStatement.setString(5, tag);
 
             preparedStatement.setString(6, "unknown");
+
+            preparedStatement.setString(7, "unknown");
 
             i = preparedStatement.executeUpdate();
 
@@ -140,6 +150,38 @@ public class Database {
 
 
     }
+    public boolean deleteMonitor(){
+
+        int test=0;
+
+        getConnection();
+
+        try {
+
+            preparedStatement=connection.prepareStatement("delete from monitor where id=?");
+
+            preparedStatement.setString(1,this.id);
+
+            test=preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        if(test>0){
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
     public boolean addPingMonitor() {
 
         getConnection();
@@ -148,7 +190,7 @@ public class Database {
 
         try {
 
-            preparedStatement = connection.prepareStatement("insert into monitor values(?,?,?,?)");
+            preparedStatement = connection.prepareStatement("insert into monitor (name,ip,type,tag) values(?,?,?,?)");
 
             preparedStatement.setString(1, name);
 
@@ -188,7 +230,7 @@ public class Database {
 
         try {
 
-            preparedStatement = connection.prepareStatement("insert into monitor values(?,?,?,?)");
+            preparedStatement = connection.prepareStatement("insert into monitor (name,ip,type,tag)  values(?,?,?,?)");
 
             preparedStatement.setString(1, name);
 
@@ -242,7 +284,7 @@ public class Database {
 
             while (resultSet.next()) {
 
-                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6));
+                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean( resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5),resultSet.getString(6),resultSet.getString(7));
 
                 pollingmonitorList.add(pollingmonitorBean);
 
@@ -270,7 +312,7 @@ public class Database {
 
             while (resultSet.next()) {
 
-                MonitorBean monitorBean = new MonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+                MonitorBean monitorBean = new MonitorBean(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),resultSet.getString(5));
 
                 monitorList.add(monitorBean);
 
@@ -308,7 +350,6 @@ public class Database {
             else {
 
                 return false;
-
 
             }
 

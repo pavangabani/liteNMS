@@ -1,5 +1,6 @@
 package com.motadata.kernel.action;
 
+import com.motadata.kernel.bean.AddMonitorBean;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
 import com.opensymphony.xwork2.ModelDriven;
@@ -7,110 +8,29 @@ import com.opensymphony.xwork2.ModelDriven;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddMonitor {
+public class AddMonitor implements ModelDriven {
 
-    private String name;
-
-    private String ip;
-
-    private String type;
-
-    private String tag;
-
-    private String username;
-
-    private String password;
-
-    List<MonitorBean> monitorList = new ArrayList<>();
-
-    private String status;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public List<MonitorBean> getMonitorList() {
-        return monitorList;
-    }
-
-    public void setMonitorList(List<MonitorBean> monitorList) {
-
-        this.monitorList = monitorList;
-    }
-
+    AddMonitorBean addMonitorBean=new AddMonitorBean();
 
     public String add() {
 
-        Database database = new Database(name, ip, type, tag, username, password);
+        Database database = new Database(addMonitorBean.getName(), addMonitorBean.getIp(), addMonitorBean.getType(), addMonitorBean.getTag(),addMonitorBean.getUsername(), addMonitorBean.getPassword());
 
-        if (type.equals("ping")) {
+        if (addMonitorBean.getType().equals("ping")) {
 
             if (database.addPingMonitor()) {
 
-                status = "Added Ping";
+                addMonitorBean.setStatus("Added Ping");
             }
         } else {
 
             if (database.addSshMonitor()) {
 
-                status = "Added SSH";
+                addMonitorBean.setStatus("Added SSH");
             }
         }
 
-        this.setMonitorList(database.getAllMonitor());
+        addMonitorBean.setMonitorList(database.getAllMonitor());
 
         return "ADDED";
     }
@@ -119,9 +39,31 @@ public class AddMonitor {
 
         Database database=new Database();
 
-        this.setMonitorList(database.getAllMonitor());
+       addMonitorBean.setMonitorList(database.getAllMonitor());
 
         return "LOADED";
     }
 
+    public String delete(){
+
+        Database database=new Database(addMonitorBean.getId());
+
+        if(database.deleteMonitor()){
+
+            addMonitorBean.setStatus("Monitor Deleted");
+
+        }
+        else {
+
+            addMonitorBean.setStatus("Could not Delete");
+
+        }
+
+        return "DELETED";
+    }
+
+    @Override
+    public Object getModel() {
+        return addMonitorBean;
+    }
 }

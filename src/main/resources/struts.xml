@@ -12,6 +12,9 @@
         <action name="MonitorLoad" class="com.motadata.kernel.action.AddMonitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
+        <action name="DeleteMonitor" class="com.motadata.kernel.action.AddMonitor" method="delete">
+            <result name="DELETED" type="json"></result>
+        </action>
         <action name="Discovery" class="com.motadata.kernel.action.Discovery" method="discovery">
             <result name="DISCOVER" type="json"></result>
         </action>

@@ -2,6 +2,8 @@ package com.motadata.kernel.bean;
 
 public class MonitorBean {
 
+    private String id;
+
     private String name;
 
     private String ip;
@@ -10,7 +12,9 @@ public class MonitorBean {
 
     private String tag;
 
-    public MonitorBean(String name, String ip, String type, String tag){
+    public MonitorBean(String id,String name, String ip, String type, String tag){
+
+        this.id=id;
 
         this.name=name;
 
@@ -53,8 +57,11 @@ public class MonitorBean {
         this.tag = tag;
     }
 
-    public void display(){
-        System.out.println(this.name+" "+this.ip+" "+this.type+" "+this.tag);
+    public String getId() {return id;}
+
+    public void setId(String id) {
+        this.id = id;
     }
+
 
 }
