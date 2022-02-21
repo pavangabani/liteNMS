@@ -1,3 +1,17 @@
+function ajaxpost(request){
+    $.ajax({
+        type:'POST',
+        url: request.url,
+        data: request.data,
+        success: function (data){
+            request.runfunction(data);
+        },
+        error: function (data) {
+            alert("Some error occured.");
+        }
+    });
+}
+
 $(document).ready(function () {
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
@@ -13,16 +27,14 @@ $(document).ready(function () {
             modal.style.display = "none";
         }
     }
-    $.ajax({
-        type: "GET",
-        url: "MonitorLoad.action",
-        success: function (data) {
-            adddata(data);
-        },
-        error: function (data) {
-            alert("Some error occured.");
-        }
-    });
+    var request={
+      url:"MonitorLoad.action",
+      data:"",
+      runfunction:function (data){
+          adddata(data);
+      },
+    };
+    ajaxpost(request);
 })
 
 function showssh() {
@@ -47,29 +59,23 @@ function add() {
     if(validate(name,ip,type,tag)){
 
         if (type == "ssh") {
-            $.ajax({
-                type: "GET",
-                url: "AddMonitor.action",
-                data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                success: function (data) {
+            var request={
+                url:"AddMonitor.action",
+                data:"username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
+                runfunction:function (data){
                     adddata(data);
                 },
-                error: function (data) {
-                    alert("Some error occured.");
-                }
-            });
+            };
+            ajaxpost(request);
         } else {
-            $.ajax({
-                type: "GET",
-                url: "AddMonitor.action",
+            var request={
+                url:"AddMonitor.action",
                 data: "name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                success: function (data) {
+                runfunction:function (data) {
                     adddata(data);
                 },
-                error: function (data) {
-                    alert("Some error occured.");
-                }
-            });
+            };
+            ajaxpost(request);
         }
     }
     modal.style.display = "none";
@@ -85,47 +91,50 @@ function adddata(data){
             "<td>" + this.tag + "</td>" +
             "<td>" +
             "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Run</button>" +
-            "<button onclick='addforpolling(this)' className='btn' style='margin-left: 5px'>Add</button>" +
-            "<button onclick='edit(this)' className='btn' style='margin-left: 5px'>Edit</button>" +
-            "<button onclick='deletemonitor(this)' className='btn' style='margin-left: 5px'>Delete</button>" +
+            "<button onclick='addforpolling(this,"+this.id+")' className='btn' style='margin-left: 5px'>Add</button>" +
+            "<button onclick='edit("+this+")' className='btn' style='margin-left: 5px'>Edit</button>" +
+            "<button onclick='deletemonitor("+this.id+")' className='btn' style='margin-left: 5px'>Delete</button>" +
             "</td>" +
             "</tr>";
     });
     $("#tablebody").html(tabledata);
 }
+function deletemonitor(id){
+    var request={
+        url:"DeleteMonitor.action",
+        data: "id="+id,
+        runfunction:function (data){
+            alert(data.status);
+        },
+    };
+    ajaxpost(request);
+}
 
-function addforpolling(that){
+function addforpolling(that,id){
     var name=$(that).parent().prev().prev().prev().prev().text();
     var ip=$(that).parent().prev().prev().prev().text();
     var type=$(that).parent().prev().prev().text();
     var tag=$(that).parent().prev().text();
-    $.ajax({
-        type:'POST',
-        url: 'AddPolling.action',
-        data: "name="+name+"&ip="+ip+"&type="+type+"&tag="+tag,
-        success: function (data){
+    var request={
+        url:"AddPolling.action",
+        data: "id="+id+"&name="+name+"&ip="+ip+"&type="+type+"&tag="+tag,
+        runfunction:function (data){
             alert(data.status);
         },
-        error: function (data) {
-            alert("Some error occured.");
-        }
-    });
-
+    };
+    ajaxpost(request);
 }
 function run(that){
     var ip=$(that).parent().prev().prev().prev().text();
     var type=$(that).parent().prev().prev().text();
-    $.ajax({
-        type:'POST',
-        url: 'Discovery.action',
+    var request={
+        url:"Discovery.action",
         data: "ip="+ip+"&type="+type,
-        success: function (data){
+        runfunction:function (data){
             alert(data.status);
         },
-        error: function (data) {
-            alert("Some error occured.");
-        }
-    });
+    };
+    ajaxpost(request);
 }
 
 function validate(name,ip,type,tag){
