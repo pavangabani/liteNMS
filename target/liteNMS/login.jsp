@@ -18,7 +18,7 @@
         <button class="btn" type="submit" onclick="login()">Log in</button>
     </div>
 </form>
-
+<%--<div id="loading" style="visibility: hidden"></div>--%>
 </body>
 
 </html>

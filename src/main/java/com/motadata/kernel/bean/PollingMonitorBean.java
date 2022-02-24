@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PollingMonitorBean {
+
     private String id;
 
     private String name;
@@ -21,14 +22,6 @@ public class PollingMonitorBean {
     private String health;
 
     private List<PollingMonitorBean> pollingMonitorBeanList=new ArrayList<>();
-
-    public List<PollingMonitorBean> getPollingMonitorBeanList() {
-        return pollingMonitorBeanList;
-    }
-
-    public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
-        this.pollingMonitorBeanList = pollingMonitorBeanList;
-    }
 
     public String getName() {
         return name;
@@ -92,6 +85,14 @@ public class PollingMonitorBean {
 
     public void setHealth(String health) {
         this.health = health;
+    }
+
+    public List<PollingMonitorBean> getPollingMonitorBeanList() {
+        return pollingMonitorBeanList;
+    }
+
+    public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
+        this.pollingMonitorBeanList = pollingMonitorBeanList;
     }
 
 }

@@ -19,9 +19,9 @@ public class MonitorBean {
 
     private String password;
 
-    List<MonitorBean> monitorList = new ArrayList<>();
-
     private String status;
+
+    List<MonitorBean> monitorList = new ArrayList<>();
 
     public String getStatus() {
         return status;

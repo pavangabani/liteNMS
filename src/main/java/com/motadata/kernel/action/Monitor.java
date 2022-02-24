@@ -59,17 +59,15 @@ public class Monitor implements ModelDriven {
 
         Discover discover=new Discover();
 
-        if(monitorBean.getType().equals("ping")){
+        if(discover.discovery(monitorBean.getIp(),monitorBean.getType())) {
 
-            monitorBean.setStatus(discover.ping(monitorBean.getIp()));
+            monitorBean.setStatus("Discovery Successful!");
+
+        }else {
+
+            monitorBean.setStatus("Discovery Fails!");
 
         }
-        else {
-
-            monitorBean.setStatus(discover.ssh());
-
-        }
-
         return "RUN";
 
     }

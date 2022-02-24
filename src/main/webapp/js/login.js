@@ -1,4 +1,5 @@
 function login(){
+    // $("#loading").show();
     var username=$("#username").val();
     var password=$("#password").val();
     $.ajax({
@@ -8,7 +9,7 @@ function login(){
         success : function(data) {
             alert(data.status);
             if(data.status=="Success"){
-                window.location.replace('Welcome.action');
+                window.location.replace('Discovery.action');
             }
         },
         error : function(data) {

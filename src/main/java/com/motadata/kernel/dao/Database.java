@@ -87,9 +87,9 @@ public class Database {
 
         try {
 
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:5000/liteNMS", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
 
         } catch (ClassNotFoundException | SQLException e) {
 
@@ -391,4 +391,30 @@ public class Database {
         return false;
     }
 
+    void getCredential(String ip){
+
+        getConnection();
+
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM credential where ip=?");
+
+            preparedStatement.setString(1,ip);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+
+                this.setUsername(resultSet.getString(2));
+
+                this.setPassword(resultSet.getString(3));
+
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
 }
