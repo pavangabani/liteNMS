@@ -23,12 +23,12 @@ public class MonitorBean {
 
     List<MonitorBean> monitorList = new ArrayList<>();
 
-    public String getStatus() {
-        return status;
+    public String getId() {
+        return id;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -79,12 +79,12 @@ public class MonitorBean {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public String getStatus() {
+        return status;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<MonitorBean> getMonitorList() {
@@ -92,8 +92,9 @@ public class MonitorBean {
     }
 
     public void setMonitorList(List<MonitorBean> monitorList) {
-
         this.monitorList = monitorList;
     }
+
+
 
 }

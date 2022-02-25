@@ -2,8 +2,9 @@
 <body>
 
 <link rel="stylesheet" href="css/loginstyle.css">
-<script src="js/login.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="js/login.js"></script>
+
 
 <div id="bg"></div>
 
@@ -15,7 +16,7 @@
         <input name="password" id="password" type="password" placeholder="Password" required/>
     </div>
     <div class="form-field">
-        <button class="btn" type="submit" onclick="login()">Log in</button>
+        <button class="btn"  id="loginsubmit">Log in</button>
     </div>
 </form>
 <%--<div id="loading" style="visibility: hidden"></div>--%>

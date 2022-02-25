@@ -23,6 +23,14 @@ public class PollingMonitorBean {
 
     private List<PollingMonitorBean> pollingMonitorBeanList=new ArrayList<>();
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -63,14 +71,6 @@ public class PollingMonitorBean {
         this.status = status;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getAvailability() {
         return availability;
     }
@@ -94,5 +94,6 @@ public class PollingMonitorBean {
     public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
         this.pollingMonitorBeanList = pollingMonitorBeanList;
     }
+
 
 }

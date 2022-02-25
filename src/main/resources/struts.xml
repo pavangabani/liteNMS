@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE struts PUBLIC        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<!DOCTYPE struts PUBLIC        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
     <package name="Main" extends="json-default,struts-default">
@@ -8,7 +9,7 @@
             <result name="LOGIN" type="json"></result>
         </action>
 
-<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="Load" class="com.motadata.kernel.action.Monitor" method="load">
             <result name="LOADED" type="json"></result>
@@ -26,28 +27,31 @@
             <result name="DELETED" type="json"></result>
         </action>
 
-<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
 
 
-<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="Welcome" >
+        <action name="Welcome">
             <result>WEB-INF/welcome.jsp</result>
         </action>
-        <action name="Discovery" >
+        <action name="Discovery">
             <result>WEB-INF/discovery.jsp</result>
         </action>
-        <action name="Monitor" >
+        <action name="Monitor">
             <result>WEB-INF/monitor.jsp</result>
         </action>
-        <action name="Dashboard" >
+        <action name="Dashboard">
             <result>WEB-INF/dashboard.jsp</result>
         </action>
-        <action name="Logout" >
+        <action name="Logout">
+            <result>login.jsp</result>
+        </action>
+        <action name="LoginFail">
             <result>login.jsp</result>
         </action>
 
