@@ -4,40 +4,19 @@ import java.util.ArrayList;
 
 public class Database {
 
-    Connection connection;
+    ConnectionPool connectionPool;
 
     PreparedStatement preparedStatement;
 
     public Database(){
 
-        try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-        } catch (ClassNotFoundException e) {
-
-            e.printStackTrace();
-
-        }
-    }
-
-    void getConnection() {
-
-        try {
-
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
-
-        } catch(SQLException e){
-
-            e.printStackTrace();
-
-        }
-
+        connectionPool =new ConnectionPool();
 
     }
+
     public ResultSet select(String tableName, ArrayList attributes, ArrayList values) {
 
-        getConnection();
+        Connection connection=connectionPool.getConnection();
 
         ResultSet resultSet;
 
@@ -86,7 +65,7 @@ public class Database {
 
     int delete(String tableName,ArrayList attributes,ArrayList values)  {
 
-        getConnection();
+        Connection connection=connectionPool.getConnection();
 
         int affectedRaw=0;
 
@@ -127,6 +106,20 @@ public class Database {
             e.printStackTrace();
 
         }
+        finally {
+
+            try {
+
+                connectionPool.releaseConnection(connection);
+
+                preparedStatement.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            }
+        }
 
         return affectedRaw;
 
@@ -134,7 +127,7 @@ public class Database {
 
     int insert(String tableName,ArrayList attributes,ArrayList values) {
 
-        getConnection();
+        Connection connection= connectionPool.getConnection();
 
         int affectedRaw=0;
 
@@ -194,24 +187,23 @@ public class Database {
             e.printStackTrace();
 
         }
+        finally {
+
+            try {
+
+                connectionPool.releaseConnection(connection);
+
+                preparedStatement.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            }
+        }
 
         return affectedRaw;
     }
 
-    void closeConnection() {
-
-        try {
-
-            connection.close();
-
-            preparedStatement.close();
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
 
 }
