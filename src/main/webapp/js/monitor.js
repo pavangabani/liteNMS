@@ -1,18 +1,15 @@
 $(document).ready(function () {
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+
+    $("#myBtn").on("click",function(){
+        $("#myModal").show();
+    });
+    $("#close").click(function(){
+        $("#myModal").hide();
+    });
+    $("#close2").click(function(){
+        $("#myModalUpdate").hide();
+    });
+
     var request={
         url:"Load.action",
         data:"",
@@ -39,17 +36,18 @@ function ajaxpost(request){
 
 
 function showssh() {
-    var type = document.monitor.type.value;
-    if (type == "ssh") {
-        document.getElementById("sshdivision").style.display = "block";
+    if (($("#type").val() == "ssh") || ($("#updatetype").val() == "ssh")) {
+        $("#sshdivision").show();
+        $("#updatesshdivision").show();
+
     } else {
-        document.getElementById("sshdivision").style.display = "none";
+        $("#sshdivision").hide();
+        $("#updatesshdivision").hide();
     }
 }
 
 function add() {
 
-    var modal = document.getElementById("myModal");
     var name = $("#name").val();
     var ip = $("#ip").val();
     var type = $("#type").val();
@@ -79,7 +77,7 @@ function add() {
             ajaxpost(request);
         }
     }
-    modal.style.display = "none";
+    $("#myModal").hide();
 }
 
 function adddata(data){
@@ -93,7 +91,7 @@ function adddata(data){
             "<td>" +
             "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Run</button>" +
             "<button onclick='addforpolling(this,"+this.id+")' className='btn' style='margin-left: 5px'>Add</button>" +
-            "<button onclick='edit("+this+")' className='btn' style='margin-left: 5px'>Edit</button>" +
+            "<button onclick='edit(this)' className='btn' style='margin-left: 5px'>Edit</button>" +
             "<button onclick='deletemonitor("+this.id+")' className='btn' style='margin-left: 5px'>Delete</button>" +
             "</td>" +
             "</tr>";
@@ -129,8 +127,28 @@ function addforpolling(that,id){
     ajaxpost(request);
 }
 
-function edit(){
+function edit(that){
 
+    $("#myModalUpdate").show();
+
+
+    var name=$(that).parent().prev().prev().prev().prev().text();
+    var ip=$(that).parent().prev().prev().prev().text();
+    var type=$(that).parent().prev().prev().text();
+    var tag=$(that).parent().prev().text();
+    var index=$(that).parent().parent().index();
+
+
+    $("#rawid").val(index);
+    $("#updateip").val(ip);
+    $("#updatename").val(name);
+    $("#updatetype").val(type);
+    $("#updatetag").val(tag);
+
+}
+
+function update(){
+    var updatedname;
 }
 
 function deletemonitor(id){

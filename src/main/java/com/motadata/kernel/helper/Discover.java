@@ -28,7 +28,6 @@ public class Discover {
 
     }
 
-
     public boolean discovery(String ip,String type){
 
         boolean test=false;

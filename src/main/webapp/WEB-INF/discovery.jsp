@@ -11,7 +11,7 @@
 <jsp:include page="navigation.jsp"/>
 
 <div class="monitorTitle">
-    <h1 style="color: black">Monitors</h1>
+    <h1 style="color: black">Discovery</h1>
 </div>
 
 <table id="monitors">
@@ -34,7 +34,7 @@
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span id="close">&times;</span>
         <h3>Add Monitor</h3>
         <form name="monitor">
             <label>Name: </label>
@@ -62,6 +62,44 @@
             <label>Tag:</label>
             <input id="tag" name="tag" type="text"><br><br>
             <button type="button" value="Check" onclick="add()">Add</button>
+        </form>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="myModalUpdate" class="modal" >
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span id="close2">&times;</span>
+        <h3>Add Monitor</h3>
+        <form name="monitor">
+            <label>Name: </label>
+            <input id="updatename" name="name" type="text"><br><br>
+
+            <label>IP: </label>
+            <input id="updateip" name="ip" type="text"><br><br>
+
+            <label>Type:</label>
+            <select name="type" id="updatetype" onchange="showssh()">
+                <option value="ping">Ping</option>
+                <option value="ssh">SSH</option>
+            </select><br><br>
+
+            <div id="updatesshdivision" style="display:none;">
+
+                <label>Username:</label>
+                <input id="updateusername" name="username" type="text">
+
+                <label>Password:</label>
+                <input id="updatepassword" name="password" type="password"><br><br>
+
+            </div>
+
+            <label>Tag:</label>
+            <input id="updatetag" name="tag" type="text"><br><br>
+
+            <p style="visibility: hidden" id="rawid"></p>
+            <button type="button" value="Check" onclick="update()">Update</button>
         </form>
     </div>
 </div>

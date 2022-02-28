@@ -4,7 +4,6 @@ import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.dao.PollingMonitorDao;
 import com.opensymphony.xwork2.ModelDriven;
 
-
 public class PollingMonitor implements ModelDriven {
 
     PollingMonitorBean pollingMonitorBean=new PollingMonitorBean();

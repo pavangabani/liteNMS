@@ -19,8 +19,6 @@ public class PollingMonitorBean {
 
     private String availability;
 
-    private String health;
-
     private List<PollingMonitorBean> pollingMonitorBeanList=new ArrayList<>();
 
     public String getId() {
@@ -77,14 +75,6 @@ public class PollingMonitorBean {
 
     public void setAvailability(String availability) {
         this.availability = availability;
-    }
-
-    public String getHealth() {
-        return health;
-    }
-
-    public void setHealth(String health) {
-        this.health = health;
     }
 
     public List<PollingMonitorBean> getPollingMonitorBeanList() {

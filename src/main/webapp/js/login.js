@@ -15,7 +15,7 @@ function login(){
         success: function(data){
             alert(data.status);
             if(data.status=="Success"){
-                window.location.replace('Discovery.action');
+                window.location.replace('Dashboard.action');
             }
             else {
                 window.location.replace('LoginFail.action');

@@ -37,9 +37,7 @@ public class GetData {
 
                 pollingmonitorBean.setTag(resultSet.getString(5));
 
-                pollingmonitorBean.setHealth(resultSet.getString(6));
-
-                pollingmonitorBean.setAvailability(resultSet.getString(7));
+                pollingmonitorBean.setAvailability(resultSet.getString(6));
 
                 pollingmonitorList.add(pollingmonitorBean);
 

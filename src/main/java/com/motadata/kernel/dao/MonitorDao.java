@@ -56,11 +56,11 @@ public class MonitorDao {
 
             ArrayList attributes2=new ArrayList();
 
-            attributes.add("ip");
+            attributes2.add("ip");
 
-            attributes.add("username");
+            attributes2.add("username");
 
-            attributes.add("password");
+            attributes2.add("password");
 
             ArrayList values2=new ArrayList();
 
@@ -114,8 +114,6 @@ public class MonitorDao {
 
         attributes.add("tag");
 
-        attributes.add("health");
-
         attributes.add("availability");
 
         ArrayList values=new ArrayList();
@@ -129,8 +127,6 @@ public class MonitorDao {
         values.add(monitorBean.getType());
 
         values.add(monitorBean.getTag());
-
-        values.add("unknown");
 
         values.add("unknown");
 
