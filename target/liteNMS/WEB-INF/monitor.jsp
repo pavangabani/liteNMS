@@ -9,7 +9,7 @@
         <jsp:include page="navigation.jsp" />
 
         <div class="monitorTitle2">
-            <h1 style="color: black">Polling Monitors</h1>
+            <h1 style="color: black">Monitors</h1>
         </div><br>
 
         <table id="monitors">
@@ -18,7 +18,6 @@
                 <th>IP</th>
                 <th>Type</th>
                 <th>Tag</th>
-                <th>Health</th>
                 <th>Availability</th>
                 <th>Operation</th>
             </tr>

@@ -19,7 +19,6 @@ function adddata(data) {
             "<td>" + this.ip + "</td>" +
             "<td>" + this.type + "</td>" +
             "<td>" + this.tag + "</td>" +
-            "<td>" + this.health + "</td>" +
             "<td>" + this.availability + "</td>" +
             "<td>" +
             "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Show</button>" +

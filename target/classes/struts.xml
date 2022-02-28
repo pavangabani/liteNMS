@@ -23,6 +23,9 @@
         <action name="AddPolling" class="com.motadata.kernel.action.Monitor" method="addPolling">
             <result name="ADDED" type="json"></result>
         </action>
+        <action name="Edit" class="com.motadata.kernel.action.Monitor" method="edit">
+            <result name="EDITED" type="json"></result>
+        </action>
         <action name="Delete" class="com.motadata.kernel.action.Monitor" method="delete">
             <result name="DELETED" type="json"></result>
         </action>
