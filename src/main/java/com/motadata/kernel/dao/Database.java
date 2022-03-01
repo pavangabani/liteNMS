@@ -232,7 +232,13 @@ public class Database {
 
         for(int i=0;i<length;i++){
 
-            attributesString += attributes.get(i)+"=? ";
+            if(i==(length-1)){
+                attributesString += attributes.get(i)+"=? ";
+            }
+            else {
+                attributesString += attributes.get(i)+"=?, ";
+            }
+
 
         }
 
@@ -299,9 +305,8 @@ public class Database {
 
                 connectionPool.releaseConnection(connection);
 
-                preparedStatement.close();
 
-            } catch (SQLException e) {
+            } catch (Exception e) {
 
                 e.printStackTrace();
 

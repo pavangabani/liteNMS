@@ -4,6 +4,8 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.helper.Discover;
 import com.motadata.kernel.helper.GetData;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MonitorDao {
@@ -141,6 +143,132 @@ public class MonitorDao {
             monitorBean.setStatus("Fails to add");
 
         }
+
+    }
+
+    public void edit(MonitorBean monitorBean){
+
+        Database database = new Database();
+
+        GetData getData=new GetData();
+
+        ArrayList attributes=new ArrayList();
+
+        attributes.add("name");
+
+        attributes.add("ip");
+
+        attributes.add("type");
+
+        attributes.add("tag");
+
+        ArrayList values=new ArrayList();
+
+        values.add(monitorBean.getName());
+
+        values.add(monitorBean.getIp());
+
+        values.add(monitorBean.getType());
+
+        values.add(monitorBean.getTag());
+
+        ArrayList conditionAttributes=new ArrayList();
+
+        conditionAttributes.add("id");
+
+        ArrayList conditionValues=new ArrayList();
+
+        conditionValues.add(monitorBean.getId());
+
+        int affectedRawPing=database.update("monitor",attributes,values,conditionAttributes,conditionValues);
+
+        if (monitorBean.getType().equals("ping")) {
+
+            if (affectedRawPing > 0) {
+
+                monitorBean.setStatus("Updated Ping");
+
+            }
+
+        } else {
+
+            ArrayList attributeCheck=new ArrayList();
+
+            attributeCheck.add("ip");
+
+            ArrayList valuesCheck=new ArrayList();
+
+            valuesCheck.add(monitorBean.getIp());
+
+            ResultSet resultSet=database.select("credential",attributeCheck,valuesCheck);
+
+            try {
+
+                if(resultSet.next()){
+
+                    ArrayList attributes2=new ArrayList();
+
+                    attributes2.add("username");
+
+                    attributes2.add("password");
+
+                    ArrayList values2=new ArrayList();
+
+                    values2.add(monitorBean.getUsername());
+
+                    values2.add(monitorBean.getPassword());
+
+                    ArrayList conditionAttributes2=new ArrayList<>();
+
+                    conditionAttributes2.add("ip");
+
+                    ArrayList conditionValues2=new ArrayList<>();
+
+                    conditionValues2.add(monitorBean.getIp());
+
+                    int affectedRawSsh=database.update("credential",attributes2,values2,conditionAttributes2,conditionValues2);
+
+                    if (affectedRawPing > 0 && affectedRawSsh > 0) {
+
+                        monitorBean.setStatus("Updates SSH");
+
+                    }
+                }
+                else {
+
+                    ArrayList attributes2=new ArrayList();
+
+                    attributes2.add("ip");
+
+                    attributes2.add("username");
+
+                    attributes2.add("password");
+
+                    ArrayList values2=new ArrayList();
+
+                    values2.add(monitorBean.getIp());
+
+                    values2.add(monitorBean.getUsername());
+
+                    values2.add(monitorBean.getPassword());
+
+                    int affectedRawSsh=database.insert("credential",attributes2,values2);
+
+                    if (affectedRawPing > 0 && affectedRawSsh > 0) {
+
+                        monitorBean.setStatus("Updated SSH");
+
+                    }
+
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        monitorBean.setMonitorList(getData.getAllMonitor());
 
     }
 

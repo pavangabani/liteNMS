@@ -21,8 +21,8 @@ function adddata(data) {
             "<td>" + this.tag + "</td>" +
             "<td>" + this.availability + "</td>" +
             "<td>" +
-            "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Show</button>" +
-            "<button onclick='addforpolling(this)' className='btn' style='margin-left: 5px'>Delete</button>" +
+            "<button onclick='show(this)' className='btn' style='margin-left: 5px'>Show</button>" +
+            "<button onclick='delete(this)' className='btn' style='margin-left: 5px'>Delete</button>" +
             "</td>" +
             "</tr>";
     });

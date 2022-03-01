@@ -67,6 +67,7 @@
             </div>
             <input id="updatetag" name="tag" type="text" placeholder="Tag"><br>
             <button type="button" value="Check" onclick="update()">Update</button>
+            <p id="rawid" style="visibility: hidden"></p>
         </form>
     </div>
 </div>

@@ -10,8 +10,7 @@ public class Login implements ModelDriven {
 
     LoginDao loginDao=new LoginDao();
 
-    public String login()
-    {
+    public String login() {
 
         loginDao.login(loginBean);
 

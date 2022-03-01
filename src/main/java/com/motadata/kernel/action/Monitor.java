@@ -32,6 +32,14 @@ public class Monitor implements ModelDriven {
 
     }
 
+    public String edit(){
+
+        monitorDao.edit(monitorBean);
+
+        return "EDITED";
+
+    }
+
     public String addPolling(){
 
         monitorDao.addPolling(monitorBean);
@@ -46,7 +54,6 @@ public class Monitor implements ModelDriven {
 
         return "DELETED";
     }
-
 
     @Override
     public Object getModel() {
