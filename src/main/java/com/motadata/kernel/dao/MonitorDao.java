@@ -130,9 +130,9 @@ public class MonitorDao {
 
         values.add("unknown");
 
-        int test= database.insert("pollingmonitor",attributes,values);
+        int affectedRaw= database.insert("pollingmonitor",attributes,values);
 
-        if (test > 0) {
+        if (affectedRaw > 0) {
 
             monitorBean.setStatus("Monitor added for polling");
 
@@ -156,9 +156,9 @@ public class MonitorDao {
 
         values.add(monitorBean.getId());
 
-        int test=database.delete("monitor",attributes,values);
+        int affectedRaw=database.delete("monitor",attributes,values);
 
-        if (test > 0) {
+        if (affectedRaw > 0) {
 
             monitorBean.setStatus("Monitor Deleted");
 

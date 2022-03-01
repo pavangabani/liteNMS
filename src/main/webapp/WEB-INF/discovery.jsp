@@ -1,12 +1,11 @@
 <html>
 <body>
 
+<link rel="stylesheet" href="css/discoverystyle.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
-<script type="text/javascript" src="js/monitor.js"></script>
-<link rel="stylesheet" href="css/discoverystyle.css">
-
+<script type="text/javascript" src="js/discovery.js"></script>
 
 <jsp:include page="navigation.jsp"/>
 
@@ -30,81 +29,47 @@
     <i class="fa fa-plus my-float"></i>
 </a>
 
-<!-- The Modal -->
 <div id="myModal" class="modal">
-    <!-- Modal content -->
     <div class="modal-content">
         <span id="close">&times;</span>
         <h3>Add Monitor</h3>
         <form name="monitor">
-            <label>Name: </label>
-            <input id="name" name="name" type="text"><br><br>
-
-            <label>IP: </label>
-            <input id="ip" name="ip" type="text"><br><br>
-
-            <label>Type:</label>
+            <input id="name" name="name" type="text" placeholder="Name"><br>
+            <input id="ip" name="ip" type="text" placeholder="IP"><br>
             <select name="type" id="type" onchange="showssh()">
                 <option value="ping">Ping</option>
                 <option value="ssh">SSH</option>
-            </select><br><br>
-
+            </select><br>
             <div id="sshdivision" style="display:none;">
-
-                <label>Username:</label>
-                <input id="username" name="username" type="text">
-
-                <label>Password:</label>
-                <input id="password" name="password" type="password"><br><br>
-
+                <input id="username" name="username" type="text" placeholder="Username">
+                <input id="password" name="password" type="password" placeholder="Password"><br>
             </div>
-
-            <label>Tag:</label>
-            <input id="tag" name="tag" type="text"><br><br>
+            <input id="tag" name="tag" type="text" placeholder="Tag"><br>
             <button type="button" value="Check" onclick="add()">Add</button>
         </form>
     </div>
 </div>
 
-<!-- The Modal -->
-<div id="myModalUpdate" class="modal" >
-    <!-- Modal content -->
+<div id="myModalUpdate" class="modal">
     <div class="modal-content">
         <span id="close2">&times;</span>
-        <h3>Add Monitor</h3>
+        <h3>Update</h3>
         <form name="monitor">
-            <label>Name: </label>
-            <input id="updatename" name="name" type="text"><br><br>
-
-            <label>IP: </label>
-            <input id="updateip" name="ip" type="text"><br><br>
-
-            <label>Type:</label>
-            <select name="type" id="updatetype" onchange="showssh()">
+            <input id="updatename" name="name" type="text" placeholder="Name"><br>
+            <input id="updateip" name="ip" type="text" placeholder="IP"><br>
+            <select name="type" id="updatetype" onchange="showssh()" placeholder="Type">
                 <option value="ping">Ping</option>
                 <option value="ssh">SSH</option>
-            </select><br><br>
-
+            </select><br>
             <div id="updatesshdivision" style="display:none;">
-
-                <label>Username:</label>
-                <input id="updateusername" name="username" type="text">
-
-                <label>Password:</label>
-                <input id="updatepassword" name="password" type="password"><br><br>
-
+                <input id="updateusername" name="username" type="text" placeholder="Username">
+                <input id="updatepassword" name="password" type="password" placeholder="Password"><br>
             </div>
-
-            <label>Tag:</label>
-            <input id="updatetag" name="tag" type="text"><br><br>
-
-            <p style="visibility: hidden" id="rawid"></p>
+            <input id="updatetag" name="tag" type="text" placeholder="Tag"><br>
             <button type="button" value="Check" onclick="update()">Update</button>
         </form>
     </div>
 </div>
 
-
 </body>
-
 </html>

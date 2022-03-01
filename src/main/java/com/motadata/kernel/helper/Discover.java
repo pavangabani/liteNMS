@@ -18,51 +18,41 @@ public class Discover {
 
     JSch jsch;
 
-    public Discover(){
+    public Discover() {
 
         config = new Properties();
 
         config.put("StrictHostKeyChecking", "no");
 
-        jsch=new JSch();
+        jsch = new JSch();
 
     }
 
-    public boolean discovery(String ip,String type){
+    public boolean discovery(String ip, String type) {
 
-        boolean test=false;
+        boolean discoveryTest = ping(ip);
 
-        if(type.equals("ping")){
-
-            test=ping(ip);
-
-        }
-        else {
-
-            Database database=new Database();
-
-            ArrayList attributes=new ArrayList<>();
-
-            attributes.add("ip");
-
-            ArrayList values=new ArrayList<>();
-
-            values.add(ip);
-
-            ResultSet resultSet=database.select("credential",attributes,values);
-
-            if(!ping(ip)){
-
-                return false;
-
-            }
+        if (type.equals("ssh")) {
 
             try {
+
+                Database database = new Database();
+
+                ArrayList attributes = new ArrayList<>();
+
+                attributes.add("ip");
+
+                ArrayList values = new ArrayList<>();
+
+                values.add(ip);
+
+                ResultSet resultSet = database.select("credential", attributes, values);
+
                 resultSet.absolute(1);
 
-                boolean sshTest=ssh(ip,resultSet.getString(2),resultSet.getString(3));
+                boolean sshTest = ssh(ip, resultSet.getString(2), resultSet.getString(3));
 
-                test=sshTest;
+                discoveryTest = sshTest;
 
             } catch (SQLException e) {
 
@@ -72,66 +62,64 @@ public class Discover {
 
         }
 
-        return test;
+        return discoveryTest;
 
     }
 
-    public boolean ping(String ip){
+    public boolean ping(String ip) {
 
-        Integer packetLoss=100;
+        Integer packetLoss = 100;
 
         try {
 
-            Runtime runtime=Runtime.getRuntime();
+            Runtime runtime = Runtime.getRuntime();
 
-            String command="ping -c 4 "+ip;
+            String command = "ping -c 4 " + ip;
 
-            String[] cmd = { "/bin/sh", "-c", command };
+            String[] cmd = {"/bin/sh", "-c", command};
 
-            Process process=runtime.exec(cmd);
+            Process process = runtime.exec(cmd);
 
-            BufferedReader reader=new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
 
-            String answer="";
+            String answer = "";
 
-            while((line= reader.readLine())!=null){
+            while ((line = reader.readLine()) != null) {
 
-                answer+=line;
+                answer += line;
 
             }
 
-            answer=(answer.substring(answer.indexOf("received")+10,answer.indexOf("%"))).trim();
+            answer = (answer.substring(answer.indexOf("received") + 10, answer.indexOf("%"))).trim();
 
-            packetLoss=Integer.parseInt(answer);
+            packetLoss = Integer.parseInt(answer);
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
 
         }
 
-        if(packetLoss>50){
+        if (packetLoss > 50) {
 
             return false;
 
-        }
-
-        else {
+        } else {
 
             return true;
         }
 
     }
 
-    public boolean ssh(String ip,String username,String password) {
+    public boolean ssh(String ip, String username, String password) {
 
-        boolean test;
+        boolean sshTest;
 
         try {
 
-            session = jsch.getSession(username,ip,22);
+            session = jsch.getSession(username, ip, 22);
 
             session.setPassword(password);
 
@@ -139,16 +127,16 @@ public class Discover {
 
             session.connect();
 
-            test=true;
+            sshTest = true;
 
 
         } catch (JSchException e) {
 
-            test=false;
+            sshTest = false;
 
         }
 
-          return test;
+        return sshTest;
 
     }
 
