@@ -5,6 +5,7 @@ import com.motadata.kernel.bean.LoginBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginDao {
 
@@ -12,17 +13,9 @@ public class LoginDao {
 
         Database database = new Database();
 
-        ArrayList attributes = new ArrayList();
+        ArrayList attributes = new ArrayList(Arrays.asList("user","pass"));
 
-        attributes.add("user");
-
-        attributes.add("pass");
-
-        ArrayList values = new ArrayList();
-
-        values.add(loginBean.getUsername());
-
-        values.add(loginBean.getPassword());
+        ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(),loginBean.getPassword()));
 
         ResultSet resultSet = database.select("login", attributes, values);
 
