@@ -2,6 +2,7 @@ package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.LoginBean;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class LoginDao {
 
                 loginBean.setStatus("Success");
 
+                activityOnLogin();
+
             } else {
 
                 loginBean.setStatus("Failure");
@@ -35,5 +38,9 @@ public class LoginDao {
 
         }
     }
+    void activityOnLogin(){
 
+        System.out.println("hello pollinng");
+
+    }
 }

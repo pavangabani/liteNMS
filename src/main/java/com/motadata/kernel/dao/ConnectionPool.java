@@ -9,11 +9,16 @@ import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
 
-    private BlockingQueue<Connection> connectionsPool;
+    private static BlockingQueue<Connection> connectionsPool;
 
-    private ArrayList<Connection> usedConnection=new ArrayList<>();
+    private static ArrayList<Connection> usedConnection=new ArrayList<>();
 
-    ConnectionPool(){
+    static
+    {
+        createFixedSizePool(5);
+    }
+
+    static void createFixedSizePool(Integer size){
 
         try {
 
@@ -24,10 +29,6 @@ public class ConnectionPool {
             e.printStackTrace();
 
         }
-
-    }
-
-    void createFixedSizePool(Integer size){
 
         connectionsPool=new ArrayBlockingQueue(size);
 
@@ -48,7 +49,7 @@ public class ConnectionPool {
         }
     }
 
-    Connection getConnection(){
+    static Connection getConnection(){
 
         Connection connection= connectionsPool.remove();
 
@@ -57,7 +58,7 @@ public class ConnectionPool {
         return connection;
     }
 
-    void releaseConnection(Connection connection){
+    static void releaseConnection(Connection connection){
 
         try {
 

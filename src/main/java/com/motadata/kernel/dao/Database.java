@@ -4,21 +4,11 @@ import java.util.ArrayList;
 
 public class Database {
 
-    ConnectionPool connectionPool;
-
     PreparedStatement preparedStatement;
-
-    public Database(){
-
-        connectionPool =new ConnectionPool();
-
-        connectionPool.createFixedSizePool(5);
-
-    }
 
     int delete(String tableName,ArrayList attributes,ArrayList values)  {
 
-        Connection connection=connectionPool.getConnection();
+        Connection connection=ConnectionPool.getConnection();
 
         int affectedRaw=0;
 
@@ -63,7 +53,7 @@ public class Database {
 
             try {
 
-                connectionPool.releaseConnection(connection);
+                ConnectionPool.releaseConnection(connection);
 
                 preparedStatement.close();
 
@@ -80,7 +70,7 @@ public class Database {
 
     int insert(String tableName,ArrayList attributes,ArrayList values) {
 
-        Connection connection= connectionPool.getConnection();
+        Connection connection= ConnectionPool.getConnection();
 
         int affectedRaw=0;
 
@@ -144,7 +134,7 @@ public class Database {
 
             try {
 
-                connectionPool.releaseConnection(connection);
+                ConnectionPool.releaseConnection(connection);
 
                 preparedStatement.close();
 
@@ -160,7 +150,7 @@ public class Database {
 
     public ResultSet select(String tableName, ArrayList attributes, ArrayList values) {
 
-        Connection connection=connectionPool.getConnection();
+        Connection connection=ConnectionPool.getConnection();
 
         ResultSet resultSet;
 
@@ -206,8 +196,7 @@ public class Database {
 
             try {
 
-                connectionPool.releaseConnection(connection);
-
+                ConnectionPool.releaseConnection(connection);
 
             } catch (Exception e) {
 
@@ -222,7 +211,7 @@ public class Database {
 
     int update(String tableName,ArrayList attributes,ArrayList values,ArrayList conditionAttributes,ArrayList conditionValues){
 
-        Connection connection= connectionPool.getConnection();
+        Connection connection= ConnectionPool.getConnection();
 
         int affectedRaw=0;
 
@@ -303,7 +292,7 @@ public class Database {
 
             try {
 
-                connectionPool.releaseConnection(connection);
+                ConnectionPool.releaseConnection(connection);
 
 
             } catch (Exception e) {
