@@ -10,10 +10,10 @@
 <jsp:include page="navigation.jsp"/>
 
 <div class="monitorTitle">
-    <h1 style="color: black">Discovery</h1>
+    <h1 style="color: black">DISCOVERY</h1>
 </div>
 
-<table id="monitors">
+<table id="monitors" >
     <tr>
         <th>Name</th>
         <th>IP</th>
@@ -33,7 +33,7 @@
     <div class="modal-content">
         <span id="close">&times;</span>
         <h3>Add Monitor</h3>
-        <form name="monitor">
+        <form name="monitor" id="monitor">
             <input id="name" name="name" type="text" placeholder="Name"><br>
             <input id="ip" name="ip" type="text" placeholder="IP"><br>
             <select name="type" id="type" onchange="showssh()">
@@ -54,7 +54,7 @@
     <div class="modal-content">
         <span id="close2">&times;</span>
         <h3>Update</h3>
-        <form name="monitor">
+        <form name="monitor" id="updatemonitor">
             <input id="updatename" name="name" type="text" placeholder="Name"><br>
             <input id="updateip" name="ip" type="text" placeholder="IP"><br>
             <select name="type" id="updatetype" onchange="showssh()" placeholder="Type">

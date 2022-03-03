@@ -6,15 +6,15 @@ public class Database {
 
     PreparedStatement preparedStatement;
 
-    int delete(String tableName,ArrayList attributes,ArrayList values)  {
+    public ResultSet select(String tableName, ArrayList attributes, ArrayList values) {
 
         Connection connection=ConnectionPool.getConnection();
 
-        int affectedRaw=0;
+        ResultSet resultSet = null;
 
         int size = attributes.size();
 
-        String query="delete from "+tableName+" where ";
+        String query="select * from "+tableName+" where ";
 
         for(Object attribute:attributes){
 
@@ -25,8 +25,8 @@ public class Database {
         query+= "1=1";
 
         try {
-
-            preparedStatement=connection.prepareStatement(query);
+            
+            preparedStatement=connection.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             for(int i=1;i<=size;i++){
 
@@ -42,7 +42,9 @@ public class Database {
 
             }
 
-            affectedRaw=preparedStatement.executeUpdate();
+            resultSet=preparedStatement.executeQuery();
+
+            return resultSet;
 
         } catch (SQLException e) {
 
@@ -55,16 +57,14 @@ public class Database {
 
                 ConnectionPool.releaseConnection(connection);
 
-                preparedStatement.close();
-
-            } catch (SQLException e) {
+            } catch (Exception e) {
 
                 e.printStackTrace();
 
             }
         }
 
-        return affectedRaw;
+        return resultSet;
 
     }
 
@@ -147,16 +147,16 @@ public class Database {
 
         return affectedRaw;
     }
-
-    public ResultSet select(String tableName, ArrayList attributes, ArrayList values) {
+    
+    int delete(String tableName,ArrayList attributes,ArrayList values)  {
 
         Connection connection=ConnectionPool.getConnection();
 
-        ResultSet resultSet;
+        int affectedRaw=0;
 
         int size = attributes.size();
 
-        String query="select * from "+tableName+" where ";
+        String query="delete from "+tableName+" where ";
 
         for(Object attribute:attributes){
 
@@ -167,7 +167,8 @@ public class Database {
         query+= "1=1";
 
         try {
-            preparedStatement=connection.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            preparedStatement=connection.prepareStatement(query);
 
             for(int i=1;i<=size;i++){
 
@@ -183,9 +184,7 @@ public class Database {
 
             }
 
-            resultSet=preparedStatement.executeQuery();
-
-            return resultSet;
+            affectedRaw=preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
 
@@ -198,14 +197,16 @@ public class Database {
 
                 ConnectionPool.releaseConnection(connection);
 
-            } catch (Exception e) {
+                preparedStatement.close();
+
+            } catch (SQLException e) {
 
                 e.printStackTrace();
 
             }
         }
 
-        return null;
+        return affectedRaw;
 
     }
 

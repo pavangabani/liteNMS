@@ -11,14 +11,13 @@ public class ConnectionPool {
 
     private static BlockingQueue<Connection> connectionsPool;
 
-    private static ArrayList<Connection> usedConnection=new ArrayList<>();
+    private static ArrayList<Connection> usedConnection = new ArrayList<>();
 
-    static
-    {
+    static {
         createFixedSizePool(5);
     }
 
-    static void createFixedSizePool(Integer size){
+    static void createFixedSizePool(Integer size) {
 
         try {
 
@@ -30,9 +29,9 @@ public class ConnectionPool {
 
         }
 
-        connectionsPool=new ArrayBlockingQueue(size);
+        connectionsPool = new ArrayBlockingQueue(size);
 
-        for(int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
 
             try {
 
@@ -49,16 +48,16 @@ public class ConnectionPool {
         }
     }
 
-    static Connection getConnection(){
+    static Connection getConnection() {
 
-        Connection connection= connectionsPool.remove();
+        Connection connection = connectionsPool.remove();
 
         usedConnection.add(connection);
 
         return connection;
     }
 
-    static void releaseConnection(Connection connection){
+    static void releaseConnection(Connection connection) {
 
         try {
 

@@ -1,3 +1,6 @@
+* {
+    font-family: sans-serif;
+}
 /*form*/
 input, select {
     width: 100%;
@@ -28,13 +31,14 @@ button:hover {
 
 /*table*/
 #monitors {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
-.monitorTitle2 {
-    border: 5px outset white;
-    background-color: lightgray;
+.monitorTitle {
+    font-family: sans-serif;
+    text-shadow: 1px 1px 5px lightgray;
+    letter-spacing: 5px;
     text-align: center;
     alignment: center;
 }

@@ -18,7 +18,6 @@
         <button class="btn" id="loginsubmit">Log in</button>
     </div>
 </form>
-
 </body>
 </html>
 

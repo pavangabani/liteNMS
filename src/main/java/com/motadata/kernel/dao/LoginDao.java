@@ -1,8 +1,6 @@
 package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.LoginBean;
-
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ public class LoginDao {
         ResultSet resultSet = database.select("login", attributes, values);
 
         try {
+
             if (resultSet.next()) {
 
                 loginBean.setStatus("Success");
@@ -32,11 +31,13 @@ public class LoginDao {
                 loginBean.setStatus("Failure");
 
             }
+
         } catch (SQLException e) {
 
             e.printStackTrace();
 
         }
+
     }
     void activityOnLogin(){
 

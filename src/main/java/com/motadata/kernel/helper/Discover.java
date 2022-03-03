@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class Discover {
@@ -38,13 +39,9 @@ public class Discover {
 
                 Database database = new Database();
 
-                ArrayList attributes = new ArrayList<>();
+                ArrayList attributes = new ArrayList(Arrays.asList("ip"));
 
-                attributes.add("ip");
-
-                ArrayList values = new ArrayList<>();
-
-                values.add(ip);
+                ArrayList values = new ArrayList(Arrays.asList(ip));
 
                 ResultSet resultSet = database.select("credential", attributes, values);
 

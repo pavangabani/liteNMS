@@ -29,6 +29,8 @@ public class GetData {
 
                 PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
 
+                pollingmonitorBean.setId(resultSet.getString(1));
+
                 pollingmonitorBean.setName(resultSet.getString(2));
 
                 pollingmonitorBean.setIp(resultSet.getString(3));

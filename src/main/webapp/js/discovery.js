@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#myBtn").on("click", function () {
         $("#myModal").show();
     });
@@ -9,7 +8,6 @@ $(document).ready(function () {
     $("#close2").click(function () {
         $("#myModalUpdate").hide();
     });
-
     var request = {
         url: "Load.action",
         data: "",
@@ -18,7 +16,6 @@ $(document).ready(function () {
         },
     };
     ajaxpost(request);
-
 })
 
 function run(that) {
@@ -60,6 +57,12 @@ function edit(that, id) {
     $("#updatename").val(name);
     $("#updatetype").val(type);
     $("#updatetag").val(tag);
+    if(type == "ssh"){
+        $("#updatesshdivision").show();
+    }
+    else {
+        $("#updatesshdivision").hide();
+    }
 }
 
 function update() {
@@ -96,15 +99,17 @@ function update() {
 }
 
 function deletemonitor(id) {
-    var request = {
-        url: "Delete.action",
-        data: "id=" + id,
-        runfunction: function (data) {
-            alert(data.status);
-        },
-    };
-    ajaxpost(request);
-    location.reload();
+    if(confirm("Do you want to delete?")){
+        var request = {
+            url: "Delete.action",
+            data: "id=" + id,
+            runfunction: function (data) {
+                alert(data.status);
+            },
+        };
+        ajaxpost(request);
+        location.reload();
+    }
 }
 
 function add() {
@@ -135,6 +140,7 @@ function add() {
             ajaxpost(request);
         }
     }
+    $('#monitor').trigger("reset");
     $("#myModal").hide();
 }
 
@@ -187,14 +193,21 @@ function validate(name, ip, type, tag) {
 }
 
 function showssh() {
+
     if($("#updatetype").val() == "ssh"){
+
         $("#updatesshdivision").show();
-    }
-    else if ($("#type").val() == "ssh") {
+
+    } else if ($("#type").val() == "ssh") {
+
         $("#sshdivision").show();
+
     } else {
+
         $("#sshdivision").hide();
+
         $("#updatesshdivision").hide();
+
     }
 }
 
