@@ -1,5 +1,0 @@
-package com.motadata.kernel.helper;
-
-public class Polling {
-
-}

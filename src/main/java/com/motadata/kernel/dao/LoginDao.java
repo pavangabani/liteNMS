@@ -1,6 +1,8 @@
 package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.LoginBean;
+import com.motadata.kernel.helper.polling.PollingScheduler;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -41,7 +43,11 @@ public class LoginDao {
     }
     void activityOnLogin(){
 
-        System.out.println("hello pollinng");
+        PollingScheduler pollingScheduler=new PollingScheduler();
+
+        pollingScheduler.createScheduler();
+
+        pollingScheduler.startScheduler();
 
     }
 }
