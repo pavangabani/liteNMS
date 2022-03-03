@@ -52,8 +52,6 @@ button:hover {
     color: white;
 }
 .modal {
-    display: flex;
-    flex-wrap: wrap;
     /* Hidden by default */
     position: fixed;
     /* Stay in place */
@@ -62,8 +60,10 @@ button:hover {
     left: 0;
     top: 0;
     width: 100%;
+    max-width: fit-content;
     /* Full width */
     height: 100%;
+    max-height: fit-content;
     /* Full height */
     overflow: auto;
     /* Enable scroll if needed */
@@ -110,6 +110,7 @@ button:hover {
 }
 #barDiv {
     grid-column:3 / 7;
+    grid-row: 2 / 5;
 }
 
 .matrix {

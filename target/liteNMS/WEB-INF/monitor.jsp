@@ -11,7 +11,7 @@
 
 <div class="monitorTitle">
     <h1 style="color: black">MONITORS</h1>
-</div><br>
+</div>
 
 <table id="monitors">
     <tr>
@@ -26,7 +26,7 @@
     </tbody>
 </table>
 
-<div id="myModalStatistic" class="modal">
+<div id="myModalStatistic" class="modal" style="display: none">
     <div class="modal-content">
         <span id="close">&times;</span>
         <div class="wrapper">

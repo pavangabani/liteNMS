@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#close").click(function () {
         $("#myModalStatistic").hide();
     });
@@ -17,9 +16,13 @@ $(document).ready(function () {
     chart();
 })
 
-
-function show(that){
-    $("#myModalStatistic").show();
+function showstatistic(that){
+    var type=$(that).parent().prev().prev().prev().val();
+    if(type=="ssh"){
+        showsshdata();
+    }else {
+        showpingdata();
+    }
 }
 
 function deletemonitor(id) {
@@ -58,7 +61,7 @@ function adddata(data) {
             "<td>" + this.tag + "</td>" +
             "<td>" + this.availability + "</td>" +
             "<td>" +
-            "<button onclick='show(this)' id='showBtn' className='btn' style='margin-left: 5px'>Show</button>" +
+            "<button onclick='showstatistic(this)' className='btn' style='margin-left: 5px'>Show</button>" +
             "<button onclick='deletemonitor("+this.id+")' className='btn' style='margin-left: 5px'>Delete</button>" +
             "</td>" +
             "</tr>";
@@ -111,4 +114,12 @@ function chart(){
             }
         }
     });
+}
+
+function showsshdata(){
+    $("#myModalStatistic").show();
+}
+
+function showpingdata(){
+    $("#myModalStatistic").show();
 }
