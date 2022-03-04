@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="css/navigationstyle.css">
 
 <nav class="navbar">
-    <div class="logo">NMS</div>
+    <div class="logo"> LiteNMS</div>
     <ul class="nav-links">
         <div class="menu">
             <a href="Discovery.action" style="text-decoration: none;">Discovery</a>

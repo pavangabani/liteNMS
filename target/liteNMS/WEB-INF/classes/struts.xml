@@ -58,9 +58,6 @@
         <action name="Logout">
             <result>login.jsp</result>
         </action>
-        <action name="LoginFail">
-            <result>login.jsp</result>
-        </action>
 
     </package>
 </struts>

@@ -34,10 +34,15 @@ public class Database {
 
                     preparedStatement.setInt(i, (Integer) values.get(i-1));
 
+                }else if(values.get(i-1) instanceof Timestamp){
+
+                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
+
                 }
                 else {
 
                     preparedStatement.setString(i,(String) values.get(i-1));
+
                 }
 
             }
@@ -68,7 +73,7 @@ public class Database {
 
     }
 
-    int insert(String tableName,ArrayList attributes,ArrayList values) {
+    public int insert(String tableName,ArrayList attributes,ArrayList values) {
 
         Connection connection= ConnectionPool.getConnection();
 
@@ -114,6 +119,10 @@ public class Database {
 
                     preparedStatement.setInt(i, (Integer) values.get(i-1));
 
+                }else if(values.get(i-1) instanceof Timestamp){
+
+                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
+
                 }
                 else {
 
@@ -147,8 +156,8 @@ public class Database {
 
         return affectedRaw;
     }
-    
-    int delete(String tableName,ArrayList attributes,ArrayList values)  {
+
+    public int delete(String tableName,ArrayList attributes,ArrayList values)  {
 
         Connection connection=ConnectionPool.getConnection();
 
@@ -210,7 +219,7 @@ public class Database {
 
     }
 
-    int update(String tableName,ArrayList attributes,ArrayList values,ArrayList conditionAttributes,ArrayList conditionValues){
+    public int update(String tableName,ArrayList attributes,ArrayList values,ArrayList conditionAttributes,ArrayList conditionValues){
 
         Connection connection= ConnectionPool.getConnection();
 

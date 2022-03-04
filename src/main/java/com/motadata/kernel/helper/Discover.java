@@ -106,6 +106,7 @@ public class Discover {
         } else {
 
             return true;
+
         }
 
     }
@@ -125,7 +126,6 @@ public class Discover {
             session.connect();
 
             sshTest = true;
-
 
         } catch (JSchException e) {
 

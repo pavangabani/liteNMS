@@ -9,10 +9,13 @@
 <div id="bg"></div>
 <form method="POST">
     <div class="form-field">
-        <input name="username" id="username" type="text" placeholder="Email / Username" required/>
+        <input name="username" id="username" type="text" placeholder="Email / Username" />
     </div>
     <div class="form-field">
-        <input name="password" id="password" type="password" placeholder="Password" required/>
+        <input name="password" id="password" type="password" placeholder="Password" />
+    </div>
+    <div id="failure" class="alert" style="display:none;">
+        <strong>Failure! </strong> Wrong password or username.
     </div>
     <div class="form-field">
         <button class="btn" id="loginsubmit">Log in</button>

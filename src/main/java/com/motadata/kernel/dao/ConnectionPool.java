@@ -14,7 +14,9 @@ public class ConnectionPool {
     private static ArrayList<Connection> usedConnection = new ArrayList<>();
 
     static {
+
         createFixedSizePool(5);
+
     }
 
     static void createFixedSizePool(Integer size) {
@@ -48,7 +50,7 @@ public class ConnectionPool {
         }
     }
 
-    static Connection getConnection() {
+    public static Connection getConnection() {
 
         Connection connection = connectionsPool.remove();
 

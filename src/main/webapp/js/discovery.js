@@ -94,6 +94,7 @@ function update() {
             ajaxpost(request);
         }
     }
+
     $("#myModalUpdate").hide();
     location.reload();
 }

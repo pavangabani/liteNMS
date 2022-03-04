@@ -13,12 +13,14 @@ function login(){
         data: "username="+username+"&password="+password,
         url: "Login.action",
         success: function(data){
-            alert(data.status);
             if(data.status=="Success"){
                 window.location.replace('Dashboard.action');
             }
             else {
-                window.location.replace('LoginFail.action');
+                $("#failure").show();
+                setTimeout(function (){
+                    $("#failure").hide();
+                },2000);
             }
 
         },
