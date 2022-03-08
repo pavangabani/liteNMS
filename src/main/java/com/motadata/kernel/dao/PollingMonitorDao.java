@@ -29,7 +29,7 @@ public class PollingMonitorDao {
             }
             else {
 
-                pollingMonitorBean.setSshStatistic(getData.getSshStatistic());
+                pollingMonitorBean.setSshStatistic(getData.getSshStatistic(pollingMonitorBean.getId()));
 
             }
 

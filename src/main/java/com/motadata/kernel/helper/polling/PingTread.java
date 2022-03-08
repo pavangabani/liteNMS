@@ -32,6 +32,8 @@ public class PingTread implements Runnable{
 
         ArrayList values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
 
+        new PollingDump().refreshAvailality(id,pollingPingBean.getPacketLoss());
+
         database.insert("pingdump",attributes,values);
 
     }

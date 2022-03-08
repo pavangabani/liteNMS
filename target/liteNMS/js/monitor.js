@@ -111,14 +111,75 @@ function chart(data){
             legend: { display: false },
             title: {
                 display: true,
-                text: "Last 10 polling packet loss"
+                text: "Last 10 polling receive packet"
             }
         }
     });
     bar.update();
 }
 
-function showsshdata(){
+function chart2(data){
+    var xValues = ["Up", "Down"];
+    var yValues = data.sshStatistic.pie;
+    var barColors = [
+        "blue", "orange"
+    ];
+
+    var pie=new Chart("pie", {
+        type: "doughnut",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Monitor on for Last 24 Hours"
+            }
+        }
+    });
+    pie.update();
+
+    var xValues2 = data.sshStatistic.barx;
+    var yValues2 = data.sshStatistic.bary;
+    var barColors2 = ["orange","orange","orange","orange","orange","orange","orange","orange","orange","orange"];
+
+    var bar=new Chart("bar", {
+        type: "bar",
+        data: {
+            labels: xValues2,
+            datasets: [{
+                backgroundColor: barColors2,
+                data: yValues2
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Last 10 polling cpu usage"
+            }
+        }
+    });
+    bar.update();
+}
+
+function showsshdata(id,type){
+    var request={
+        url:"PollingStatistic.action",
+        data:"id="+id+"&type="+type,
+        runfunction:function (data){
+            chart2(data);
+            $("#matrix1").text("CPU: "+data.sshStatistic.matrix[0]);
+            $("#matrix2").text("Memory: "+data.sshStatistic.matrix[1]);
+            $("#matrix3").text("Disk: "+data.sshStatistic.matrix[2]);
+            $("#matrix4").text("Uptime: "+data.sshStatistic.matrix[3]);
+        }
+    }
+    ajaxpost(request);
     $("#myModalStatistic").show();
 }
 

@@ -1,6 +1,7 @@
 package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.helper.Discover;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,6 +19,8 @@ public class PollingJob implements Job {
         try {
 
             Database database = new Database();
+
+            PollingDump pollingDump=new PollingDump();
 
             ArrayList attributes = new ArrayList();
 
@@ -46,7 +49,6 @@ public class PollingJob implements Job {
                     pool.execute(sshTread);
 
                 }
-
             }
 
         } catch (Exception e) {
@@ -56,6 +58,7 @@ public class PollingJob implements Job {
         }
 
     }
+
 
 }
 

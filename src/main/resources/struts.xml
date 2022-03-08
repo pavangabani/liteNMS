@@ -42,7 +42,11 @@
             <result name="DELETED" type="json"></result>
         </action>
 
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
+        <action name="LoadDashboard" class="com.motadata.kernel.action.Dashboard" method="load">
+            <result name="LOADED" type="json"></result>
+        </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 

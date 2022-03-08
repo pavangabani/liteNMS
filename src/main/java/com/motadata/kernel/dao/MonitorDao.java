@@ -83,7 +83,7 @@ public class MonitorDao {
 
             ArrayList attributes = new ArrayList(Arrays.asList("id","name","ip","type","tag","availability"));
 
-            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(),monitorBean.getName(),monitorBean.getIp(),monitorBean.getType(),monitorBean.getTag(),"unknown"));
+            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(),monitorBean.getName(),monitorBean.getIp(),monitorBean.getType(),monitorBean.getTag(),"Unknown"));
 
             int affectedRaw = database.insert("pollingmonitor", attributes, values);
 

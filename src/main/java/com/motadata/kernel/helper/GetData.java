@@ -1,5 +1,6 @@
 package com.motadata.kernel.helper;
 
+import com.motadata.kernel.action.Dashboard;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.dao.Database;
@@ -15,17 +16,17 @@ public class GetData {
 
     public List<PollingMonitorBean> getAllPollingMonitor() {
 
-        Database database=new Database();
+        Database database = new Database();
 
-        ArrayList attributes=new ArrayList();
+        ArrayList attributes = new ArrayList();
 
-        ArrayList values=new ArrayList();
+        ArrayList values = new ArrayList();
 
         List<PollingMonitorBean> pollingmonitorList = new ArrayList<>();
 
         try {
 
-            ResultSet resultSet = database.select("pollingmonitor",attributes,values);
+            ResultSet resultSet = database.select("pollingmonitor", attributes, values);
 
             while (resultSet.next()) {
 
@@ -58,18 +59,17 @@ public class GetData {
 
     public List<MonitorBean> getAllMonitor() {
 
+        Database database = new Database();
 
-        Database database=new Database();
+        ArrayList attributes = new ArrayList();
 
-        ArrayList attributes=new ArrayList();
-
-        ArrayList values=new ArrayList();
+        ArrayList values = new ArrayList();
 
         List<MonitorBean> monitorList = new ArrayList<>();
 
         try {
 
-            ResultSet resultSet = database.select("monitor",attributes,values);
+            ResultSet resultSet = database.select("monitor", attributes, values);
 
             while (resultSet.next()) {
 
@@ -98,5 +98,66 @@ public class GetData {
         return monitorList;
     }
 
+    public List<Integer> getDashboardData() {
+
+        List<Integer> availability = new ArrayList<>(4);
+
+        Database database = new Database();
+
+        ArrayList attributes = new ArrayList();
+
+        ArrayList values = new ArrayList();
+
+        ResultSet resultSet = database.select("pollingmonitor", attributes, values);
+
+        int up = 0;
+
+        int down = 0;
+
+        int unrechable = 0;
+
+        int total = 0;
+
+        try {
+
+
+            while (resultSet.next()) {
+
+                if (resultSet.getString(6).equals("UP")) {
+
+                    up++;
+
+                } else if (resultSet.getString(6).equals("DOWN")) {
+
+                    down++;
+
+                } else {
+
+                    unrechable++;
+
+                }
+                
+                total++;
+
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        availability.add(unrechable);
+
+        availability.add(up);
+
+        availability.add(down);
+
+        availability.add(total);
+
+        return availability;
+
+    }
 
 }
