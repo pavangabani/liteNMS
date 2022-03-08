@@ -28,7 +28,7 @@ public class SshTread implements Runnable{
 
         PollingSshBean pollingSshBean=new PollingDump().getSshData(ip);
 
-        ArrayList attributes=new ArrayList(Arrays.asList("id","cpu","memory","disk","uptime","time"));
+        ArrayList attributes=new ArrayList(Arrays.asList("id","cpu","memory","disk","uptime","pollingtime"));
 
         ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime())));
 

@@ -35,6 +35,9 @@
         <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitor" method="load">
             <result name="LOADED" type="json"></result>
         </action>
+        <action name="PollingStatistic" class="com.motadata.kernel.action.PollingMonitor" method="show">
+            <result name="SHOW" type="json"></result>
+        </action>
         <action name="DeletePolling" class="com.motadata.kernel.action.PollingMonitor" method="delete">
             <result name="DELETED" type="json"></result>
         </action>

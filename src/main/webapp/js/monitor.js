@@ -13,15 +13,15 @@ $(document).ready(function () {
             alert("Some error occured.");
         }
     });
-    chart();
+
 })
 
-function showstatistic(that){
-    var type=$(that).parent().prev().prev().prev().val();
+function showstatistic(that,id){
+    var type=$(that).parent().prev().prev().prev().text();
     if(type=="ssh"){
-        showsshdata();
+        showsshdata(id,type);
     }else {
-        showpingdata();
+        showpingdata(id,type);
     }
 }
 
@@ -61,7 +61,7 @@ function adddata(data) {
             "<td>" + this.tag + "</td>" +
             "<td>" + this.availability + "</td>" +
             "<td>" +
-            "<button onclick='showstatistic(this)' className='btn' style='margin-left: 5px'>Show</button>" +
+            "<button onclick='showstatistic(this,"+ this.id +")' className='btn' style='margin-left: 5px'>Show</button>" +
             "<button onclick='deletemonitor("+this.id+")' className='btn' style='margin-left: 5px'>Delete</button>" +
             "</td>" +
             "</tr>";
@@ -69,14 +69,14 @@ function adddata(data) {
     $("#tablebody").html(tabledata);
 }
 
-function chart(){
+function chart(data){
     var xValues = ["Up", "Down"];
-    var yValues = [4, 2];
+    var yValues = data.pingStatistic.pie;
     var barColors = [
         "blue", "orange"
     ];
 
-    new Chart("pie", {
+    var pie=new Chart("pie", {
         type: "doughnut",
         data: {
             labels: xValues,
@@ -92,12 +92,13 @@ function chart(){
             }
         }
     });
+    pie.update();
 
-    var xValues2 = ["10:35", "10:40", "10:45", "10:50", "10:55","10:35", "10:40", "10:45", "10:50", "10:55"];
-    var yValues2 = [4,3,2,4,4,4,3,2,4,4];
-    var barColors2 = ["red", "green", "blue", "orange", "brown","red", "green", "blue", "orange", "brown"];
+    var xValues2 = data.pingStatistic.barx;
+    var yValues2 = data.pingStatistic.bary;
+    var barColors2 = ["orange","orange","orange","orange","orange","orange","orange","orange","orange","orange"];
 
-    new Chart("bar", {
+    var bar=new Chart("bar", {
         type: "bar",
         data: {
             labels: xValues2,
@@ -110,16 +111,30 @@ function chart(){
             legend: { display: false },
             title: {
                 display: true,
-                text: "Last 5 polling packet loss"
+                text: "Last 10 polling packet loss"
             }
         }
     });
+    bar.update();
 }
 
 function showsshdata(){
     $("#myModalStatistic").show();
 }
 
-function showpingdata(){
+function showpingdata(id,type){
+
+    var request={
+        url:"PollingStatistic.action",
+        data:"id="+id+"&type="+type,
+        runfunction:function (data){
+            chart(data);
+            $("#matrix1").text("Sent Packet: "+data.pingStatistic.matrix[0]);
+            $("#matrix2").text("Receive Packet: "+data.pingStatistic.matrix[1]);
+            $("#matrix3").text("Packet Loss: "+data.pingStatistic.matrix[2]);
+            $("#matrix4").text("RTT(ms): "+data.pingStatistic.matrix[3]);
+        }
+    }
+    ajaxpost(request);
     $("#myModalStatistic").show();
 }

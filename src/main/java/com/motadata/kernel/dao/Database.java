@@ -73,6 +73,86 @@ public class Database {
 
     }
 
+    public ResultSet select(String tableName, ArrayList attributes, ArrayList values,String additionalCondition,boolean atEnd) {
+
+        Connection connection=ConnectionPool.getConnection();
+
+        ResultSet resultSet = null;
+
+        int size = attributes.size();
+
+        String query="select * from "+tableName+" where ";
+
+        if(!atEnd){
+
+            query+=additionalCondition +" AND ";
+
+        }
+
+        for(Object attribute:attributes){
+
+            query+=attribute+"=? AND ";
+
+        }
+
+        query+= "1=1";
+
+        if(atEnd){
+
+            query+=additionalCondition;
+
+        }
+
+        try {
+
+            preparedStatement=connection.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            for(int i=1;i<=size;i++){
+
+                if(values.get(i-1) instanceof Integer){
+
+                    preparedStatement.setInt(i, (Integer) values.get(i-1));
+
+                }else if(values.get(i-1) instanceof Timestamp){
+
+                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
+
+                }
+                else {
+
+                    preparedStatement.setString(i,(String) values.get(i-1));
+
+                }
+
+            }
+
+            resultSet=preparedStatement.executeQuery();
+
+            return resultSet;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+        finally {
+
+            try {
+
+                ConnectionPool.releaseConnection(connection);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
+        }
+
+        return resultSet;
+
+    }
+
+
     public int insert(String tableName,ArrayList attributes,ArrayList values) {
 
         Connection connection= ConnectionPool.getConnection();

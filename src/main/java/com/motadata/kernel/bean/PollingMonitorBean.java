@@ -1,6 +1,7 @@
 package com.motadata.kernel.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PollingMonitorBean {
@@ -20,6 +21,10 @@ public class PollingMonitorBean {
     private String availability;
 
     private List<PollingMonitorBean> pollingMonitorBeanList=new ArrayList<>();
+
+    private HashMap<String ,Object> pingStatistic=new HashMap<>();
+
+    private HashMap<String ,Object> sshStatistic=new HashMap<>();
 
     public String getId() {
         return id;
@@ -83,6 +88,22 @@ public class PollingMonitorBean {
 
     public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
         this.pollingMonitorBeanList = pollingMonitorBeanList;
+    }
+
+    public HashMap<String, Object> getPingStatistic() {
+        return pingStatistic;
+    }
+
+    public void setPingStatistic(HashMap<String, Object> pingStatistic) {
+        this.pingStatistic = pingStatistic;
+    }
+
+    public HashMap<String, Object> getSshStatistic() {
+        return sshStatistic;
+    }
+
+    public void setSshStatistic(HashMap<String, Object> sshStatistic) {
+        this.sshStatistic = sshStatistic;
     }
 
 

@@ -18,6 +18,13 @@ public class PollingMonitor implements ModelDriven {
 
     }
 
+    public String show(){
+
+        pollingMonitorDao.show(pollingMonitorBean);
+
+        return "SHOW";
+    }
+
     public String delete() {
 
         pollingMonitorDao.delete(pollingMonitorBean);

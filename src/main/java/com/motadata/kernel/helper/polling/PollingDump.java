@@ -3,18 +3,22 @@ package com.motadata.kernel.helper.polling;
 import com.jcraft.jsch.*;
 import com.motadata.kernel.bean.PollingPingBean;
 import com.motadata.kernel.bean.PollingSshBean;
+import com.motadata.kernel.dao.Database;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Properties;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class PollingDump {
 
-    PollingPingBean getPingData(String ip){
+    PollingPingBean getPingData(String ip) {
 
-        PollingPingBean pollingPingBean=new PollingPingBean();
+        PollingPingBean pollingPingBean = new PollingPingBean();
 
         try {
 
@@ -39,23 +43,36 @@ public class PollingDump {
             }
             System.out.println(ip);
 
-            outputString=outputString.substring(outputString.indexOf("statistics"));
+            if (outputString.indexOf("statistics") == -1) {
 
-            Integer RTT=Integer.parseInt((outputString.substring(outputString.indexOf("time") + 5, outputString.indexOf("ms"))).trim());
+                pollingPingBean.setPacketLoss(100);
 
-            Integer receivedPacket=Integer.parseInt((outputString.substring(outputString.indexOf("transmitted") + 13, outputString.indexOf("received"))).trim());
+                pollingPingBean.setRTT(-1);
 
-            int packetLoss=(int)((1-(receivedPacket/4.0))*100);
+                pollingPingBean.setReceivePacket(0);
 
-            Integer sentPacket=4;
+                pollingPingBean.setSentPacket(4);
+            } else {
+                outputString = outputString.substring(outputString.indexOf("statistics"));
 
-            pollingPingBean.setPacketLoss(packetLoss);
+                Integer RTT = Integer.parseInt((outputString.substring(outputString.indexOf("time") + 5, outputString.indexOf("ms"))).trim());
 
-            pollingPingBean.setRTT(RTT);
+                Integer receivedPacket = Integer.parseInt((outputString.substring(outputString.indexOf("transmitted") + 13, outputString.indexOf("received"))).trim());
 
-            pollingPingBean.setReceivePacket(receivedPacket);
+                int packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
-            pollingPingBean.setSentPacket(sentPacket);
+                Integer sentPacket = 4;
+
+                pollingPingBean.setPacketLoss(packetLoss);
+
+                pollingPingBean.setRTT(RTT);
+
+                pollingPingBean.setReceivePacket(receivedPacket);
+
+                pollingPingBean.setSentPacket(sentPacket);
+
+            }
+
 
         } catch (Exception e) {
 
@@ -66,21 +83,36 @@ public class PollingDump {
         return pollingPingBean;
 
     }
-    PollingSshBean getSshData(String ip){
 
-        PollingSshBean pollingSshBean=new PollingSshBean();
+    PollingSshBean getSshData(String ip) {
+
+        PollingSshBean pollingSshBean = new PollingSshBean();
 
         try {
+
+            Database database = new Database();
+
+            ArrayList attributes = new ArrayList(Arrays.asList("ip"));
+
+            ArrayList values = new ArrayList(Arrays.asList(ip));
+
+            ResultSet resultSet = database.select("credential", attributes, values);
+
+            resultSet.next();
+
+            String ussername = resultSet.getString(2);
+
+            String password = resultSet.getString(3);
 
             Properties config = new Properties();
 
             config.put("StrictHostKeyChecking", "no");
 
-            JSch jsch=new JSch();
+            JSch jsch = new JSch();
 
-            Session session=  jsch.getSession("pavan",ip,22);
+            Session session = jsch.getSession(ussername, ip, 22);
 
-            session.setPassword("Mind@123");
+            session.setPassword(password);
 
             session.setConfig(config);
 
@@ -88,25 +120,48 @@ public class PollingDump {
 
             System.out.println("Connected: " + ip);
 
-            Channel channel=session.openChannel("exec");
+            Channel channel = session.openChannel("exec");
 
-            ((ChannelExec)channel).setCommand("free -m | grep Mem | awk '{print $2}';free -m | grep Mem | awk '{print $3}'");
+            ((ChannelExec) channel).setCommand(
+                    "free -m | grep Mem | awk '{print $2}';" +
+                            "free -m | grep Mem | awk '{print $3}';" +
+                            "mpstat | grep all | awk {'print $5'};" +
+                            "df -hT /home | grep dev | awk '{print $6}';" +
+                            "uptime -p");
 
-            InputStream in=channel.getInputStream();
+            InputStream in = channel.getInputStream();
 
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
             channel.connect();
 
-            String ans =inputStreamToString(in);
+            String temp = "";
 
-            String[] ansArray= ans.split("\n");
+            String answer = "";
 
-            float total=Float.valueOf(ansArray[0].trim());
+            while ((temp = bufferedReader.readLine()) != null) {
 
-            float used=Float.valueOf(ansArray[1].trim());
+                answer += temp + "\n";
+            }
 
-            float memoryUsage=(used/total)*100;
 
-            System.out.println("Memory Usage: "+memoryUsage+" %");
+            String[] ansArray = answer.split("\n");
+
+            int memory = (int) ((Float.valueOf(ansArray[1].trim()) / Float.valueOf(ansArray[0].trim())) * 100);
+
+            int cpu = 100 - (int)Float.parseFloat(ansArray[2].trim());
+
+            int disk = Integer.parseInt(ansArray[3].substring(0, ansArray[3].indexOf("%")));
+
+            String upTime = ansArray[4].substring(ansArray[4].indexOf("up") + 3).trim();
+
+            pollingSshBean.setMemory(memory);
+
+            pollingSshBean.setCpu(cpu);
+
+            pollingSshBean.setDisk(disk);
+
+            pollingSshBean.setUpTime(upTime);
+
 
         } catch (Exception e) {
 
@@ -118,17 +173,110 @@ public class PollingDump {
 
     }
 
-    String inputStreamToString(InputStream inputStream) throws IOException {
+    public HashMap<String, Object> getPingStatistic(String id) {
 
-        StringBuilder sb = new StringBuilder();
+        HashMap<String, Object> pingStatistic = new HashMap<>();
 
-        for (int ch; (ch = inputStream.read()) != -1; ) {
+        Database database = new Database();
 
-            sb.append((char) ch);
+        Calendar calendar = Calendar.getInstance();
+
+        Date date = new Date();
+
+        calendar.setTime(date);
+
+        calendar.add(Calendar.DATE, -1);
+
+        Date lastDay = calendar.getTime();
+
+        Timestamp lastDayTimestamp = new Timestamp(lastDay.getTime());
+
+        Timestamp currentTimeStamp = new Timestamp(date.getTime());
+
+        String additionalcondition = "pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "'";
+
+        ArrayList attributes = new ArrayList(Arrays.asList("id"));
+
+        ArrayList values = new ArrayList(Arrays.asList(id));
+
+        ResultSet resultSet = database.select("pingdump", attributes, values, additionalcondition, false);
+
+        int pingSuccess = 0;
+
+        int pingTotal = 0;
+
+        try {
+
+            while (resultSet.next()) {
+
+                pingTotal += 1;
+
+                if (resultSet.getInt(4) < 50) {
+
+                    pingSuccess += 1;
+
+                }
+
+            }
+
+            int pieUp = (int) ((float) pingSuccess / (float) pingTotal) * 100;
+
+            int pieDown = 100 - pieUp;
+
+            pingStatistic.put("pie", new ArrayList(Arrays.asList(pieUp, pieDown)));
+
+            additionalcondition = " ORDER BY pollingtime DESC limit 1";
+
+            ResultSet resultSetMatrix = database.select("pingdump", attributes, values, additionalcondition, true);
+
+            resultSetMatrix.next();
+
+            pingStatistic.put("matrix", new ArrayList(Arrays.asList(resultSetMatrix.getInt(2), resultSetMatrix.getInt(3), resultSetMatrix.getInt(4), resultSetMatrix.getInt(5))));
+
+            additionalcondition = " ORDER BY pollingtime DESC limit 10";
+
+            ResultSet resultSetBar = database.select("pingdump", attributes, values, additionalcondition, true);
+
+            ArrayList<Integer> bary = new ArrayList();
+
+            ArrayList<Timestamp> barx = new ArrayList();
+
+            while (resultSetBar.next()) {
+
+                bary.add(resultSetBar.getInt(3));
+
+                barx.add(resultSetBar.getTimestamp(6));
+
+            }
+
+            pingStatistic.put("barx", barx);
+
+            pingStatistic.put("bary", bary);
+
+        } catch (SQLException ex) {
+
+            ex.printStackTrace();
 
         }
 
-        return sb.toString();
+        return pingStatistic;
 
     }
+
+
+    public HashMap<String, Object> getSshStatistic() {
+
+        HashMap<String, Object> pingStatistic = new HashMap<>();
+
+        pingStatistic.put("pie", new ArrayList(Arrays.asList("2")));
+
+        pingStatistic.put("matrix", new ArrayList(Arrays.asList("4")));
+
+        pingStatistic.put("barX", new ArrayList(Arrays.asList("10")));
+
+        pingStatistic.put("barY", new ArrayList(Arrays.asList("10")));
+
+        return pingStatistic;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.helper.GetData;
+import com.motadata.kernel.helper.polling.PollingDump;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,29 @@ public class PollingMonitorDao {
         GetData getData=new GetData();
 
         pollingMonitorBean.setPollingMonitorBeanList(getData.getAllPollingMonitor());
+
+    }
+
+    public void show(PollingMonitorBean pollingMonitorBean){
+
+        try {
+            PollingDump getData=new PollingDump();
+
+            if (pollingMonitorBean.getType().equals("ping")){
+
+                pollingMonitorBean.setPingStatistic(getData.getPingStatistic(pollingMonitorBean.getId()));
+
+            }
+            else {
+
+                pollingMonitorBean.setSshStatistic(getData.getSshStatistic());
+
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
