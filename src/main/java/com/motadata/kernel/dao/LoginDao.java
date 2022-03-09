@@ -41,6 +41,7 @@ public class LoginDao {
         }
 
     }
+
     void activityOnLogin(){
 
         PollingScheduler pollingScheduler=new PollingScheduler();

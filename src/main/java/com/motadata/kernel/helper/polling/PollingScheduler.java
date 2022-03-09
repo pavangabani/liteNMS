@@ -25,7 +25,7 @@ public class PollingScheduler {
             Trigger trigger=TriggerBuilder.newTrigger()
                     .withIdentity("myTrigger","group")
                     .startNow()
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever())
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(120).repeatForever())
                     .build();
 
             scheduler.scheduleJob(job,trigger);

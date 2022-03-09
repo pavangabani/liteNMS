@@ -34,6 +34,9 @@ public class PollingMonitor implements ModelDriven {
 
     @Override
     public Object getModel() {
+
         return pollingMonitorBean;
+
     }
+
 }

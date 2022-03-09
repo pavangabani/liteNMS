@@ -20,13 +20,7 @@ public class PollingJob implements Job {
 
             Database database = new Database();
 
-            PollingDump pollingDump=new PollingDump();
-
-            ArrayList attributes = new ArrayList();
-
-            ArrayList values = new ArrayList();
-
-            ResultSet resultSet = database.select("pollingmonitor", attributes, values);
+            ResultSet resultSet = database.select("pollingmonitor", new ArrayList(), new ArrayList());
 
             ExecutorService pool = Executors.newFixedThreadPool(10);
 

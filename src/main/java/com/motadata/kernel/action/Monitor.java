@@ -24,14 +24,6 @@ public class Monitor implements ModelDriven {
         return "ADDED";
     }
 
-    public String run(){
-
-        monitorDao.run(monitorBean);
-
-        return "RUN";
-
-    }
-
     public String edit(){
 
         monitorDao.edit(monitorBean);
@@ -57,6 +49,9 @@ public class Monitor implements ModelDriven {
 
     @Override
     public Object getModel() {
+
         return monitorBean;
+
     }
+
 }

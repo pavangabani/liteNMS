@@ -20,6 +20,7 @@ public class PollingMonitorDao {
     public void show(PollingMonitorBean pollingMonitorBean){
 
         try {
+
             PollingDump getData=new PollingDump();
 
             if (pollingMonitorBean.getType().equals("ping")){
@@ -33,9 +34,10 @@ public class PollingMonitorDao {
 
             }
 
-
         }catch (Exception e){
+
             e.printStackTrace();
+
         }
 
     }
@@ -52,11 +54,11 @@ public class PollingMonitorDao {
 
         if (affectedRaw > 0) {
 
-            pollingMonitorBean.setStatus("Monitor Deleted");
+            pollingMonitorBean.setStatus("Monitor Deleted!");
 
         } else {
 
-            pollingMonitorBean.setStatus("Could not Delete");
+            pollingMonitorBean.setStatus("Could not Delete!");
 
         }
 

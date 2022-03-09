@@ -33,6 +33,9 @@
     <div class="modal-content">
         <span id="close">&times;</span>
         <h3>Add Monitor</h3>
+        <div id="failure" class="alert" style="display:none;">
+            <strong>Failure! </strong> Wrong password or username.
+        </div>
         <form name="monitor" id="monitor">
             <input id="name" name="name" type="text" placeholder="Name"><br>
             <input id="ip" name="ip" type="text" placeholder="IP"><br>

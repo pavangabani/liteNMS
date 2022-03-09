@@ -152,7 +152,6 @@ public class Database {
 
     }
 
-
     public int insert(String tableName,ArrayList attributes,ArrayList values) {
 
         Connection connection= ConnectionPool.getConnection();
@@ -312,10 +311,14 @@ public class Database {
         for(int i=0;i<length;i++){
 
             if(i==(length-1)){
+
                 attributesString += attributes.get(i)+"=? ";
+
             }
             else {
+
                 attributesString += attributes.get(i)+"=?, ";
+
             }
 
 
@@ -332,8 +335,6 @@ public class Database {
         }
 
         String query= "update "+tableName+" set "+attributesString+"where "+conditionAttributeString;
-
-        System.out.println(query);
 
         try {
 

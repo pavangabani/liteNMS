@@ -26,9 +26,7 @@ public class PollingDump {
 
             String command = "ping -c 4 " + ip;
 
-            String[] cmd = {"/bin/sh", "-c", command};
-
-            Process process = runtime.exec(cmd);
+            Process process = runtime.exec(command);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -41,7 +39,6 @@ public class PollingDump {
                 outputString += line;
 
             }
-            System.out.println(ip);
 
             if (outputString.indexOf("statistics") == -1) {
 
@@ -52,6 +49,7 @@ public class PollingDump {
                 pollingPingBean.setReceivePacket(0);
 
                 pollingPingBean.setSentPacket(4);
+
             } else {
                 outputString = outputString.substring(outputString.indexOf("statistics"));
 
@@ -359,6 +357,7 @@ public class PollingDump {
             ArrayList values=new ArrayList(Arrays.asList("UP"));
 
             database.update("pollingmonitor",attributes,values,conditionAttributes,conditionValues);
+
         }else {
 
             ArrayList attributes=new ArrayList(Arrays.asList("availability"));

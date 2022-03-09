@@ -19,44 +19,6 @@ public class MonitorDao {
 
     }
 
-    public void add(MonitorBean monitorBean) {
-
-        Database database = new Database();
-
-        ArrayList attributes = new ArrayList(Arrays.asList("name","ip","type","tag"));
-
-        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(),monitorBean.getIp(),monitorBean.getType(),monitorBean.getTag()));
-
-        int affectedRawPing = database.insert("monitor", attributes, values);
-
-        if (monitorBean.getType().equals("ping")) {
-
-            if (affectedRawPing > 0) {
-
-                monitorBean.setStatus("Added Ping");
-
-            }
-
-        } else {
-
-            ArrayList credentialAttributes = new ArrayList(Arrays.asList("ip","username","password"));
-
-            ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(),monitorBean.getUsername(),monitorBean.getPassword()));
-
-            int affectedRawSsh = database.insert("credential", credentialAttributes, credentialValues);
-
-            if (affectedRawPing > 0 && affectedRawSsh > 0) {
-
-                monitorBean.setStatus("Added SSH");
-
-            }
-        }
-
-        GetData getData = new GetData();
-
-        monitorBean.setMonitorList(getData.getAllMonitor());
-    }
-
     public void run(MonitorBean monitorBean) {
 
         Discover discover = new Discover();
@@ -81,19 +43,19 @@ public class MonitorDao {
 
             Database database = new Database();
 
-            ArrayList attributes = new ArrayList(Arrays.asList("id","name","ip","type","tag","availability"));
+            ArrayList attributes = new ArrayList(Arrays.asList("id", "name", "ip", "type", "tag", "availability"));
 
-            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(),monitorBean.getName(),monitorBean.getIp(),monitorBean.getType(),monitorBean.getTag(),"Unknown"));
+            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(), monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), "Unknown"));
 
             int affectedRaw = database.insert("pollingmonitor", attributes, values);
 
             if (affectedRaw > 0) {
 
-                monitorBean.setStatus("Monitor added for polling");
+                monitorBean.setStatus("Monitor Added!");
 
             } else {
 
-                monitorBean.setStatus("Fails to add");
+                monitorBean.setStatus("Failed to Add!");
 
             }
 
@@ -111,9 +73,9 @@ public class MonitorDao {
 
         GetData getData = new GetData();
 
-        ArrayList attributes = new ArrayList(Arrays.asList("name","ip","type","tag"));
+        ArrayList attributes = new ArrayList(Arrays.asList("name", "ip", "type", "tag"));
 
-        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(),monitorBean.getIp(),monitorBean.getType(),monitorBean.getTag()));
+        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
         ArrayList conditionAttributes = new ArrayList(Arrays.asList("id"));
 
@@ -121,11 +83,9 @@ public class MonitorDao {
 
         int affectedRawPing = database.update("monitor", attributes, values, conditionAttributes, conditionValues);
 
-        int affectedRawPolling = database.update("pollingmonitor", attributes, values, conditionAttributes, conditionValues);
-
         if (monitorBean.getType().equals("ping")) {
 
-            if (affectedRawPing > 0 && affectedRawPolling > 0) {
+            if (affectedRawPing > 0) {
 
                 monitorBean.setStatus("Updated Ping");
 
@@ -143,26 +103,26 @@ public class MonitorDao {
 
                 if (resultSet.next()) {
 
-                    ArrayList updateAttributes = new ArrayList(Arrays.asList("username","password"));
+                    ArrayList updateAttributes = new ArrayList(Arrays.asList("username", "password"));
 
-                    ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(),monitorBean.getPassword()));
+                    ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(), monitorBean.getPassword()));
 
                     ArrayList updateConditionAttributes = new ArrayList(Arrays.asList("ip"));
 
                     ArrayList updateConditionValues = new ArrayList(Arrays.asList(monitorBean.getIp()));
 
-                    int affectedRawSsh = database.update("credential", updateAttributes, updateValues,updateConditionAttributes,updateConditionValues);
+                    int affectedRawSsh = database.update("credential", updateAttributes, updateValues, updateConditionAttributes, updateConditionValues);
 
-                    if (affectedRawPing > 0 && affectedRawSsh > 0 && affectedRawPolling > 0) {
+                    if (affectedRawPing > 0 && affectedRawSsh > 0) {
 
                         monitorBean.setStatus("Updated SSH");
 
                     }
                 } else {
 
-                    ArrayList insertAttributes = new ArrayList(Arrays.asList("ip","username","password"));
+                    ArrayList insertAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
 
-                    ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(),monitorBean.getUsername(),monitorBean.getPassword()));
+                    ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword()));
 
                     int affectedRawSsh = database.insert("credential", insertAttributes, insertValues);
 
@@ -198,13 +158,53 @@ public class MonitorDao {
 
         if (affectedRaw > 0) {
 
-            monitorBean.setStatus("Monitor Deleted");
+            monitorBean.setStatus("Monitor Deleted!");
 
         } else {
 
-            monitorBean.setStatus("Could not Delete");
+            monitorBean.setStatus("Could not Delete!");
 
         }
 
     }
+
+    public void add(MonitorBean monitorBean) {
+
+        Database database = new Database();
+
+        ArrayList attributes = new ArrayList(Arrays.asList("name", "ip", "type", "tag"));
+
+        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+
+        int affectedRawPing = database.insert("monitor", attributes, values);
+
+        if (monitorBean.getType().equals("ping")) {
+
+            if (affectedRawPing > 0) {
+
+                monitorBean.setStatus("Added Ping");
+
+            }
+
+        } else {
+
+            ArrayList credentialAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
+
+            ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword()));
+
+            int affectedRawSsh = database.insert("credential", credentialAttributes, credentialValues);
+
+            if (affectedRawPing > 0 && affectedRawSsh > 0) {
+
+                monitorBean.setStatus("Added SSH!");
+
+            }
+        }
+
+        GetData getData = new GetData();
+
+        monitorBean.setMonitorList(getData.getAllMonitor());
+
+    }
+
 }

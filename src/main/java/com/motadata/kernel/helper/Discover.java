@@ -73,9 +73,7 @@ public class Discover {
 
             String command = "ping -c 4 " + ip;
 
-            String[] cmd = {"/bin/sh", "-c", command};
-
-            Process process = runtime.exec(cmd);
+            Process process = runtime.exec(command);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -95,7 +93,7 @@ public class Discover {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            return false;
 
         }
 

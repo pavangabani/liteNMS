@@ -12,4 +12,5 @@ public class DashboardDao {
         dashboardBean.setAvailability(getData.getDashboardData());
 
     }
+
 }

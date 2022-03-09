@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $("#myBtn").on("click", function () {
         $("#myModal").show();
     });
@@ -8,6 +9,7 @@ $(document).ready(function () {
     $("#close2").click(function () {
         $("#myModalUpdate").hide();
     });
+
     var request = {
         url: "Load.action",
         data: "",
@@ -17,19 +19,6 @@ $(document).ready(function () {
     };
     ajaxpost(request);
 })
-
-function run(that) {
-    var ip = $(that).parent().prev().prev().prev().text();
-    var type = $(that).parent().prev().prev().text();
-    var request = {
-        url: "Run.action",
-        data: "ip=" + ip + "&type=" + type,
-        runfunction: function (data) {
-            alert(data.status);
-        },
-    };
-    ajaxpost(request);
-}
 
 function addforpolling(that, id) {
     var name = $(that).parent().prev().prev().prev().prev().text();
@@ -140,9 +129,10 @@ function add() {
             };
             ajaxpost(request);
         }
+        $('#monitor').trigger("reset");
+        $("#myModal").hide();
     }
-    $('#monitor').trigger("reset");
-    $("#myModal").hide();
+
 }
 
 function ajaxpost(request) {
@@ -168,7 +158,6 @@ function adddata(data) {
             "<td>" + this.type + "</td>" +
             "<td>" + this.tag + "</td>" +
             "<td>" +
-            "<button onclick='run(this)' className='btn' style='margin-left: 5px'>Run</button>" +
             "<button onclick='addforpolling(this," + this.id + ")' className='btn' style='margin-left: 5px'>Add</button>" +
             "<button onclick='edit(this," + this.id + ")' className='btn' style='margin-left: 5px'>Edit</button>" +
             "<button onclick='deletemonitor(" + this.id + ")' className='btn' style='margin-left: 5px'>Delete</button>" +
@@ -180,35 +169,35 @@ function adddata(data) {
 
 function validate(name, ip, type, tag) {
     var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (name == "" || name == null) {
-        alert("Enter Name Of Monitor");
-    } else if (ip == "" || ip == null) {
-        alert("Enter IP");
+    if (name == "" ) {
+        customalert("#failure", "Enter Valid Name");
+    } else if (ip == "") {
+        customalert("#failure", "Enter IP");
     } else if (!ipformat.test(ip)) {
-        alert("Enter Valid IP");
-    } else if (tag == "" || tag == null) {
-        alert("Enter Tag");
+        customalert("#failure", "Enter Valid IP");
+    } else if (tag=="") {
+        customalert("#failure", "Enter Tag");
     } else {
         return true;
     }
 }
 
 function showssh() {
-
     if($("#updatetype").val() == "ssh"){
-
         $("#updatesshdivision").show();
-
     } else if ($("#type").val() == "ssh") {
-
         $("#sshdivision").show();
-
     } else {
-
         $("#sshdivision").hide();
-
         $("#updatesshdivision").hide();
-
     }
+}
+
+function customalert(id,message){
+    $(id).text(message);
+    $(id).show();
+    setTimeout(function (){
+        $(id).hide();
+    },2000);
 }
 

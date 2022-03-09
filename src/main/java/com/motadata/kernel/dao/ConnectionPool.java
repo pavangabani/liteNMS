@@ -2,7 +2,6 @@ package com.motadata.kernel.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -25,29 +24,22 @@ public class ConnectionPool {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-        } catch (ClassNotFoundException e) {
+            connectionsPool = new ArrayBlockingQueue(size);
 
-            e.printStackTrace();
-
-        }
-
-        connectionsPool = new ArrayBlockingQueue(size);
-
-        for (int i = 0; i < size; i++) {
-
-            try {
+            for (int i = 0; i < size; i++) {
 
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
 
                 connectionsPool.add(connection);
 
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
             }
 
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
+
     }
 
     public static Connection getConnection() {
@@ -57,6 +49,7 @@ public class ConnectionPool {
         usedConnection.add(connection);
 
         return connection;
+
     }
 
     static void releaseConnection(Connection connection) {
@@ -72,6 +65,7 @@ public class ConnectionPool {
             e.printStackTrace();
 
         }
+
     }
 
 }
