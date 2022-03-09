@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class LoginDao {
 
@@ -16,7 +17,13 @@ public class LoginDao {
 
         ArrayList attributes = new ArrayList(Arrays.asList("user","pass"));
 
-        ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(),loginBean.getPassword()));
+        String username=loginBean.getUsername();
+
+        String password = loginBean.getPassword();
+
+        String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+        ArrayList values=new ArrayList(Arrays.asList(username,encodedPassword));
 
         ResultSet resultSet = database.select("login", attributes, values);
 

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Properties;
 
 public class Discover {
@@ -47,7 +48,11 @@ public class Discover {
 
                 resultSet.absolute(1);
 
-                boolean sshTest = ssh(ip, resultSet.getString(2), resultSet.getString(3));
+                byte[] passwordBytes = Base64.getDecoder().decode(resultSet.getString(3));
+
+                String decodePassword = new String(passwordBytes);
+
+                boolean sshTest = ssh(ip, resultSet.getString(2), decodePassword);
 
                 discoveryTest = sshTest;
 

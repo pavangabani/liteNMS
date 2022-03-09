@@ -106,5 +106,4 @@ public class PollingMonitorBean {
         this.sshStatistic = sshStatistic;
     }
 
-
 }

@@ -100,7 +100,11 @@ public class PollingDump {
 
             String ussername = resultSet.getString(2);
 
-            String password = resultSet.getString(3);
+            String password=resultSet.getString(3);
+
+            byte[] passwordBytes = Base64.getDecoder().decode(password);
+
+            String decodePassword = new String(passwordBytes);
 
             Properties config = new Properties();
 
@@ -110,7 +114,7 @@ public class PollingDump {
 
             Session session = jsch.getSession(ussername, ip, 22);
 
-            session.setPassword(password);
+            session.setPassword(decodePassword);
 
             session.setConfig(config);
 

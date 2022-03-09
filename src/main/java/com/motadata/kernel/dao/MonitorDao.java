@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class MonitorDao {
 
@@ -105,7 +106,11 @@ public class MonitorDao {
 
                     ArrayList updateAttributes = new ArrayList(Arrays.asList("username", "password"));
 
-                    ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(), monitorBean.getPassword()));
+                    String password = monitorBean.getPassword();
+
+                    String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+                    ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(),encodedPassword ));
 
                     ArrayList updateConditionAttributes = new ArrayList(Arrays.asList("ip"));
 
@@ -122,7 +127,11 @@ public class MonitorDao {
 
                     ArrayList insertAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
 
-                    ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword()));
+                    String password =  monitorBean.getPassword();
+
+                    String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+                    ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(),encodedPassword));
 
                     int affectedRawSsh = database.insert("credential", insertAttributes, insertValues);
 
@@ -190,7 +199,11 @@ public class MonitorDao {
 
             ArrayList credentialAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
 
-            ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword()));
+            String password = monitorBean.getPassword();
+
+            String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+            ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), encodedPassword));
 
             int affectedRawSsh = database.insert("credential", credentialAttributes, credentialValues);
 

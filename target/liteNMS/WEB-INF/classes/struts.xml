@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+
+    <package name="Start" namespace="/" extends="struts-default">
+        <action  name="">
+            <result>login.jsp</result>
+        </action>
+    </package>
+
     <package name="Main" extends="json-default,struts-default">
 
         <action name="Login" class="com.motadata.kernel.action.Login" method="login">
@@ -16,9 +22,6 @@
         </action>
         <action name="Add" class="com.motadata.kernel.action.Monitor" method="add">
             <result name="ADDED" type="json"></result>
-        </action>
-        <action name="Run" class="com.motadata.kernel.action.Monitor" method="run">
-            <result name="RUN" type="json"></result>
         </action>
         <action name="AddPolling" class="com.motadata.kernel.action.Monitor" method="addPolling">
             <result name="ADDED" type="json"></result>
