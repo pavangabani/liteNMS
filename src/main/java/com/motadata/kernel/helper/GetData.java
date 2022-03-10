@@ -4,84 +4,68 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.dao.Database;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GetData {
 
     public List<PollingMonitorBean> getAllPollingMonitor() {
 
-        Database database = new Database();
+        String query = "select * from pollingmonitor";
+
+        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
 
         List<PollingMonitorBean> pollingmonitorList = new ArrayList<>();
 
-        try {
+        for (HashMap<String, String> row : data) {
 
-            ResultSet resultSet = database.select("pollingmonitor", new ArrayList(), new ArrayList());
+            PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
 
-            while (resultSet.next()) {
+            pollingmonitorBean.setId(row.get("id"));
 
-                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
+            pollingmonitorBean.setName(row.get("name"));
 
-                pollingmonitorBean.setId(resultSet.getString(1));
+            pollingmonitorBean.setIp(row.get("ip"));
 
-                pollingmonitorBean.setName(resultSet.getString(2));
+            pollingmonitorBean.setType(row.get("type"));
 
-                pollingmonitorBean.setIp(resultSet.getString(3));
+            pollingmonitorBean.setTag(row.get("tag"));
 
-                pollingmonitorBean.setType(resultSet.getString(4));
+            pollingmonitorBean.setAvailability(row.get("availability"));
 
-                pollingmonitorBean.setTag(resultSet.getString(5));
-
-                pollingmonitorBean.setAvailability(resultSet.getString(6));
-
-                pollingmonitorList.add(pollingmonitorBean);
-
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
+            pollingmonitorList.add(pollingmonitorBean);
 
         }
+
 
         return pollingmonitorList;
     }
 
     public List<MonitorBean> getAllMonitor() {
 
-        Database database = new Database();
-
         List<MonitorBean> monitorList = new ArrayList<>();
 
-        try {
+        String query = "select * from monitor";
 
-            ResultSet resultSet = database.select("monitor",new ArrayList(), new ArrayList());
+        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
 
-            while (resultSet.next()) {
+        for (HashMap<String, String> row : data) {
 
-                MonitorBean monitorBean = new MonitorBean();
+            MonitorBean monitorBean = new MonitorBean();
 
-                monitorBean.setId(resultSet.getString(1));
+            monitorBean.setId(row.get("id"));
 
-                monitorBean.setName(resultSet.getString(2));
+            monitorBean.setName(row.get("name"));
 
-                monitorBean.setIp(resultSet.getString(3));
+            monitorBean.setIp(row.get("ip"));
 
-                monitorBean.setType(resultSet.getString(4));
+            monitorBean.setType(row.get("type"));
 
-                monitorBean.setTag(resultSet.getString(5));
+            monitorBean.setTag(row.get("tag"));
 
-                monitorList.add(monitorBean);
-
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
+            monitorList.add(monitorBean);
 
         }
 
@@ -90,42 +74,36 @@ public class GetData {
 
     public List<Integer> getDashboardData() {
 
-        Database database = new Database();
+        String query = "select availability from pollingmonitor";
 
-        ResultSet resultSet = database.select("pollingmonitor", new ArrayList(), new ArrayList());
+        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
 
-        int up = 0,down = 0,unrechable = 0,total = 0;
+        int up = 0, down = 0, unrechable = 0, total = 0;
 
-        try {
+        for (HashMap<String, String> row : data) {
 
-            while (resultSet.next()) {
+            if (row.get("availability").equals("UP")) {
 
-                if (resultSet.getString(6).equals("UP")) {
+                up++;
 
-                    up++;
+            }
+            if (row.get("availability").equals("DOWN")) {
 
-                } else if (resultSet.getString(6).equals("DOWN")) {
+                down++;
 
-                    down++;
+            }
+            if (row.get("availability").equals("Unknown")) {
 
-                } else {
-
-                    unrechable++;
-
-                }
-                
-                total++;
+                unrechable++;
 
             }
 
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
+            total++;
 
         }
 
-        List<Integer> availability = new ArrayList<>(Arrays.asList(unrechable,up,down,total));
+
+        List<Integer> availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
 
         return availability;
 

@@ -15,7 +15,6 @@ function adddata(data){
     $("#three").html("<h1> Down: "+data.availability[2]+"</h1>");
     $("#four").html("<h1> Total: "+data.availability[3]+"</h1>");
 
-
 }
 function ajaxpost(request) {
     $.ajax({

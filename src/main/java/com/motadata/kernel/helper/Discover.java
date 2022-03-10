@@ -5,12 +5,7 @@ import com.motadata.kernel.dao.Database;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Properties;
+import java.util.*;
 
 public class Discover {
 
@@ -36,31 +31,19 @@ public class Discover {
 
         if (type.equals("ssh")) {
 
-            try {
+            ArrayList values = new ArrayList(Arrays.asList(ip));
 
-                Database database = new Database();
+            String query = "select * from credential where ip=?";
 
-                ArrayList attributes = new ArrayList(Arrays.asList("ip"));
+            List<HashMap<String, String>> data = Database.select(query, values);
 
-                ArrayList values = new ArrayList(Arrays.asList(ip));
+            byte[] passwordBytes = Base64.getDecoder().decode(data.get(0).get("password"));
 
-                ResultSet resultSet = database.select("credential", attributes, values);
+            String decodePassword = new String(passwordBytes);
 
-                resultSet.absolute(1);
+            boolean sshTest = ssh(ip, data.get(0).get("username"), decodePassword);
 
-                byte[] passwordBytes = Base64.getDecoder().decode(resultSet.getString(3));
-
-                String decodePassword = new String(passwordBytes);
-
-                boolean sshTest = ssh(ip, resultSet.getString(2), decodePassword);
-
-                discoveryTest = sshTest;
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
-            }
+            discoveryTest = sshTest;
 
         }
 

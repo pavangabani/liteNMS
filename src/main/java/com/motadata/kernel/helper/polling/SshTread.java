@@ -24,15 +24,13 @@ public class SshTread implements Runnable{
     @Override
     public void run() {
 
-        Database database=new Database();
-
         PollingSshBean pollingSshBean=new PollingDump().getSshData(ip);
-
-        ArrayList attributes=new ArrayList(Arrays.asList("id","cpu","memory","disk","uptime","pollingtime"));
 
         ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime())));
 
-        database.insert("sshdump",attributes,values);
+        String query="insert into sshdump (id,cpu,memory,disk,uptime,pollingtime) values(?,?,?,?,?,?)";
+
+        Database.update(query,values);
 
     }
 }

@@ -4,11 +4,7 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.helper.Discover;
 import com.motadata.kernel.helper.GetData;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.*;
 
 public class MonitorDao {
 
@@ -42,13 +38,11 @@ public class MonitorDao {
 
         if (monitorBean.getStatus().equals("Discovery Successful!")) {
 
-            Database database = new Database();
-
-            ArrayList attributes = new ArrayList(Arrays.asList("id", "name", "ip", "type", "tag", "availability"));
-
             ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(), monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), "Unknown"));
 
-            int affectedRaw = database.insert("pollingmonitor", attributes, values);
+            String query="insert into pollingmonitor (id,name,ip,type,tag,availability) values(?,?,?,?,?,?)";
+
+            int affectedRaw = Database.update(query,values);
 
             if (affectedRaw > 0) {
 
@@ -74,15 +68,11 @@ public class MonitorDao {
 
         GetData getData = new GetData();
 
-        ArrayList attributes = new ArrayList(Arrays.asList("name", "ip", "type", "tag"));
+        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(),monitorBean.getId()));
 
-        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+        String query="update monitor set name=?,ip=?,type=?,tag=? where id=?";
 
-        ArrayList conditionAttributes = new ArrayList(Arrays.asList("id"));
-
-        ArrayList conditionValues = new ArrayList(Arrays.asList(monitorBean.getId()));
-
-        int affectedRawPing = database.update("monitor", attributes, values, conditionAttributes, conditionValues);
+        int affectedRawPing = Database.update(query,values);
 
         if (monitorBean.getType().equals("ping")) {
 
@@ -94,58 +84,46 @@ public class MonitorDao {
 
         } else {
 
-            ArrayList attributeCheck = new ArrayList(Arrays.asList("ip"));
-
             ArrayList valuesCheck = new ArrayList(Arrays.asList(monitorBean.getIp()));
 
-            ResultSet resultSet = database.select("credential", attributeCheck, valuesCheck);
+            query = "select * from credential where ip=?";
 
-            try {
+            List<HashMap<String, String>> data = Database.select(query, valuesCheck);
 
-                if (resultSet.next()) {
+            if (data.size() == 1) {
 
-                    ArrayList updateAttributes = new ArrayList(Arrays.asList("username", "password"));
+                String password = monitorBean.getPassword();
 
-                    String password = monitorBean.getPassword();
+                String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
 
-                    String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+                ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(), encodedPassword,monitorBean.getIp()));
 
-                    ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(),encodedPassword ));
+                query="update credential set username=?,password=? where ip=?";
 
-                    ArrayList updateConditionAttributes = new ArrayList(Arrays.asList("ip"));
+                int affectedRawSsh = Database.update(query,updateValues);
 
-                    ArrayList updateConditionValues = new ArrayList(Arrays.asList(monitorBean.getIp()));
+                if (affectedRawPing > 0 && affectedRawSsh > 0) {
 
-                    int affectedRawSsh = database.update("credential", updateAttributes, updateValues, updateConditionAttributes, updateConditionValues);
-
-                    if (affectedRawPing > 0 && affectedRawSsh > 0) {
-
-                        monitorBean.setStatus("Updated SSH");
-
-                    }
-                } else {
-
-                    ArrayList insertAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
-
-                    String password =  monitorBean.getPassword();
-
-                    String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
-
-                    ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(),encodedPassword));
-
-                    int affectedRawSsh = database.insert("credential", insertAttributes, insertValues);
-
-                    if (affectedRawPing > 0 && affectedRawSsh > 0) {
-
-                        monitorBean.setStatus("Updated SSH");
-
-                    }
+                    monitorBean.setStatus("Updated SSH");
 
                 }
+            } else {
 
-            } catch (SQLException e) {
+                String password = monitorBean.getPassword();
 
-                e.printStackTrace();
+                String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+
+                ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), encodedPassword));
+
+                query="insert into credential (ip,username,password) values(?,?,?)";
+
+                int affectedRawSsh = Database.update(query,insertValues);
+
+                if (affectedRawPing > 0 && affectedRawSsh > 0) {
+
+                    monitorBean.setStatus("Updated SSH");
+
+                }
 
             }
 
@@ -157,13 +135,11 @@ public class MonitorDao {
 
     public void delete(MonitorBean monitorBean) {
 
-        Database database = new Database();
-
-        ArrayList attributes = new ArrayList(Arrays.asList("id"));
-
         ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId()));
 
-        int affectedRaw = database.delete("monitor", attributes, values);
+        String query="delete from monitor where id=?";
+
+        int affectedRaw = Database.update(query,values);
 
         if (affectedRaw > 0) {
 
@@ -179,13 +155,11 @@ public class MonitorDao {
 
     public void add(MonitorBean monitorBean) {
 
-        Database database = new Database();
-
-        ArrayList attributes = new ArrayList(Arrays.asList("name", "ip", "type", "tag"));
-
         ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
-        int affectedRawPing = database.insert("monitor", attributes, values);
+        String query="insert into monitor (name,ip,type,tag) values(?,?,?,?)";
+
+        int affectedRawPing = Database.update(query,values);
 
         if (monitorBean.getType().equals("ping")) {
 
@@ -197,15 +171,15 @@ public class MonitorDao {
 
         } else {
 
-            ArrayList credentialAttributes = new ArrayList(Arrays.asList("ip", "username", "password"));
-
             String password = monitorBean.getPassword();
 
             String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
 
             ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), encodedPassword));
 
-            int affectedRawSsh = database.insert("credential", credentialAttributes, credentialValues);
+            query="insert into credential (ip,username,password) values(?,?,?)";
+
+            int affectedRawSsh = Database.update(query,credentialValues);
 
             if (affectedRawPing > 0 && affectedRawSsh > 0) {
 

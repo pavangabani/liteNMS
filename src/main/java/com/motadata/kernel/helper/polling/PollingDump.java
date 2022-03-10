@@ -4,13 +4,10 @@ import com.jcraft.jsch.*;
 import com.motadata.kernel.bean.PollingPingBean;
 import com.motadata.kernel.bean.PollingSshBean;
 import com.motadata.kernel.dao.Database;
-import com.motadata.kernel.helper.Discover;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -88,19 +85,15 @@ public class PollingDump {
 
         try {
 
-            Database database = new Database();
-
-            ArrayList attributes = new ArrayList(Arrays.asList("ip"));
-
             ArrayList values = new ArrayList(Arrays.asList(ip));
 
-            ResultSet resultSet = database.select("credential", attributes, values);
+            String query = "select * from credential where ip=?";
 
-            resultSet.next();
+            List<HashMap<String, String>> data = Database.select(query, values);
 
-            String ussername = resultSet.getString(2);
+            String ussername = data.get(0).get("username");
 
-            String password=resultSet.getString(3);
+            String password = data.get(0).get("password");
 
             byte[] passwordBytes = Base64.getDecoder().decode(password);
 
@@ -176,51 +169,37 @@ public class PollingDump {
 
         HashMap<String, Object> pingStatistic = new HashMap<>();
 
-        Database database = new Database();
-
-        ArrayList attributes = new ArrayList(Arrays.asList("id"));
-
         ArrayList values = new ArrayList(Arrays.asList(id));
 
-        try {
+        ArrayList availability = getAvailability(id);
 
-            ArrayList availability = getAvailability(id);
+        pingStatistic.put("pie", availability);
 
-            pingStatistic.put("pie", availability);
+        String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
 
-            String additionalcondition = " ORDER BY pollingtime DESC limit 1";
+        List<HashMap<String, String>> matrixData = Database.select(query, values);
 
-            ResultSet resultSetMatrix = database.select("pingdump", attributes, values, additionalcondition, true);
+        pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
 
-            resultSetMatrix.next();
+        query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
 
-            pingStatistic.put("matrix", new ArrayList(Arrays.asList(resultSetMatrix.getInt(2), resultSetMatrix.getInt(3), resultSetMatrix.getInt(4), resultSetMatrix.getInt(5))));
+        List<HashMap<String, String>> barData = Database.select(query, values);
 
-            additionalcondition = " ORDER BY pollingtime DESC limit 10";
+        ArrayList bary = new ArrayList();
 
-            ResultSet resultSetBar = database.select("pingdump", attributes, values, additionalcondition, true);
+        ArrayList barx = new ArrayList();
 
-            ArrayList<Integer> bary = new ArrayList();
+        for (HashMap<String, String> row : barData) {
 
-            ArrayList<Timestamp> barx = new ArrayList();
+            bary.add(row.get("recrivepackets"));
 
-            while (resultSetBar.next()) {
-
-                bary.add(resultSetBar.getInt(3));
-
-                barx.add(resultSetBar.getTimestamp(6));
-
-            }
-
-            pingStatistic.put("barx", barx);
-
-            pingStatistic.put("bary", bary);
-
-        } catch (SQLException ex) {
-
-            ex.printStackTrace();
+            barx.add(row.get("pollingtime"));
 
         }
+
+        pingStatistic.put("barx", barx);
+
+        pingStatistic.put("bary", bary);
 
         return pingStatistic;
 
@@ -228,55 +207,39 @@ public class PollingDump {
 
     public HashMap<String, Object> getSshStatistic(String id) {
 
-        Database database = new Database();
-
         HashMap<String, Object> sshStatistic = new HashMap<>();
 
-        try {
+        ArrayList values = new ArrayList(Arrays.asList(id));
 
-            ArrayList availability = getAvailability(id);
+        ArrayList availability = getAvailability(id);
 
-            sshStatistic.put("pie", availability);
+        sshStatistic.put("pie", availability);
 
-            String additionalcondition = " ORDER BY pollingtime DESC limit 1";
+        String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 1";
 
-            ArrayList attributes = new ArrayList(Arrays.asList("id"));
+        List<HashMap<String, String>> matrixData = Database.select(query, values);
 
-            ArrayList values = new ArrayList(Arrays.asList(id));
+        sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"))));
 
-            ResultSet resultSetMatrix = database.select("sshdump", attributes, values, additionalcondition, true);
+        query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
 
-            resultSetMatrix.next();
+        List<HashMap<String, String>> barData = Database.select(query, values);
 
-            sshStatistic.put("matrix", new ArrayList(Arrays.asList(resultSetMatrix.getInt(2), resultSetMatrix.getInt(3), resultSetMatrix.getInt(4), resultSetMatrix.getString(5))));
+        ArrayList bary = new ArrayList();
 
-            additionalcondition = " ORDER BY pollingtime DESC limit 10";
+        ArrayList barx = new ArrayList();
 
-            ResultSet resultSetBar = database.select("sshdump", attributes, values, additionalcondition, true);
+        for (HashMap<String, String> row : barData) {
 
-            ArrayList<Integer> bary = new ArrayList();
+            bary.add(row.get("cpu"));
 
-            ArrayList<Timestamp> barx = new ArrayList();
-
-            while (resultSetBar.next()) {
-
-                bary.add(resultSetBar.getInt(2));
-
-                barx.add(resultSetBar.getTimestamp(6));
-
-            }
-
-            sshStatistic.put("barx", barx);
-
-            sshStatistic.put("bary", bary);
-
-            return sshStatistic;
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
+            barx.add(row.get("pollingtime"));
 
         }
+
+        sshStatistic.put("barx", barx);
+
+        sshStatistic.put("bary", bary);
 
         return sshStatistic;
 
@@ -287,8 +250,6 @@ public class PollingDump {
         ArrayList availability = new ArrayList();
 
         try {
-
-            Database database = new Database();
 
             Calendar calendar = Calendar.getInstance();
 
@@ -310,17 +271,19 @@ public class PollingDump {
 
             ArrayList values = new ArrayList(Arrays.asList(id));
 
-            ResultSet resultSet = database.select("pingdump", attributes, values, additionalcondition, false);
+            String query="select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
+
+            List<HashMap<String,String>> data=Database.select(query,values);
 
             int pingSuccess = 0;
 
             int pingTotal = 0;
 
-            while (resultSet.next()) {
+            for (HashMap<String,String> row:data){
 
                 pingTotal += 1;
 
-                if (resultSet.getInt(4) < 50) {
+                if (Integer.parseInt(row.get("packetloss"))< 50) {
 
                     pingSuccess += 1;
 
@@ -346,29 +309,23 @@ public class PollingDump {
 
     }
 
-    public void refreshAvailality(String id,int packetLoss) {
+    public void refreshAvailality(String id, int packetLoss) {
 
-        Database database=new Database();
+        if (packetLoss < 50) {
 
-        ArrayList conditionAttributes=new ArrayList(Arrays.asList("id"));
+            ArrayList values = new ArrayList(Arrays.asList("UP",id));
 
-        ArrayList conditionValues=new ArrayList(Arrays.asList(id));
+            String query="update pollingmonitor set availability=? where id=?";
 
-        if(packetLoss<50){
+            Database.update(query,values);
 
-            ArrayList attributes=new ArrayList(Arrays.asList("availability"));
+        } else {
 
-            ArrayList values=new ArrayList(Arrays.asList("UP"));
+            ArrayList values = new ArrayList(Arrays.asList("DOWN",id));
 
-            database.update("pollingmonitor",attributes,values,conditionAttributes,conditionValues);
+            String query="update pollingmonitor set availability=? where id=?";
 
-        }else {
-
-            ArrayList attributes=new ArrayList(Arrays.asList("availability"));
-
-            ArrayList values=new ArrayList(Arrays.asList("DOWN"));
-
-            database.update("pollingmonitor",attributes,values,conditionAttributes,conditionValues);
+            Database.update(query,values);
 
         }
 

@@ -1,399 +1,133 @@
 package com.motadata.kernel.dao;
+
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Database {
 
-    PreparedStatement preparedStatement;
+    public static List<HashMap<String, String>> select(String query, ArrayList values) {
 
-    public ResultSet select(String tableName, ArrayList attributes, ArrayList values) {
+        Connection connection = ConnectionPool.getConnection();
 
-        Connection connection=ConnectionPool.getConnection();
-
-        ResultSet resultSet = null;
-
-        int size = attributes.size();
-
-        String query="select * from "+tableName+" where ";
-
-        for(Object attribute:attributes){
-
-            query+=attribute+"=? AND ";
-
-        }
-
-        query+= "1=1";
+        List<HashMap<String, String>> data = null;
 
         try {
-            
-            preparedStatement=connection.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            for(int i=1;i<=size;i++){
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-                if(values.get(i-1) instanceof Integer){
+            int i = 1;
 
-                    preparedStatement.setInt(i, (Integer) values.get(i-1));
+            for (Object value : values) {
 
-                }else if(values.get(i-1) instanceof Timestamp){
+                if (value instanceof Integer) {
 
-                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
+                    preparedStatement.setInt(i, (Integer) value);
 
                 }
-                else {
+                else if (value instanceof String) {
 
-                    preparedStatement.setString(i,(String) values.get(i-1));
+                    preparedStatement.setString(i, (String) value);
 
                 }
+                else if (value instanceof Timestamp) {
+
+                    preparedStatement.setTimestamp(i, (Timestamp) value);
+
+                }
+
+                i++;
 
             }
 
-            resultSet=preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            return resultSet;
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 
-        } catch (SQLException e) {
+            int columnCount = resultSetMetaData.getColumnCount();
 
-            e.printStackTrace();
+            data = new ArrayList<>();
 
-        }
-        finally {
+            while (resultSet.next()) {
 
-            try {
+                HashMap<String, String> row = new HashMap<>();
 
-                ConnectionPool.releaseConnection(connection);
+                for (int j = 1; j <= columnCount; j++) {
 
-            } catch (Exception e) {
+                    row.put(resultSetMetaData.getColumnName(j), resultSet.getString(j));
 
-                e.printStackTrace();
+                }
+
+                data.add(row);
 
             }
+
+            preparedStatement.close();
+
+        } catch (SQLException ex) {
+
+            ex.printStackTrace();
+
+        } finally {
+
+            ConnectionPool.releaseConnection(connection);
+
         }
 
-        return resultSet;
+        return data;
 
     }
 
-    public ResultSet select(String tableName, ArrayList attributes, ArrayList values,String additionalCondition,boolean atEnd) {
+    public static int update(String query, ArrayList values) {
 
-        Connection connection=ConnectionPool.getConnection();
+        Connection connection = ConnectionPool.getConnection();
 
-        ResultSet resultSet = null;
-
-        int size = attributes.size();
-
-        String query="select * from "+tableName+" where ";
-
-        if(!atEnd){
-
-            query+=additionalCondition +" AND ";
-
-        }
-
-        for(Object attribute:attributes){
-
-            query+=attribute+"=? AND ";
-
-        }
-
-        query+= "1=1";
-
-        if(atEnd){
-
-            query+=additionalCondition;
-
-        }
+        int affectedRow=0;
 
         try {
 
-            preparedStatement=connection.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            for(int i=1;i<=size;i++){
+            int i = 1;
 
-                if(values.get(i-1) instanceof Integer){
+            for (Object value : values) {
 
-                    preparedStatement.setInt(i, (Integer) values.get(i-1));
+                if (value instanceof Integer) {
 
-                }else if(values.get(i-1) instanceof Timestamp){
-
-                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
+                    preparedStatement.setInt(i, (Integer) value);
 
                 }
-                else {
+                else if (value instanceof String) {
 
-                    preparedStatement.setString(i,(String) values.get(i-1));
+                    preparedStatement.setString(i, (String) value);
 
                 }
+                else if (value instanceof Timestamp) {
+
+                    preparedStatement.setTimestamp(i, (Timestamp) value);
+
+                }
+
+                i++;
 
             }
 
-            resultSet=preparedStatement.executeQuery();
+            affectedRow=preparedStatement.executeUpdate();
 
-            return resultSet;
+            preparedStatement.close();
 
         } catch (SQLException e) {
 
             e.printStackTrace();
 
-        }
-        finally {
+        }finally {
 
-            try {
-
-                ConnectionPool.releaseConnection(connection);
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-        return resultSet;
-
-    }
-
-    public int insert(String tableName,ArrayList attributes,ArrayList values) {
-
-        Connection connection= ConnectionPool.getConnection();
-
-        int affectedRaw=0;
-
-        int length=attributes.size();
-
-        String attributesString ="(";
-
-        String valueString="(";
-
-        for(int i=0;i<length;i++){
-
-            if(length-1==i){
-
-                attributesString += attributes.get(i);
-
-                valueString+="?";
-
-            }else {
-
-                attributesString += attributes.get(i)+",";
-
-                valueString+="?,";
-
-            }
+            ConnectionPool.releaseConnection(connection);
 
         }
 
-        attributesString+=")";
-
-        valueString+=")";
-
-        String query= "insert into "+tableName+" "+attributesString+" values"+valueString;
-
-        try {
-
-            preparedStatement=connection.prepareStatement(query);
-
-            for(int i=1;i<=length;i++){
-
-                if(values.get(i-1) instanceof Integer){
-
-                    preparedStatement.setInt(i, (Integer) values.get(i-1));
-
-                }else if(values.get(i-1) instanceof Timestamp){
-
-                    preparedStatement.setTimestamp(i, (Timestamp) values.get(i-1));
-
-                }
-                else {
-
-                    preparedStatement.setString(i,(String) values.get(i-1));
-                }
-
-            }
-
-            affectedRaw=preparedStatement.executeUpdate();
-
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-        finally {
-
-            try {
-
-                ConnectionPool.releaseConnection(connection);
-
-                preparedStatement.close();
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-        return affectedRaw;
-    }
-
-    public int delete(String tableName,ArrayList attributes,ArrayList values)  {
-
-        Connection connection=ConnectionPool.getConnection();
-
-        int affectedRaw=0;
-
-        int size = attributes.size();
-
-        String query="delete from "+tableName+" where ";
-
-        for(Object attribute:attributes){
-
-            query+=attribute+"=? AND ";
-
-        }
-
-        query+= "1=1";
-
-        try {
-
-            preparedStatement=connection.prepareStatement(query);
-
-            for(int i=1;i<=size;i++){
-
-                if(values.get(i-1) instanceof Integer){
-
-                    preparedStatement.setInt(i, (Integer) values.get(i-1));
-
-                }
-                else {
-
-                    preparedStatement.setString(i,(String) values.get(i-1));
-                }
-
-            }
-
-            affectedRaw=preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-        finally {
-
-            try {
-
-                ConnectionPool.releaseConnection(connection);
-
-                preparedStatement.close();
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-        return affectedRaw;
-
-    }
-
-    public int update(String tableName,ArrayList attributes,ArrayList values,ArrayList conditionAttributes,ArrayList conditionValues){
-
-        Connection connection= ConnectionPool.getConnection();
-
-        int affectedRaw=0;
-
-        int length=attributes.size();
-
-        String attributesString ="";
-
-        for(int i=0;i<length;i++){
-
-            if(i==(length-1)){
-
-                attributesString += attributes.get(i)+"=? ";
-
-            }
-            else {
-
-                attributesString += attributes.get(i)+"=?, ";
-
-            }
-
-
-        }
-
-        int lengthCondition=conditionAttributes.size();
-
-        String conditionAttributeString = "";
-
-        for (int i=0;i<lengthCondition;i++){
-
-            conditionAttributeString +=conditionAttributes.get(i)+"=?";
-
-        }
-
-        String query= "update "+tableName+" set "+attributesString+"where "+conditionAttributeString;
-
-        try {
-
-            PreparedStatement preparedStatement=connection.prepareStatement(query);
-
-            for(int i=1;i<=length;i++){
-
-                if(values.get(i-1) instanceof Integer){
-
-                    preparedStatement.setInt(i, (Integer) values.get(i-1));
-
-                }
-                else {
-
-                    preparedStatement.setString(i,(String) values.get(i-1));
-                }
-
-            }
-
-            for(int i=length+1;i<=length+lengthCondition;i++){
-
-                int index=0;
-
-                if(conditionValues.get(index) instanceof Integer){
-
-                    preparedStatement.setInt(i, (Integer) conditionValues.get(index));
-
-                }
-                else {
-
-                    preparedStatement.setString(i,(String) conditionValues.get(index));
-                }
-
-                index++;
-            }
-
-            affectedRaw=preparedStatement.executeUpdate();
-
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-        finally {
-
-            try {
-
-                ConnectionPool.releaseConnection(connection);
-
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-        return affectedRaw;
+        return affectedRow;
     }
 
 }

@@ -24,17 +24,15 @@ public class PingTread implements Runnable{
     @Override
     public void run() {
 
-        Database database=new Database();
-
         PollingPingBean pollingPingBean=new PollingDump().getPingData(ip);
-
-        ArrayList attributes=new ArrayList(Arrays.asList("id","sentpackets","receivepackets","packetloss","rtt","pollingtime"));
 
         ArrayList values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
 
         new PollingDump().refreshAvailality(id,pollingPingBean.getPacketLoss());
 
-        database.insert("pingdump",attributes,values);
+        String query="insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
+
+        Database.update(query,values);
 
     }
 }

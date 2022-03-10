@@ -1,13 +1,13 @@
 package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.dao.Database;
-import com.motadata.kernel.helper.Discover;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,17 +20,19 @@ public class PollingJob implements Job {
 
             Database database = new Database();
 
-            ResultSet resultSet = database.select("pollingmonitor", new ArrayList(), new ArrayList());
+            String query="select * from pollingmonitor";
+
+            List<HashMap<String,String>> data=Database.select(query,new ArrayList());
 
             ExecutorService pool = Executors.newFixedThreadPool(10);
 
-            while (resultSet.next()) {
+            for (HashMap<String,String> row:data){
 
-                String id=resultSet.getString(1);
+                String id=row.get("id");
 
-                String ip=resultSet.getString(3);
+                String ip=row.get("ip");
 
-                String type=resultSet.getString(4);
+                String type=row.get("type");
 
                 Runnable pingTread=new PingTread(id,ip);
 
@@ -43,6 +45,7 @@ public class PollingJob implements Job {
                     pool.execute(sshTread);
 
                 }
+
             }
 
         } catch (Exception e) {
@@ -52,7 +55,6 @@ public class PollingJob implements Job {
         }
 
     }
-
 
 }
 

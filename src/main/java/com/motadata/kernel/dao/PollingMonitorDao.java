@@ -44,13 +44,11 @@ public class PollingMonitorDao {
 
     public void delete(PollingMonitorBean pollingMonitorBean){
 
-        Database database = new Database();
-
-        ArrayList attributes = new ArrayList(Arrays.asList("id"));
-
         ArrayList values = new ArrayList(Arrays.asList(pollingMonitorBean.getId()));
 
-        int affectedRaw = database.delete("pollingmonitor", attributes, values);
+        String query="delete from pollingmonitor where id=?";
+
+        int affectedRaw = Database.update(query,values);
 
         if (affectedRaw > 0) {
 
