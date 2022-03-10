@@ -3,6 +3,7 @@ package com.motadata.kernel.action;
 import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.dao.LoginDao;
 import com.opensymphony.xwork2.ModelDriven;
+import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
@@ -13,16 +14,23 @@ public class Login implements ModelDriven, SessionAware {
 
     LoginDao loginDao=new LoginDao();
 
-    Map<String, Object> map;
+    SessionMap<String, Object> session;
 
     public String login() {
 
         loginDao.login(loginBean);
 
-        map.put("user",loginBean);
+        session.put("user",loginBean.getUsername());
 
         return "LOGIN";
 
+    }
+
+    public String logout(){
+
+        session.invalidate();
+
+        return "LOGOUT";
     }
 
     @Override
@@ -33,9 +41,9 @@ public class Login implements ModelDriven, SessionAware {
     }
 
     @Override
-    public void setSession(Map<String, Object> map) {
+    public void setSession(Map<String, Object> session) {
 
-        this.map=map;
+        this.session=(SessionMap<String, Object>) session;
 
     }
 }

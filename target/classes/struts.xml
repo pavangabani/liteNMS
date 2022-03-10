@@ -11,8 +11,21 @@
 
     <package name="Main" extends="json-default,struts-default">
 
+        <interceptors>
+            <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor"></interceptor>
+        </interceptors>
+
+        <global-results>
+            <result name="loginUser" type="redirect">login.jsp</result>
+        </global-results>
+
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
         <action name="Login" class="com.motadata.kernel.action.Login" method="login">
             <result name="LOGIN" type="json"></result>
+        </action>
+        <action name="Logout" class="com.motadata.kernel.action.Login" method="logout">
+            <result name="LOGOUT">login.jsp</result>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -53,20 +66,17 @@
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="Welcome">
-            <result>WEB-INF/welcome.jsp</result>
-        </action>
         <action name="Discovery">
+            <interceptor-ref name="userSession"></interceptor-ref>
             <result>WEB-INF/discovery.jsp</result>
         </action>
         <action name="Monitor">
+            <interceptor-ref name="userSession"></interceptor-ref>
             <result>WEB-INF/monitor.jsp</result>
         </action>
         <action name="Dashboard">
+            <interceptor-ref name="userSession"></interceptor-ref>
             <result>WEB-INF/dashboard.jsp</result>
-        </action>
-        <action name="Logout">
-            <result>login.jsp</result>
         </action>
 
     </package>
