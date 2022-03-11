@@ -15,10 +15,9 @@ public class ConnectionPool {
     static {
 
         createFixedSizePool(5);
-
     }
 
-    static void createFixedSizePool(Integer size) {
+    public static void createFixedSizePool(Integer size) {
 
         try {
 
@@ -37,9 +36,7 @@ public class ConnectionPool {
         } catch (Exception e) {
 
             e.printStackTrace();
-
         }
-
     }
 
     public static Connection getConnection() {
@@ -52,7 +49,7 @@ public class ConnectionPool {
 
     }
 
-    static void releaseConnection(Connection connection) {
+    public static void releaseConnection(Connection connection) {
 
         try {
 
@@ -63,9 +60,6 @@ public class ConnectionPool {
         } catch (InterruptedException e) {
 
             e.printStackTrace();
-
         }
-
     }
-
 }

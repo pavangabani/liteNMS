@@ -15,7 +15,6 @@ public class PollingMonitor implements ModelDriven {
         pollingMonitorDao.load(pollingMonitorBean);
 
         return "LOADED";
-
     }
 
     public String show(){
@@ -36,7 +35,5 @@ public class PollingMonitor implements ModelDriven {
     public Object getModel() {
 
         return pollingMonitorBean;
-
     }
-
 }

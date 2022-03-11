@@ -7,8 +7,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.RecursiveTask;
 
-public class PingTread implements Runnable{
+public class PingTread extends RecursiveTask<Boolean> {
 
     String id;
 
@@ -22,17 +23,32 @@ public class PingTread implements Runnable{
     }
 
     @Override
-    public void run() {
+    protected Boolean compute() {
 
-        PollingPingBean pollingPingBean=new PollingDump().getPingData(ip);
+        PollingDump dump=new PollingDump();
 
-        ArrayList values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
+        PollingPingBean pollingPingBean=dump.getPingData(ip);
 
-        new PollingDump().refreshAvailality(id,pollingPingBean.getPacketLoss());
+        //QueryStart
 
         String query="insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
 
+        ArrayList values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
+
         Database.update(query,values);
 
+        //QueryEnd
+
+        dump.refreshAvailality(id,pollingPingBean.getPacketLoss());
+
+        if(pollingPingBean.getPacketLoss()<50){
+
+            return true;
+
+        }else {
+
+            return false;
+
+        }
     }
 }

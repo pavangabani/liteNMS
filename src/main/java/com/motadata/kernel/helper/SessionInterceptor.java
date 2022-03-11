@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
 import java.util.Map;
 
 public class SessionInterceptor implements Interceptor {
+
     @Override
     public void destroy() {
 
@@ -22,10 +23,11 @@ public class SessionInterceptor implements Interceptor {
         Map<String,Object> session=actionInvocation.getInvocationContext().getSession();
 
         if(session.get("user")!=null){
+
             return actionInvocation.invoke();
+
         }
 
         return "loginUser";
-
     }
 }

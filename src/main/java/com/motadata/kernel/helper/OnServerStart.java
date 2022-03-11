@@ -8,13 +8,10 @@ public class OnServerStart extends HttpServlet {
 
     public void init()
     {
-
         PollingScheduler pollingScheduler=new PollingScheduler();
 
         pollingScheduler.createScheduler();
 
         pollingScheduler.startScheduler();
-
     }
-
 }

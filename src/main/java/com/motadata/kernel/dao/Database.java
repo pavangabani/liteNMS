@@ -15,6 +15,8 @@ public class Database {
 
         try {
 
+            //Set Prepare statement
+
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             int i = 1;
@@ -42,6 +44,8 @@ public class Database {
             }
 
             ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Get data from Resultset
 
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 
@@ -76,7 +80,6 @@ public class Database {
         }
 
         return data;
-
     }
 
     public static int update(String query, ArrayList values) {
@@ -86,6 +89,8 @@ public class Database {
         int affectedRow=0;
 
         try {
+
+            //Set Preparestatement
 
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
@@ -123,11 +128,10 @@ public class Database {
 
         }finally {
 
-            ConnectionPool.releaseConnection(connection);
+            ConnectionPool.releaseConnection(connection); //release connection
 
         }
 
         return affectedRow;
     }
-
 }

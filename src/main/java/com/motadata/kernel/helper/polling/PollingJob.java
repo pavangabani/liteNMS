@@ -1,9 +1,9 @@
 package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.helper.PoolUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,45 +14,32 @@ import java.util.concurrent.Executors;
 public class PollingJob implements Job {
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext jobExecutionContext) {
 
-        try {
+        //QueryStart
 
-            Database database = new Database();
+        String query = "select id,ip,type from pollingmonitor";
 
-            String query="select * from pollingmonitor";
+        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
 
-            List<HashMap<String,String>> data=Database.select(query,new ArrayList());
+        //QueryEnd
 
-            ExecutorService pool = Executors.newFixedThreadPool(10);
+        for (HashMap<String, String> row : data) {
 
-            for (HashMap<String,String> row:data){
+            String id=row.get("id"),ip=row.get("ip"),type=row.get("type");
 
-                String id=row.get("id");
+            //forkjoinpool
 
-                String ip=row.get("ip");
+            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingTread(id,ip));
 
-                String type=row.get("type");
+            if (ping && type.equals("ssh")) {
 
-                Runnable pingTread=new PingTread(id,ip);
-
-                pool.execute(pingTread);
-
-                if(type.equals("ssh")){
-
-                    Runnable sshTread=new SshTread(id,ip);
-
-                    pool.execute(sshTread);
-
-                }
+                PoolUtil.forkJoinPool.invoke(new SshTread(id,ip));
 
             }
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
         }
+
 
     }
 

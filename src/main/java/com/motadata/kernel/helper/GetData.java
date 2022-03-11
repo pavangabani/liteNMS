@@ -13,9 +13,13 @@ public class GetData {
 
     public List<PollingMonitorBean> getAllPollingMonitor() {
 
+        //QueryStart
+
         String query = "select * from pollingmonitor";
 
         List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+
+        //QueryEnd
 
         List<PollingMonitorBean> pollingmonitorList = new ArrayList<>();
 
@@ -39,17 +43,20 @@ public class GetData {
 
         }
 
-
         return pollingmonitorList;
     }
 
     public List<MonitorBean> getAllMonitor() {
 
-        List<MonitorBean> monitorList = new ArrayList<>();
+        //QueryStart
 
         String query = "select * from monitor";
 
         List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+
+        //QueryEnd
+
+        List<MonitorBean> monitorList = new ArrayList<>();
 
         for (HashMap<String, String> row : data) {
 
@@ -74,9 +81,13 @@ public class GetData {
 
     public List<Integer> getDashboardData() {
 
+        //QueryStart
+
         String query = "select availability from pollingmonitor";
 
         List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+
+        //QueryEnd
 
         int up = 0, down = 0, unrechable = 0, total = 0;
 
@@ -102,11 +113,8 @@ public class GetData {
 
         }
 
-
         List<Integer> availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
 
         return availability;
-
     }
-
 }

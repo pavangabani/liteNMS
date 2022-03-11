@@ -7,8 +7,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.RecursiveAction;
 
-public class SshTread implements Runnable{
+public class SshTread extends RecursiveAction {
 
     String id;
 
@@ -21,8 +22,9 @@ public class SshTread implements Runnable{
         this.ip=ip;
     }
 
+
     @Override
-    public void run() {
+    protected void compute() {
 
         PollingSshBean pollingSshBean=new PollingDump().getSshData(ip);
 

@@ -23,7 +23,6 @@ public class Login implements ModelDriven, SessionAware {
         session.put("user",loginBean.getUsername());
 
         return "LOGIN";
-
     }
 
     public String logout(){
@@ -37,13 +36,11 @@ public class Login implements ModelDriven, SessionAware {
     public Object getModel() {
 
         return loginBean;
-
     }
 
     @Override
     public void setSession(Map<String, Object> session) {
 
         this.session=(SessionMap<String, Object>) session;
-
     }
 }

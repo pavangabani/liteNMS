@@ -21,7 +21,5 @@ public class Dashboard implements ModelDriven {
     public Object getModel() {
 
         return dashboardBean;
-
     }
-
 }

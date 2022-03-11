@@ -9,41 +9,23 @@ import java.util.*;
 
 public class Discover {
 
-    Session session;
-
-    Properties config;
-
-    JSch jsch;
-
-    public Discover() {
-
-        config = new Properties();
-
-        config.put("StrictHostKeyChecking", "no");
-
-        jsch = new JSch();
-
-    }
-
     public boolean discovery(String ip, String type) {
 
         boolean discoveryTest = ping(ip);
 
-        if (type.equals("ssh")) {
+        if (discoveryTest && type.equals("ssh")) {
 
-            ArrayList values = new ArrayList(Arrays.asList(ip));
+            //QueryStart
 
             String query = "select * from credential where ip=?";
 
+            ArrayList values = new ArrayList(Arrays.asList(ip));
+
             List<HashMap<String, String>> data = Database.select(query, values);
 
-            byte[] passwordBytes = Base64.getDecoder().decode(data.get(0).get("password"));
+            //QueryEnd
 
-            String decodePassword = new String(passwordBytes);
-
-            boolean sshTest = ssh(ip, data.get(0).get("username"), decodePassword);
-
-            discoveryTest = sshTest;
+            discoveryTest = ssh(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password")));
 
         }
 
@@ -53,21 +35,17 @@ public class Discover {
 
     public boolean ping(String ip) {
 
-        Integer packetLoss = 100;
+        int packetLoss = 100;
 
         try {
 
             Runtime runtime = Runtime.getRuntime();
 
-            String command = "ping -c 4 " + ip;
-
-            Process process = runtime.exec(command);
+            Process process = runtime.exec("ping -c 4 " + ip);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-
-            String answer = "";
+            String line, answer = "";
 
             while ((line = reader.readLine()) != null) {
 
@@ -81,27 +59,33 @@ public class Discover {
 
         } catch (Exception e) {
 
-            return false;
+            e.printStackTrace();
 
         }
 
-        if (packetLoss > 50) {
-
-            return false;
-
-        } else {
+        if (packetLoss < 50) {
 
             return true;
 
         }
 
+        return false;
+
     }
 
     public boolean ssh(String ip, String username, String password) {
 
-        boolean sshTest;
+        boolean sshTest = false;
+
+        Session session;
 
         try {
+
+            Properties config = new Properties();
+
+            JSch jsch = new JSch();
+
+            config.put("StrictHostKeyChecking", "no");
 
             session = jsch.getSession(username, ip, 22);
 
@@ -111,11 +95,15 @@ public class Discover {
 
             session.connect();
 
-            sshTest = true;
+            if (session.isConnected()) {
+
+                sshTest = true;
+
+            }
 
         } catch (JSchException e) {
 
-            sshTest = false;
+            e.printStackTrace();
 
         }
 

@@ -25,11 +25,10 @@ public class PollingScheduler {
             Trigger trigger=TriggerBuilder.newTrigger()
                     .withIdentity("myTrigger","group")
                     .startNow()
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(120).repeatForever())
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever())
                     .build();
 
             scheduler.scheduleJob(job,trigger);
-
 
         }catch (Exception e){
 
@@ -37,6 +36,7 @@ public class PollingScheduler {
 
         }
     }
+
     public void startScheduler(){
 
         try {
@@ -46,7 +46,6 @@ public class PollingScheduler {
         } catch (SchedulerException e) {
 
             e.printStackTrace();
-
         }
     }
 }

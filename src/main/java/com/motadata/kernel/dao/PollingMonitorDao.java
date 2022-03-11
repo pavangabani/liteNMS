@@ -9,46 +9,41 @@ import java.util.Arrays;
 
 public class PollingMonitorDao {
 
-    public void load(PollingMonitorBean pollingMonitorBean){
+    public void load(PollingMonitorBean pollingMonitorBean) {
 
-        GetData getData=new GetData();
+        GetData getData = new GetData();
 
         pollingMonitorBean.setPollingMonitorBeanList(getData.getAllPollingMonitor());
 
     }
 
-    public void show(PollingMonitorBean pollingMonitorBean){
+    public void show(PollingMonitorBean pollingMonitorBean) {
+        
+        PollingDump getData = new PollingDump();
 
-        try {
+        if (pollingMonitorBean.getType().equals("ping")) {
 
-            PollingDump getData=new PollingDump();
+            pollingMonitorBean.setPingStatistic(getData.getPingStatistic(pollingMonitorBean.getId()));
 
-            if (pollingMonitorBean.getType().equals("ping")){
+        } else {
 
-                pollingMonitorBean.setPingStatistic(getData.getPingStatistic(pollingMonitorBean.getId()));
-
-            }
-            else {
-
-                pollingMonitorBean.setSshStatistic(getData.getSshStatistic(pollingMonitorBean.getId()));
-
-            }
-
-        }catch (Exception e){
-
-            e.printStackTrace();
+            pollingMonitorBean.setSshStatistic(getData.getSshStatistic(pollingMonitorBean.getId()));
 
         }
 
     }
 
-    public void delete(PollingMonitorBean pollingMonitorBean){
+    public void delete(PollingMonitorBean pollingMonitorBean) {
+
+        //QueryStart
+
+        String query = "delete from pollingmonitor where id=?";
 
         ArrayList values = new ArrayList(Arrays.asList(pollingMonitorBean.getId()));
 
-        String query="delete from pollingmonitor where id=?";
+        int affectedRaw = Database.update(query, values);
 
-        int affectedRaw = Database.update(query,values);
+        //QueryEnd
 
         if (affectedRaw > 0) {
 
@@ -59,6 +54,5 @@ public class PollingMonitorDao {
             pollingMonitorBean.setStatus("Could not Delete!");
 
         }
-
     }
 }
