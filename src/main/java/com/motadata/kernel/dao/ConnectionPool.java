@@ -12,11 +12,6 @@ public class ConnectionPool {
 
     private static ArrayList<Connection> usedConnection = new ArrayList<>();
 
-    static {
-
-        createFixedSizePool(5);
-    }
-
     public static void createFixedSizePool(Integer size) {
 
         try {

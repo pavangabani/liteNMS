@@ -2,6 +2,7 @@ package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.bean.PollingPingBean;
 import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.dao.GetData;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ public class PingTread extends RecursiveTask<Boolean> {
     @Override
     protected Boolean compute() {
 
-        PollingDump dump=new PollingDump();
+        GetData getData=new GetData();
 
-        PollingPingBean pollingPingBean=dump.getPingData(ip);
+        PollingPingBean pollingPingBean=getData.getPingData(ip);
 
         //QueryStart
 
@@ -39,13 +40,25 @@ public class PingTread extends RecursiveTask<Boolean> {
 
         //QueryEnd
 
-        dump.refreshAvailality(id,pollingPingBean.getPacketLoss());
+        //Update PollingMonitor table & returning status of ping
 
         if(pollingPingBean.getPacketLoss()<50){
+
+            values = new ArrayList(Arrays.asList("UP",id));
+
+            query="update pollingmonitor set availability=? where id=?";
+
+            Database.update(query,values);
 
             return true;
 
         }else {
+
+            values = new ArrayList(Arrays.asList("DOWN",id));
+
+            query="update pollingmonitor set availability=? where id=?";
+
+            Database.update(query,values);
 
             return false;
 

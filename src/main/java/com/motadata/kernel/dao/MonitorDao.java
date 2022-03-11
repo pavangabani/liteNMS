@@ -3,7 +3,6 @@ package com.motadata.kernel.dao;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.helper.Cipher;
 import com.motadata.kernel.helper.Discover;
-import com.motadata.kernel.helper.GetData;
 
 import java.util.*;
 

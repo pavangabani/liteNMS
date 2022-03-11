@@ -1,7 +1,6 @@
 package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.DashboardBean;
-import com.motadata.kernel.helper.GetData;
 
 public class DashboardDao {
 

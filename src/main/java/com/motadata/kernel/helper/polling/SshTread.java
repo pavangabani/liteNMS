@@ -2,6 +2,7 @@ package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.bean.PollingSshBean;
 import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.dao.GetData;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,17 +23,19 @@ public class SshTread extends RecursiveAction {
         this.ip=ip;
     }
 
-
     @Override
     protected void compute() {
 
-        PollingSshBean pollingSshBean=new PollingDump().getSshData(ip);
+        PollingSshBean pollingSshBean=new GetData().getSshData(ip);
 
-        ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime())));
+        //QueryStart
 
         String query="insert into sshdump (id,cpu,memory,disk,uptime,pollingtime) values(?,?,?,?,?,?)";
 
+        ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime())));
+
         Database.update(query,values);
 
+        //QueryEnd
     }
 }

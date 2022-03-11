@@ -1,6 +1,5 @@
 package com.motadata.kernel.helper.polling;
 
-import com.motadata.kernel.helper.polling.PollingJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 

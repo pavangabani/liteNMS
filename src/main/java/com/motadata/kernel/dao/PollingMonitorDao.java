@@ -1,8 +1,6 @@
 package com.motadata.kernel.dao;
 
 import com.motadata.kernel.bean.PollingMonitorBean;
-import com.motadata.kernel.helper.GetData;
-import com.motadata.kernel.helper.polling.PollingDump;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +17,7 @@ public class PollingMonitorDao {
 
     public void show(PollingMonitorBean pollingMonitorBean) {
         
-        PollingDump getData = new PollingDump();
+        GetData getData = new GetData();
 
         if (pollingMonitorBean.getType().equals("ping")) {
 

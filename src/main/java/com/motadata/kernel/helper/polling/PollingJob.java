@@ -8,8 +8,6 @@ import org.quartz.JobExecutionContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PollingJob implements Job {
 
@@ -35,13 +33,8 @@ public class PollingJob implements Job {
             if (ping && type.equals("ssh")) {
 
                 PoolUtil.forkJoinPool.invoke(new SshTread(id,ip));
-
             }
-
         }
-
-
     }
-
 }
 
