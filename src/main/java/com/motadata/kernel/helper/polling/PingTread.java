@@ -2,7 +2,7 @@ package com.motadata.kernel.helper.polling;
 
 import com.motadata.kernel.bean.PollingPingBean;
 import com.motadata.kernel.dao.Database;
-import com.motadata.kernel.dao.GetData;
+import com.motadata.kernel.helper.GetData;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

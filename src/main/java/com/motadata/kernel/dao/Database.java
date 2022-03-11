@@ -69,9 +69,9 @@ public class Database {
 
             preparedStatement.close();
 
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
 
-            ex.printStackTrace();
+            e.printStackTrace();
 
         } finally {
 

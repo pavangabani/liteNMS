@@ -173,9 +173,9 @@ function showsshdata(id,type){
         data:"id="+id+"&type="+type,
         runfunction:function (data){
             chart2(data);
-            $("#matrix1").text("CPU: "+data.sshStatistic.matrix[0]);
-            $("#matrix2").text("Memory: "+data.sshStatistic.matrix[1]);
-            $("#matrix3").text("Disk: "+data.sshStatistic.matrix[2]);
+            $("#matrix1").text("CPU: "+data.sshStatistic.matrix[0]+"%");
+            $("#matrix2").text("Memory: "+data.sshStatistic.matrix[1]+"%");
+            $("#matrix3").text("Disk: "+data.sshStatistic.matrix[2]+"%");
             $("#matrix4").text("Uptime: "+data.sshStatistic.matrix[3]);
         }
     }

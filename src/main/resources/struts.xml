@@ -21,46 +21,46 @@
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="Login" class="com.motadata.kernel.action.Login" method="login">
+        <action name="Login" class="com.motadata.kernel.action.LoginAction" method="login">
             <result name="LOGIN" type="json"></result>
         </action>
-        <action name="Logout" class="com.motadata.kernel.action.Login" method="logout">
+        <action name="Logout" class="com.motadata.kernel.action.LoginAction" method="logout">
             <result name="LOGOUT">login.jsp</result>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="Load" class="com.motadata.kernel.action.Monitor" method="load">
+        <action name="Load" class="com.motadata.kernel.action.MonitorAction" method="load">
             <result name="LOADED" type="json"></result>
         </action>
-        <action name="Add" class="com.motadata.kernel.action.Monitor" method="add">
+        <action name="Add" class="com.motadata.kernel.action.MonitorAction" method="add">
             <result name="ADDED" type="json"></result>
         </action>
-        <action name="AddPolling" class="com.motadata.kernel.action.Monitor" method="addPolling">
+        <action name="AddPolling" class="com.motadata.kernel.action.MonitorAction" method="addPolling">
             <result name="ADDED" type="json"></result>
         </action>
-        <action name="Edit" class="com.motadata.kernel.action.Monitor" method="edit">
+        <action name="Edit" class="com.motadata.kernel.action.MonitorAction" method="edit">
             <result name="EDITED" type="json"></result>
         </action>
-        <action name="Delete" class="com.motadata.kernel.action.Monitor" method="delete">
+        <action name="Delete" class="com.motadata.kernel.action.MonitorAction" method="delete">
             <result name="DELETED" type="json"></result>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitor" method="load">
+        <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitorAction" method="load">
             <result name="LOADED" type="json"></result>
         </action>
-        <action name="PollingStatistic" class="com.motadata.kernel.action.PollingMonitor" method="show">
+        <action name="PollingStatistic" class="com.motadata.kernel.action.PollingMonitorAction" method="show">
             <result name="SHOW" type="json"></result>
         </action>
-        <action name="DeletePolling" class="com.motadata.kernel.action.PollingMonitor" method="delete">
+        <action name="DeletePolling" class="com.motadata.kernel.action.PollingMonitorAction" method="delete">
             <result name="DELETED" type="json"></result>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-        <action name="LoadDashboard" class="com.motadata.kernel.action.Dashboard" method="load">
+        <action name="LoadDashboard" class="com.motadata.kernel.action.DashboardAction" method="load">
             <result name="LOADED" type="json"></result>
         </action>
 

@@ -9,13 +9,13 @@
 
 #one{
     color: #000;
-    background-color: brown;
+    background-color: orangered;
     margin: 10px;
     padding: 50px;
 }
 #two{
     color: #000;
-    background-color: orange;
+    background-color: lawngreen;
     margin: 10px;
     padding: 50px;
 }
@@ -27,7 +27,7 @@
 }
 #four{
     color: #000;
-    background-color: yellow;
+    background-color: lightgray;
     margin: 10px;
     padding: 50px;
 }

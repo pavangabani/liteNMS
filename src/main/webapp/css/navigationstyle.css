@@ -21,6 +21,11 @@
     gap: 1em;
     font-size: 18px;
 }
+.menu a:hover {
+    color: yellow;
+    border-radius: 5px;
+    transition: 0.3s ease;
+}
 .menu li {
     padding: 5px 14px;
 }

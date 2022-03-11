@@ -1,8 +1,9 @@
-package com.motadata.kernel.dao;
+package com.motadata.kernel.executor;
 
 import com.motadata.kernel.bean.DashboardBean;
+import com.motadata.kernel.helper.GetData;
 
-public class DashboardDao {
+public class DashboardExecutor {
 
     public void load(DashboardBean dashboardBean){
 

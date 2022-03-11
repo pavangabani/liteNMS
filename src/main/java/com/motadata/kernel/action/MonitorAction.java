@@ -1,46 +1,46 @@
 package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.MonitorBean;
-import com.motadata.kernel.dao.MonitorDao;
+import com.motadata.kernel.executor.MonitorExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class Monitor implements ModelDriven {
+public class MonitorAction implements ModelDriven {
 
     MonitorBean monitorBean=new MonitorBean();
 
-    MonitorDao monitorDao=new MonitorDao();
+    MonitorExecutor monitorExecutor =new MonitorExecutor();
 
     public String load(){
 
-        monitorDao.load(monitorBean);
+        monitorExecutor.load(monitorBean);
 
         return "LOADED";
     }
 
     public String add() {
 
-        monitorDao.add(monitorBean);
+        monitorExecutor.add(monitorBean);
 
         return "ADDED";
     }
 
     public String addPolling(){
 
-        monitorDao.addPolling(monitorBean);
+        monitorExecutor.addPolling(monitorBean);
 
         return "ADDED";
     }
 
     public String edit(){
 
-        monitorDao.edit(monitorBean);
+        monitorExecutor.edit(monitorBean);
 
         return "EDITED";
     }
 
     public String delete(){
 
-        monitorDao.delete(monitorBean);
+        monitorExecutor.delete(monitorBean);
 
         return "DELETED";
     }

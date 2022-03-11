@@ -12,10 +12,10 @@
     <h1 style="color: black">AVAILABILITY</h1>
 </div>
 <div class="wrapper">
-    <div id="one"><h1>Unknown : 5</h1></div>
-    <div id="two"><h1>Down : 5</h1></div>
-    <div id="three"><h1>Up : 20</h1></div>
-    <div id="four"><h1>Up : 20</h1></div>
+    <div id="one"><label style="font-size: 30px;font-weight: bold">Unknown:</label></div>
+    <div id="two"><label style="font-size: 30px;font-weight: bold">UP:</label></div>
+    <div id="three"><label style="font-size: 30px;font-weight: bold">Down:</label></div>
+    <div id="four"><label style="font-size: 30px;font-weight: bold">Total:</label></div>
 </div>
 
 </html>

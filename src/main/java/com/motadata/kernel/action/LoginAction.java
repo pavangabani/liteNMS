@@ -1,24 +1,24 @@
 package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.LoginBean;
-import com.motadata.kernel.dao.LoginDao;
+import com.motadata.kernel.executor.LoginExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
 
-public class Login implements ModelDriven, SessionAware {
+public class LoginAction implements ModelDriven, SessionAware {
 
     LoginBean loginBean=new LoginBean();
 
-    LoginDao loginDao=new LoginDao();
+    LoginExecutor loginExecutor =new LoginExecutor();
 
     SessionMap<String, Object> session;
 
     public String login() {
 
-        loginDao.login(loginBean);
+        loginExecutor.login(loginBean);
 
         session.put("user",loginBean.getUsername());
 

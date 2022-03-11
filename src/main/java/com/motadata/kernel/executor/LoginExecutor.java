@@ -1,11 +1,12 @@
-package com.motadata.kernel.dao;
+package com.motadata.kernel.executor;
 
 import com.motadata.kernel.bean.LoginBean;
+import com.motadata.kernel.dao.Database;
 import com.motadata.kernel.helper.Cipher;
 
 import java.util.*;
 
-public class LoginDao {
+public class LoginExecutor {
 
     public void login(LoginBean loginBean) {
 

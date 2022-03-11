@@ -1,18 +1,18 @@
 package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.DashboardBean;
-import com.motadata.kernel.dao.DashboardDao;
+import com.motadata.kernel.executor.DashboardExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class Dashboard implements ModelDriven {
+public class DashboardAction implements ModelDriven {
 
     DashboardBean dashboardBean=new DashboardBean();
 
-    DashboardDao dashboardDao=new DashboardDao();
+    DashboardExecutor dashboardExecutor =new DashboardExecutor();
 
     public String load(){
 
-        dashboardDao.load(dashboardBean);
+        dashboardExecutor.load(dashboardBean);
 
         return "LOADED";
     }

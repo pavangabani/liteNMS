@@ -1,32 +1,32 @@
 package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.PollingMonitorBean;
-import com.motadata.kernel.dao.PollingMonitorDao;
+import com.motadata.kernel.executor.PollingMonitorExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class PollingMonitor implements ModelDriven {
+public class PollingMonitorAction implements ModelDriven {
 
     PollingMonitorBean pollingMonitorBean=new PollingMonitorBean();
 
-    PollingMonitorDao pollingMonitorDao=new PollingMonitorDao();
+    PollingMonitorExecutor pollingMonitorExecutor =new PollingMonitorExecutor();
 
     public String load(){
 
-        pollingMonitorDao.load(pollingMonitorBean);
+        pollingMonitorExecutor.load(pollingMonitorBean);
 
         return "LOADED";
     }
 
     public String show(){
 
-        pollingMonitorDao.show(pollingMonitorBean);
+        pollingMonitorExecutor.show(pollingMonitorBean);
 
         return "SHOW";
     }
 
     public String delete() {
 
-        pollingMonitorDao.delete(pollingMonitorBean);
+        pollingMonitorExecutor.delete(pollingMonitorBean);
 
         return "DELETED";
     }

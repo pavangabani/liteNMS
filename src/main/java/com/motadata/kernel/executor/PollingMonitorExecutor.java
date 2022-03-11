@@ -1,11 +1,13 @@
-package com.motadata.kernel.dao;
+package com.motadata.kernel.executor;
 
 import com.motadata.kernel.bean.PollingMonitorBean;
+import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.helper.GetData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PollingMonitorDao {
+public class PollingMonitorExecutor {
 
     public void load(PollingMonitorBean pollingMonitorBean) {
 
