@@ -36,7 +36,17 @@ public class ConnectionPool {
 
     public static Connection getConnection() {
 
-        Connection connection = connectionsPool.remove();
+        Connection connection = null;
+
+        try {
+
+            connection = connectionsPool.take();
+
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+
+        }
 
         usedConnection.add(connection);
 

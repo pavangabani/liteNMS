@@ -33,7 +33,7 @@
     <div class="modal-content">
         <span id="close">&times;</span>
         <h3>Add Monitor</h3>
-        <div id="failure" class="alert" style="display:none;">
+        <div class="alert failure" style="display:none;">
             <strong>Failure! </strong> Wrong password or username.
         </div>
         <form name="monitor" id="monitor">
@@ -57,6 +57,9 @@
     <div class="modal-content">
         <span id="close2">&times;</span>
         <h3>Update</h3>
+        <div class="alert failure" style="display:none;">
+            <strong>Failure! </strong> Wrong password or username.
+        </div>
         <form name="monitor" id="updatemonitor">
             <input id="updatename" name="name" type="text" placeholder="Name"><br>
             <input id="updateip" name="ip" type="text" placeholder="IP"><br>

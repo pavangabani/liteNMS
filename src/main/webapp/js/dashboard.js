@@ -8,14 +8,14 @@ $(document).ready(function () {
     };
     ajaxpost(request);
 })
-function adddata(data){
 
+function adddata(data){
     $("#one").append("<h1>"+data.availability[0]+"</h1>");
     $("#two").append("<h1>"+data.availability[1]+"</h1>");
     $("#three").append("<h1>"+data.availability[2]+"</h1>");
     $("#four").append("<h1>"+data.availability[3]+"</h1>");
-
 }
+
 function ajaxpost(request) {
     $.ajax({
         type: 'POST',

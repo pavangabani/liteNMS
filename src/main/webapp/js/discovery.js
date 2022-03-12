@@ -20,6 +20,27 @@ $(document).ready(function () {
     ajaxpost(request);
 })
 
+function add() {
+    var name = $("#name").val();
+    var ip = $("#ip").val();
+    var type = $("#type").val();
+    var tag = $("#tag").val();
+    var password = $("#password").val();
+    var username = $("#username").val();
+    if (validate(name, ip, type, tag, username, password)) {
+        var request = {
+            url: "Add.action",
+            data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
+            runfunction: function (data) {
+                adddata(data);
+            },
+        };
+        ajaxpost(request);
+        $('#monitor').trigger("reset");
+        $("#myModal").hide();
+    }
+}
+
 function addforpolling(that, id) {
     var name = $(that).parent().prev().prev().prev().prev().text();
     var ip = $(that).parent().prev().prev().prev().text();
@@ -46,10 +67,9 @@ function edit(that, id) {
     $("#updatename").val(name);
     $("#updatetype").val(type);
     $("#updatetag").val(tag);
-    if(type == "ssh"){
+    if (type == "ssh") {
         $("#updatesshdivision").show();
-    }
-    else {
+    } else {
         $("#updatesshdivision").hide();
     }
 }
@@ -62,34 +82,22 @@ function update() {
     var tag = $("#updatetag").val();
     var password = $("#updatepassword").val();
     var username = $("#updateusername").val();
-    if (validate(name, ip, type, tag)) {
-        if (type == "ssh") {
-            var request = {
-                url: "Edit.action",
-                data: "id=" + id + "&username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
-                    adddata(data);
-                },
-            };
-            ajaxpost(request);
-        } else {
-            var request = {
-                url: "Edit.action",
-                data: "id=" + id + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
-                    adddata(data);
-                },
-            };
-            ajaxpost(request);
-        }
+    if (validate(name, ip, type, tag, username, password)) {
+        var request = {
+            url: "Edit.action",
+            data: "id=" + id + "&username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
+            runfunction: function (data) {
+                adddata(data);
+            },
+        };
+        ajaxpost(request);
     }
-
     $("#myModalUpdate").hide();
     location.reload();
 }
 
 function deletemonitor(id) {
-    if(confirm("Do you want to delete?")){
+    if (confirm("Do you want to delete?")) {
         var request = {
             url: "Delete.action",
             data: "id=" + id,
@@ -102,38 +110,7 @@ function deletemonitor(id) {
     }
 }
 
-function add() {
-    var name = $("#name").val();
-    var ip = $("#ip").val();
-    var type = $("#type").val();
-    var tag = $("#tag").val();
-    var password = $("#password").val();
-    var username = $("#username").val();
-    if (validate(name, ip, type, tag)) {
-        if (type == "ssh") {
-            var request = {
-                url: "Add.action",
-                data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
-                    adddata(data);
-                },
-            };
-            ajaxpost(request);
-        } else {
-            var request = {
-                url: "Add.action",
-                data: "name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
-                    adddata(data);
-                },
-            };
-            ajaxpost(request);
-        }
-        $('#monitor').trigger("reset");
-        $("#myModal").hide();
-    }
-
-}
+//helper functions
 
 function ajaxpost(request) {
     $.ajax({
@@ -167,23 +144,25 @@ function adddata(data) {
     $("#tablebody").html(tabledata);
 }
 
-function validate(name, ip, type, tag) {
+function validate(name, ip, type, tag, username, password) {
     var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (name == "" ) {
-        customalert("#failure", "Enter Valid Name");
+    if (name == "") {
+        customalert(".failure", "Enter Valid Name");
     } else if (ip == "") {
-        customalert("#failure", "Enter IP");
+        customalert(".failure", "Enter IP");
     } else if (!ipformat.test(ip)) {
-        customalert("#failure", "Enter Valid IP");
-    } else if (tag=="") {
-        customalert("#failure", "Enter Tag");
-    } else {
+        customalert(".failure", "Enter Valid IP");
+    } else if (tag == "") {
+        customalert(".failure", "Enter Tag");
+    } else if (type!="ping" && (username == "" || password == "")) {
+        customalert(".failure", "Enter Username & Password");
+    } else if (true) {
         return true;
     }
 }
 
 function showssh() {
-    if($("#updatetype").val() == "ssh"){
+    if ($("#updatetype").val() == "ssh") {
         $("#updatesshdivision").show();
     } else if ($("#type").val() == "ssh") {
         $("#sshdivision").show();
@@ -193,11 +172,11 @@ function showssh() {
     }
 }
 
-function customalert(id,message){
+function customalert(id, message) {
     $(id).text(message);
     $(id).show();
-    setTimeout(function (){
+    setTimeout(function () {
         $(id).hide();
-    },2000);
+    }, 2000);
 }
 

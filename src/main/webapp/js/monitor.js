@@ -184,7 +184,6 @@ function showsshdata(id,type){
 }
 
 function showpingdata(id,type){
-
     var request={
         url:"PollingStatistic.action",
         data:"id="+id+"&type="+type,

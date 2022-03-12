@@ -1,15 +1,20 @@
 $(document).ready(function (){
     $("#loginsubmit").click(function (event){
-        login();
+        var username=$("#username").val();
+        var password=$("#password").val();
+        if(validate(username,password)){
+            login(username,password);
+        }
+        else {
+            customalert("#failure");
+        }
         event.preventDefault();
     });
 });
 
-function login(){
-    var username=$("#username").val();
-    var password=$("#password").val();
+function login(username,password){
     $.ajax({
-        type: "GET",
+        type: "POST",
         data: "username="+username+"&password="+password,
         url: "Login.action",
         success: function(data){
@@ -17,17 +22,24 @@ function login(){
                 window.location.replace('Dashboard.action');
             }
             else {
-                $("#failure").show();
-                setTimeout(function (){
-                    $("#failure").hide();
-                },2000);
+                customalert("#failure")
             }
-
         },
         error: function(data) {
             alert("Some error occured.");
         }
     });
-
 }
-
+function customalert(id) {
+    $(id).show();
+    setTimeout(function () {
+        $(id).hide();
+    }, 2000);
+}
+function validate(username,password){
+    if(username=="" || password==""){
+        return false;
+    } else {
+        return true;
+    }
+}

@@ -260,7 +260,7 @@ public class GetData {
 
         }
 
-        int pieUp = (int) ((float) pingSuccess / (float) pingTotal) * 100;
+        int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
 
         int pieDown = 100 - pieUp;
 
