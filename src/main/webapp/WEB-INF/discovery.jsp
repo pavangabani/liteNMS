@@ -39,7 +39,7 @@
         <form name="monitor" id="monitor">
             <input id="name" name="name" type="text" placeholder="Name"><br>
             <input id="ip" name="ip" type="text" placeholder="IP"><br>
-            <select name="type" id="type" onchange="showssh()">
+            <select name="type" id="type" onchange="helper.showssh()">
                 <option value="ping">Ping</option>
                 <option value="ssh">SSH</option>
             </select><br>
@@ -48,7 +48,7 @@
                 <input id="password" name="password" type="password" placeholder="Password"><br>
             </div>
             <input id="tag" name="tag" type="text" placeholder="Tag"><br>
-            <button type="button" value="Check" onclick="add()">Add</button>
+            <button type="button" value="Check" onclick="main.add()">Add</button>
         </form>
     </div>
 </div>
@@ -63,7 +63,7 @@
         <form name="monitor" id="updatemonitor">
             <input id="updatename" name="name" type="text" placeholder="Name"><br>
             <input id="updateip" name="ip" type="text" placeholder="IP"><br>
-            <select name="type" id="updatetype" onchange="showssh()" placeholder="Type">
+            <select name="type" id="updatetype" onchange="helper.showssh()" placeholder="Type">
                 <option value="ping">Ping</option>
                 <option value="ssh">SSH</option>
             </select><br>
@@ -72,7 +72,7 @@
                 <input id="updatepassword" name="password" type="password" placeholder="Password"><br>
             </div>
             <input id="updatetag" name="tag" type="text" placeholder="Tag"><br>
-            <button type="button" value="Check" onclick="update()">Update</button>
+            <button type="button" value="Check" onclick="main.update()">Update</button>
             <p id="rawid" style="visibility: hidden"></p>
         </form>
     </div>

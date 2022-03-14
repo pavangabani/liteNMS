@@ -139,19 +139,15 @@ public class MonitorExecutor {
 
     public void add(MonitorBean monitorBean) {
 
-        //QueryStart
-
-        String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
-
-        ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
-
-        Database.update(query, values);
-
-        //QueryEnd
-
-        if(monitorBean.getType().equals("ssh")){
+        if(monitorBean.getType().equals("ssh") && Discover.sshTypeTest(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword())){
 
             //QueryStart
+
+            String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
+
+            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+
+            Database.update(query, values);
 
             query = "insert into credential (ip,username,password) values(?,?,?)";
 
@@ -160,6 +156,15 @@ public class MonitorExecutor {
             Database.update(query, credentialValues);
 
             //QueryEnd
+
+        }
+        if(monitorBean.getType().equals("ping")) {
+
+            String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
+
+            ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+
+            Database.update(query, values);
 
         }
 

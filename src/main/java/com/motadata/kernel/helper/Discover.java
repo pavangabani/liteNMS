@@ -3,8 +3,7 @@ package com.motadata.kernel.helper;
 import com.jcraft.jsch.*;
 import com.motadata.kernel.dao.Database;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Discover {
@@ -109,5 +108,60 @@ public class Discover {
 
         return sshTest;
 
+    }
+
+    public static boolean sshTypeTest(String ip,String username,String password){
+
+        try {
+
+            Properties config = new Properties();
+
+            config.put("StrictHostKeyChecking", "no");
+
+            JSch jsch = new JSch();
+
+            Session session = jsch.getSession(username, ip, 22);
+
+            session.setPassword(password);
+
+            session.setConfig(config);
+
+            session.connect();
+
+            //----------------------------------------------------------------------
+
+            Channel channel = session.openChannel("exec");
+
+            ((ChannelExec) channel).setCommand("uname");
+
+            ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+
+            channel.setOutputStream(byteArrayOutputStream);
+
+            channel.connect();
+
+            //GetData-----------------------------------------------------------------
+
+            if(channel.isConnected()){
+
+                Thread.sleep(100);
+
+            }
+
+            String answer= new String(byteArrayOutputStream.toByteArray()).trim();
+
+            if (answer.equals("Linux")){
+
+               return true;
+
+           }
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        return false;
     }
 }

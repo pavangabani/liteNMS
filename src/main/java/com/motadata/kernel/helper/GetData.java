@@ -323,7 +323,7 @@ public class GetData {
 
                 int packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
-                int RTT = Integer.parseInt((outputString.substring(outputString.indexOf("time") + 5, outputString.indexOf("ms"))).trim());
+                int RTT = (int)Float.parseFloat((outputString.substring(outputString.lastIndexOf("=")+1 ,outputString.lastIndexOf("=") + 7).trim()));
 
 
                 //------------------------------------------------------------------------------------------
@@ -386,12 +386,13 @@ public class GetData {
 
             //----------------------------------------------------------------------
 
+
             Channel channel = session.openChannel("exec");
 
             ((ChannelExec) channel).setCommand(
                     "free -m | grep Mem | awk '{print $2}';" +
                             "free -m | grep Mem | awk '{print $3}';" +
-                            "mpstat | grep all | awk {'print $4'};" +
+                            "mpstat | grep IST;" +
                             "df -hT /home | grep dev | awk '{print $6}';" +
                             "uptime -p");
 
@@ -417,11 +418,11 @@ public class GetData {
 
             int memory = (int) ((Float.valueOf(ansArray[1].trim()) / Float.valueOf(ansArray[0].trim())) * 100);
 
-            int cpu = (int) Float.parseFloat(ansArray[2].trim());
+            int cpu = 100-(int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
 
-            int disk = Integer.parseInt(ansArray[3].substring(0, ansArray[3].indexOf("%")));
+            int disk = Integer.parseInt(ansArray[4].substring(0, ansArray[4].indexOf("%")));
 
-            String upTime = ansArray[4].substring(ansArray[4].indexOf("up") + 3).trim();
+            String upTime = ansArray[5].substring(ansArray[5].indexOf("up") + 3).trim();
 
             //--------------------------------------------------------------------------------
 
@@ -433,9 +434,19 @@ public class GetData {
 
             pollingSshBean.setUpTime(upTime);
 
+
+
         } catch (Exception e) {
 
             e.printStackTrace();
+
+            pollingSshBean.setMemory(-1);
+
+            pollingSshBean.setCpu(-1);
+
+            pollingSshBean.setDisk(-1);
+
+            pollingSshBean.setUpTime("-1");
 
         }
 

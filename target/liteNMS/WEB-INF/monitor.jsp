@@ -29,6 +29,7 @@
 <div id="myModalStatistic" class="modal" style="display: none">
     <div class="modal-content">
         <span id="close">&times;</span>
+        <div style="float:right;">Live Data</div>
         <div class="wrapper">
             <div id="pieDiv">
                 <canvas id="pie" style="width:100%;max-width:500px;height: 50%;max-height:500px;"></canvas>
