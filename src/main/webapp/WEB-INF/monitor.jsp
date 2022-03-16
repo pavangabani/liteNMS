@@ -34,17 +34,17 @@
             <div id="pieDiv">
                 <canvas id="pie" style="width:100%;max-width:500px;height: 50%;max-height:500px;"></canvas>
             </div>
-            <div class="matrix" >
-                <h3 id="matrix1">Packet loss : 0%</h3>
+            <div class="matrix" id="matrix1">
+                <h3 >Packet loss : 0%</h3>
             </div>
-            <div class="matrix" >
-                <h3 id="matrix2">RTT(ms) : 20</h3>
+            <div class="matrix" id="matrix2">
+                <h3 >RTT(ms) : 20</h3>
             </div>
-            <div class="matrix" >
-                <h3 id="matrix3">Sent packet : 4</h3>
+            <div class="matrix" id="matrix3">
+                <h3 i>Sent packet : 4</h3>
             </div>
-            <div class="matrix" >
-                <h3 id="matrix4">Receive packet : 4</h3>
+            <div class="matrix" id="matrix4">
+                <h3 >Receive packet : 4</h3>
             </div>
             <div id="barDiv">
                 <canvas id="bar" style="width:100%;max-width:800px;height: 100%;max-height:300px "></canvas>

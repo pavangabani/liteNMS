@@ -2,6 +2,8 @@ package com.motadata.kernel.bean;
 
 public class PollingSshBean {
 
+    Integer totalMemory;
+
     Integer cpu;
 
     Integer disk;
@@ -9,6 +11,8 @@ public class PollingSshBean {
     Integer memory;
 
     String upTime;
+
+    String totalDisk;
 
     public Integer getCpu() {
         return cpu;
@@ -40,6 +44,22 @@ public class PollingSshBean {
 
     public void setUpTime(String upTime) {
         this.upTime = upTime;
+    }
+
+    public Integer getTotalMemory() {
+        return totalMemory;
+    }
+
+    public void setTotalMemory(Integer totalMemory) {
+        this.totalMemory = totalMemory;
+    }
+
+    public String getTotalDisk() {
+        return totalDisk;
+    }
+
+    public void setTotalDisk(String totalDisk) {
+        this.totalDisk = totalDisk;
     }
 
 }

@@ -7,17 +7,19 @@ import java.util.List;
 
 public class Database {
 
-    public static List<HashMap<String, String>> select(String query, ArrayList values) {
+    Connection connection=ConnectionPool.getConnection();
 
-        Connection connection = ConnectionPool.getConnection();
+    public List<HashMap<String, String>> select(String query, ArrayList values) {
 
-        List<HashMap<String, String>> data = null;
+        PreparedStatement preparedStatement=null;
+
+        List<HashMap<String, String>> data=null;
 
         try {
 
             //Set Prepare statement
 
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(query);
 
             int i = 1;
 
@@ -51,7 +53,7 @@ public class Database {
 
             int columnCount = resultSetMetaData.getColumnCount();
 
-            data = new ArrayList<>();
+            data=new ArrayList<>();
 
             while (resultSet.next()) {
 
@@ -67,24 +69,31 @@ public class Database {
 
             }
 
-            preparedStatement.close();
-
         } catch (SQLException e) {
 
             e.printStackTrace();
 
         } finally {
 
-            ConnectionPool.releaseConnection(connection);
+            try {
+
+                preparedStatement.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            }
+
 
         }
 
         return data;
     }
 
-    public static int update(String query, ArrayList values) {
+    public int update(String query, ArrayList values) {
 
-        Connection connection = ConnectionPool.getConnection();
+        PreparedStatement preparedStatement=null;
 
         int affectedRow=0;
 
@@ -92,7 +101,7 @@ public class Database {
 
             //Set Preparestatement
 
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+             preparedStatement= connection.prepareStatement(query);
 
             int i = 1;
 
@@ -120,18 +129,36 @@ public class Database {
 
             affectedRow=preparedStatement.executeUpdate();
 
-            preparedStatement.close();
 
-        } catch (SQLException e) {
+        }catch (SQLIntegrityConstraintViolationException e){
+
+            return -1;
+
+        }
+        catch (SQLException e) {
 
             e.printStackTrace();
 
         }finally {
 
-            ConnectionPool.releaseConnection(connection); //release connection
+            try {
+
+                preparedStatement.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            }
 
         }
 
         return affectedRow;
     }
+
+    public void releaseConnection(){
+
+        ConnectionPool.releaseConnection(connection);
+
+     }
 }

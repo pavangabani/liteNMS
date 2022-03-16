@@ -2,7 +2,6 @@ $(document).ready(function () {
     main.onload()
 });
 
-
 var main = {
 
     onload: function () {

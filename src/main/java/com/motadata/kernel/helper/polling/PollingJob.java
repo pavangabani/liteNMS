@@ -16,9 +16,11 @@ public class PollingJob implements Job {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "select id,ip,type from pollingmonitor";
 
-        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+        List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
         //QueryEnd
 
@@ -35,6 +37,8 @@ public class PollingJob implements Job {
                 PoolUtil.forkJoinPool.invoke(new SshTread(id,ip));
             }
         }
+
+        database.releaseConnection();
     }
 }
 

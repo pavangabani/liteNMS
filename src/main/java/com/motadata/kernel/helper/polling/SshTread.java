@@ -26,15 +26,19 @@ public class SshTread extends RecursiveAction {
     @Override
     protected void compute() {
 
+        Database database=new Database();
+
         PollingSshBean pollingSshBean=new GetData().getSshData(ip);
 
         //QueryStart
 
-        String query="insert into sshdump (id,cpu,memory,disk,uptime,pollingtime) values(?,?,?,?,?,?)";
+        String query="insert into sshdump (id,cpu,memory,disk,uptime,pollingtime,totaldisk,totalmemory) values(?,?,?,?,?,?,?,?)";
 
-        ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime())));
+        ArrayList values=new ArrayList(Arrays.asList(id,pollingSshBean.getCpu(),pollingSshBean.getMemory(),pollingSshBean.getDisk(),pollingSshBean.getUpTime(),new Timestamp(new Date().getTime()),pollingSshBean.getTotalDisk(),pollingSshBean.getTotalMemory()));
 
-        Database.update(query,values);
+        database.update(query,values);
+
+        database.releaseConnection();
 
         //QueryEnd
     }

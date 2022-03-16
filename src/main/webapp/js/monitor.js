@@ -237,10 +237,10 @@ var helper = {
             data: "id=" + id + "&type=" + type,
             runfunction: function (data) {
                 helper.chartssh(data);
-                $("#matrix1").text("CPU Usage: " + data.sshStatistic.matrix[0] + "%");
-                $("#matrix2").text("Memory Usage: " + data.sshStatistic.matrix[1] + "%");
-                $("#matrix3").text("Disk Usage: " + data.sshStatistic.matrix[2] + "%");
-                $("#matrix4").text("Uptime : " + data.sshStatistic.matrix[3]);
+                $("#matrix1").html("<h3>CPU Usage: " + data.sshStatistic.matrix[0] + "%</h3>");
+                $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br>Total Memory:"+data.sshStatistic.matrix[5]+"mb</h3>");
+                $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%\nTotal Disk:"+data.sshStatistic.matrix[4]+"</h3>");
+                $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3]+"</h3>");
             }
         }
         helper.ajaxpost(request);
@@ -253,10 +253,10 @@ var helper = {
             data: "id=" + id + "&type=" + type,
             runfunction: function (data) {
                 helper.chartping(data);
-                $("#matrix1").text("Sent Packet: " + data.pingStatistic.matrix[0]);
-                $("#matrix2").text("Receive Packet: " + data.pingStatistic.matrix[1]);
-                $("#matrix3").text("Packet Loss: " + data.pingStatistic.matrix[2]);
-                $("#matrix4").text("RTT(ms): " + data.pingStatistic.matrix[3]);
+                $("#matrix1").html("<h3>Sent Packet: " + data.pingStatistic.matrix[0]+"</h3>");
+                $("#matrix2").html("<h3>Receive Packet: " + data.pingStatistic.matrix[1]+"</h3>");
+                $("#matrix3").html("<h3>Packet Loss: " + data.pingStatistic.matrix[2]+"</h3>");
+                $("#matrix4").html("<h3>RTT(ms): " + data.pingStatistic.matrix[3]+"</h3>");
             }
         }
         helper.ajaxpost(request);

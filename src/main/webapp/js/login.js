@@ -15,6 +15,9 @@ var main = {
             }
             event.preventDefault();
         });
+        $("#close").click(function () {
+            $("#register").hide();
+        });
     },
 
     login: function (username, password) {
@@ -30,7 +33,31 @@ var main = {
             }
         };
         helper.ajaxpost(request);
-    }
+    },
+
+    register: function (){
+        $("#register").show();
+    },
+
+    submit: function (){
+        var registerusername=$("#registerusername").val();
+        var registerpassword=$("#registerpassword").val();
+        if(helper.validate(registerusername, registerusername)){
+            var request={
+                data:"username="+registerusername+"&password="+registerpassword,
+                url:"Register.action",
+                runfunction: function (data){
+                    alert(data.status);
+                }
+            }
+            helper.ajaxpost(request);
+        }else {
+            helper.customalert("#registerfailure");
+        }
+        $("#registerform").trigger("reset");
+        $("#register").hide();
+    },
+
 };
 
 var helper = {

@@ -20,6 +20,8 @@ public class MonitorExecutor {
 
     public void addPolling(MonitorBean monitorBean) {
 
+        Database database=new Database();
+
         Discover discover = new Discover();
 
         boolean discoveryTest = discover.discovery(monitorBean.getIp(), monitorBean.getType());
@@ -32,15 +34,20 @@ public class MonitorExecutor {
 
             ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId(), monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), "Unknown"));
 
-            int affectedRaw = Database.update(query, values);
+            int affectedRaw = database.update(query, values);
 
             //QueryEnd
+
 
             if (affectedRaw > 0) {
 
                 monitorBean.setStatus("Monitor Added!");
 
-            } else {
+            } else if (affectedRaw==-1){
+
+                monitorBean.setStatus("Monitor is already added for polling ");
+
+            } else{
 
                 monitorBean.setStatus("Failed to Add!");
 
@@ -48,9 +55,11 @@ public class MonitorExecutor {
 
         } else {
 
-            monitorBean.setStatus("Failed to Add!");
+            monitorBean.setStatus("Ping Fail!");
 
         }
+
+        database.releaseConnection();
 
     }
 
@@ -58,11 +67,13 @@ public class MonitorExecutor {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "update monitor set name=?,ip=?,type=?,tag=? where id=?";
 
         ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), monitorBean.getId()));
 
-        Database.update(query, values);
+        database.update(query, values);
 
         //QueryEnd
 
@@ -74,7 +85,7 @@ public class MonitorExecutor {
 
             ArrayList valuesCheck = new ArrayList(Arrays.asList(monitorBean.getIp()));
 
-            List<HashMap<String, String>> data = Database.select(query, valuesCheck);
+            List<HashMap<String, String>> data = database.select(query, valuesCheck);
 
             //QueryEnd
 
@@ -86,7 +97,7 @@ public class MonitorExecutor {
 
                 ArrayList updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword()), monitorBean.getIp()));
 
-                Database.update(query, updateValues);
+                database.update(query, updateValues);
 
                 //QueryEnd
 
@@ -98,12 +109,14 @@ public class MonitorExecutor {
 
                 ArrayList insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
 
-                Database.update(query, insertValues);
+                database.update(query, insertValues);
 
                 //QueryEnd
 
             }
         }
+
+        database.releaseConnection();
 
         //forLoad Data
 
@@ -117,11 +130,13 @@ public class MonitorExecutor {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "delete from monitor where id=?";
 
         ArrayList values = new ArrayList(Arrays.asList(monitorBean.getId()));
 
-        int affectedRaw = Database.update(query, values);
+        int affectedRaw = database.update(query, values);
 
         //QueryEnd
 
@@ -135,9 +150,13 @@ public class MonitorExecutor {
 
         }
 
+        database.releaseConnection();
+
     }
 
     public void add(MonitorBean monitorBean) {
+
+        Database database=new Database();
 
         if(monitorBean.getType().equals("ssh") && Discover.sshTypeTest(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword())){
 
@@ -147,13 +166,13 @@ public class MonitorExecutor {
 
             ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
-            Database.update(query, values);
+            database.update(query, values);
 
             query = "insert into credential (ip,username,password) values(?,?,?)";
 
             ArrayList credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
 
-            Database.update(query, credentialValues);
+            database.update(query, credentialValues);
 
             //QueryEnd
 
@@ -164,9 +183,11 @@ public class MonitorExecutor {
 
             ArrayList values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
-            Database.update(query, values);
+            database.update(query, values);
 
         }
+
+        database.releaseConnection();
 
         //ForLoadData
 

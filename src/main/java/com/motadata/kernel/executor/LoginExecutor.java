@@ -12,11 +12,15 @@ public class LoginExecutor {
 
         //QueryStart
 
+        Database database = new Database();
+
         ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
         String query = "select * from login where user=? AND pass=?";
 
-        List<HashMap<String, String>> data = Database.select(query, values);
+        List<HashMap<String, String>> data = database.select(query, values);
+
+        database.releaseConnection();
 
         //QueryEnd
 
@@ -27,6 +31,32 @@ public class LoginExecutor {
         } else {
 
             loginBean.setStatus("Failure");
+        }
+    }
+
+    public void register(LoginBean loginBean) {
+
+        //QueryStart
+
+        Database database = new Database();
+
+        ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+
+        String query = "insert into login values(?,?)";
+
+        int affectedRow = database.update(query, values);
+
+        database.releaseConnection();
+
+        //QueryEnd
+
+        if (affectedRow == 1) {
+
+            loginBean.setStatus("User Registered");
+
+        } else {
+
+            loginBean.setStatus("Fail to Register");
         }
     }
 }

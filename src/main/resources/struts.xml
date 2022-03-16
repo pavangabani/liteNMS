@@ -27,6 +27,9 @@
         <action name="Login" class="com.motadata.kernel.action.LoginAction" method="login">
             <result name="LOGIN" type="json"></result>
         </action>
+        <action name="Register" class="com.motadata.kernel.action.LoginAction" method="register">
+            <result name="REGISTER" type="json"></result>
+        </action>
         <action name="Logout" class="com.motadata.kernel.action.LoginAction" method="logout">
             <result name="LOGOUT">login.jsp</result>
         </action>

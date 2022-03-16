@@ -22,10 +22,11 @@ public class GetData {
     public List<PollingMonitorBean> getAllPollingMonitor() {
 
         //QueryStart
+        Database database=new Database();
 
         String query = "select * from pollingmonitor";
 
-        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+        List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
         //QueryEnd
 
@@ -51,6 +52,8 @@ public class GetData {
 
         }
 
+        database.releaseConnection();
+
         return pollingmonitorList;
     }
 
@@ -58,9 +61,11 @@ public class GetData {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "select * from monitor";
 
-        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+        List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
         //QueryEnd
 
@@ -84,6 +89,8 @@ public class GetData {
 
         }
 
+        database.releaseConnection();
+
         return monitorList;
     }
 
@@ -91,9 +98,11 @@ public class GetData {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "select availability from pollingmonitor";
 
-        List<HashMap<String, String>> data = Database.select(query, new ArrayList());
+        List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
         //QueryEnd
 
@@ -123,10 +132,14 @@ public class GetData {
 
         List<Integer> availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
 
+        database.releaseConnection();
+
         return availability;
     }
 
     public HashMap<String, Object> getPingStatistic(String id) {
+
+        Database database=new Database();
 
         HashMap<String, Object> pingStatistic = new HashMap<>();
 
@@ -142,7 +155,7 @@ public class GetData {
 
         String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
 
-        List<HashMap<String, String>> matrixData = Database.select(query, values);
+        List<HashMap<String, String>> matrixData = database.select(query, values);
 
         pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
 
@@ -150,7 +163,7 @@ public class GetData {
 
         query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
 
-        List<HashMap<String, String>> barData = Database.select(query, values);
+        List<HashMap<String, String>> barData = database.select(query, values);
 
         ArrayList bary = new ArrayList();
 
@@ -170,10 +183,14 @@ public class GetData {
 
         //End
 
+        database.releaseConnection();
+
         return pingStatistic;
     }
 
     public HashMap<String, Object> getSshStatistic(String id) {
+
+        Database database=new Database();
 
         HashMap<String, Object> sshStatistic = new HashMap<>();
 
@@ -189,15 +206,15 @@ public class GetData {
 
         ArrayList values = new ArrayList(Arrays.asList(id));
 
-        List<HashMap<String, String>> matrixData = Database.select(query, values);
+        List<HashMap<String, String>> matrixData = database.select(query, values);
 
-        sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"))));
+        sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"),matrixData.get(0).get("totaldisk"),matrixData.get(0).get("totalmemory"))));
 
         //3. Last 10 Polling
 
         query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
 
-        List<HashMap<String, String>> barData = Database.select(query, values);
+        List<HashMap<String, String>> barData = database.select(query, values);
 
         ArrayList bary = new ArrayList();
 
@@ -214,6 +231,8 @@ public class GetData {
         sshStatistic.put("barx", barx);
 
         sshStatistic.put("bary", bary);
+
+        database.releaseConnection();
 
         return sshStatistic;
     }
@@ -235,12 +254,13 @@ public class GetData {
         Timestamp currentTimeStamp = new Timestamp(date.getTime());
 
         //QueryStart
+        Database database=new Database();
 
         ArrayList values = new ArrayList(Arrays.asList(id));
 
         String query = "select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
 
-        List<HashMap<String, String>> data = Database.select(query, values);
+        List<HashMap<String, String>> data = database.select(query, values);
 
         //QueryEnd
 
@@ -269,6 +289,8 @@ public class GetData {
         availability.add(pieUp);
 
         availability.add(pieDown);
+
+        database.releaseConnection();
 
         return availability;
     }
@@ -323,8 +345,13 @@ public class GetData {
 
                 int packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
-                int RTT = (int)Float.parseFloat((outputString.substring(outputString.lastIndexOf("=")+1 ,outputString.lastIndexOf("=") + 7).trim()));
+                int RTT=0;
 
+                if(packetLoss!=100){
+
+                    RTT = (int)Float.parseFloat((outputString.substring(outputString.lastIndexOf("=")+1 ,outputString.lastIndexOf("=") + 7).trim()));
+
+                }
 
                 //------------------------------------------------------------------------------------------
 
@@ -354,11 +381,13 @@ public class GetData {
 
         //QueryStart
 
+        Database database=new Database();
+
         String query = "select * from credential where ip=?";
 
         ArrayList values = new ArrayList(Arrays.asList(ip));
 
-        List<HashMap<String, String>> data = Database.select(query, values);
+        List<HashMap<String, String>> data = database.select(query, values);
 
         //QueryEnd
 
@@ -394,7 +423,9 @@ public class GetData {
                             "free -m | grep Mem | awk '{print $3}';" +
                             "mpstat | grep IST;" +
                             "df -hT /home | grep dev | awk '{print $6}';" +
-                            "uptime -p");
+                            "uptime -p;"+
+                            "df -hT /home | grep dev | awk '{print $3}'"
+                            );
 
             channel.connect();
 
@@ -416,6 +447,8 @@ public class GetData {
 
             //-----------------------------------------------------------------------------
 
+            int totalmemory=Integer.valueOf(ansArray[0].trim());
+
             int memory = (int) ((Float.valueOf(ansArray[1].trim()) / Float.valueOf(ansArray[0].trim())) * 100);
 
             int cpu = 100-(int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
@@ -423,6 +456,8 @@ public class GetData {
             int disk = Integer.parseInt(ansArray[4].substring(0, ansArray[4].indexOf("%")));
 
             String upTime = ansArray[5].substring(ansArray[5].indexOf("up") + 3).trim();
+
+            String totalDisk=ansArray[6].trim();
 
             //--------------------------------------------------------------------------------
 
@@ -434,9 +469,13 @@ public class GetData {
 
             pollingSshBean.setUpTime(upTime);
 
+            pollingSshBean.setTotalDisk(totalDisk);
 
+            pollingSshBean.setTotalMemory(totalmemory);
 
         } catch (Exception e) {
+
+            pollingSshBean.setTotalMemory(-1);
 
             e.printStackTrace();
 
@@ -448,7 +487,11 @@ public class GetData {
 
             pollingSshBean.setUpTime("-1");
 
+            pollingSshBean.setTotalDisk("-1");
+
         }
+
+        database.releaseConnection();
 
         return pollingSshBean;
     }

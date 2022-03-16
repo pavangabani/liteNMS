@@ -42,13 +42,13 @@ public class ConnectionPool {
 
             connection = connectionsPool.take();
 
+            usedConnection.add(connection);
+
         } catch (InterruptedException e) {
 
             e.printStackTrace();
 
         }
-
-        usedConnection.add(connection);
 
         return connection;
 

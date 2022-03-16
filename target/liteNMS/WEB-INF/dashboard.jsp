@@ -9,7 +9,7 @@
 <jsp:include page="navigation.jsp"/>
 
 <div class="monitorTitle">
-    <h1 style="color: black">AVAILABILITY</h1>
+    <h1 style="color: black">MONITORS AVAILABILITY</h1>
 </div>
 <div class="wrapper">
     <div id="one"><label style="font-size: 30px;font-weight: bold">Unknown:</label></div>

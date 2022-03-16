@@ -10,6 +10,8 @@ public class Discover {
 
     public boolean discovery(String ip, String type) {
 
+        Database database=new Database();
+
         boolean discoveryTest = ping(ip);
 
         if (discoveryTest && type.equals("ssh")) {
@@ -20,13 +22,15 @@ public class Discover {
 
             ArrayList values = new ArrayList(Arrays.asList(ip));
 
-            List<HashMap<String, String>> data = Database.select(query, values);
+            List<HashMap<String, String>> data = database.select(query, values);
 
             //QueryEnd
 
             discoveryTest = ssh(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password")));
 
         }
+
+        database.releaseConnection();
 
         return discoveryTest;
 
@@ -52,9 +56,11 @@ public class Discover {
 
             }
 
-            answer = (answer.substring(answer.indexOf("received") + 10, answer.indexOf("%"))).trim();
+            answer = answer.substring(answer.indexOf("statistics"));
 
-            packetLoss = Integer.parseInt(answer);
+            int receivedPacket = Integer.parseInt((answer.substring(answer.indexOf("transmitted") + 13, answer.indexOf("received"))).trim());
+
+            packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
         } catch (Exception e) {
 
