@@ -2,7 +2,7 @@ $(document).ready(function () {
     main.onload()
 });
 
-var main = {
+let main = {
 
     onload: function () {
         $("#myBtn").on("click", function () {
@@ -15,7 +15,7 @@ var main = {
             $("#myModalUpdate").hide();
         });
 
-        var request = {
+        let request = {
             url: "Load.action",
             data: "",
             runfunction: function (data) {
@@ -26,14 +26,14 @@ var main = {
     },
 
     add: function () {
-        var name = $("#name").val();
-        var ip = $("#ip").val();
-        var type = $("#type").val();
-        var tag = $("#tag").val();
-        var password = $("#password").val();
-        var username = $("#username").val();
+        let name = $("#name").val();
+        let ip = $("#ip").val();
+        let type = $("#type").val();
+        let tag = $("#tag").val();
+        let password = $("#password").val();
+        let username = $("#username").val();
         if (helper.validate(name, ip, type, tag, username, password)) {
-            var request = {
+            let request = {
                 url: "Add.action",
                 data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
                 runfunction: function (data) {
@@ -48,11 +48,11 @@ var main = {
     },
 
     addforpolling: function (that, id) {
-        var name = $(that).parent().prev().prev().prev().prev().text();
-        var ip = $(that).parent().prev().prev().prev().text();
-        var type = $(that).parent().prev().prev().text();
-        var tag = $(that).parent().prev().text();
-        var request = {
+        let name = $(that).parent().prev().prev().prev().prev().text();
+        let ip = $(that).parent().prev().prev().prev().text();
+        let type = $(that).parent().prev().prev().text();
+        let tag = $(that).parent().prev().text();
+        let request = {
             url: "AddPolling.action",
             data: "id=" + id + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
             runfunction: function (data) {
@@ -64,10 +64,10 @@ var main = {
 
     edit: function (that, id) {
         $("#myModalUpdate").show();
-        var name = $(that).parent().prev().prev().prev().prev().text();
-        var ip = $(that).parent().prev().prev().prev().text();
-        var type = $(that).parent().prev().prev().text();
-        var tag = $(that).parent().prev().text();
+        let name = $(that).parent().prev().prev().prev().prev().text();
+        let ip = $(that).parent().prev().prev().prev().text();
+        let type = $(that).parent().prev().prev().text();
+        let tag = $(that).parent().prev().text();
         $("#rawid").val(id);
         $("#updateip").val(ip);
         $("#updatename").val(name);
@@ -81,15 +81,15 @@ var main = {
     },
 
     update: function () {
-        var id = $("#rawid").val()
-        var name = $("#updatename").val();
-        var ip = $("#updateip").val();
-        var type = $("#updatetype").val();
-        var tag = $("#updatetag").val();
-        var password = $("#updatepassword").val();
-        var username = $("#updateusername").val();
+        let id = $("#rawid").val()
+        let name = $("#updatename").val();
+        let ip = $("#updateip").val();
+        let type = $("#updatetype").val();
+        let tag = $("#updatetag").val();
+        let password = $("#updatepassword").val();
+        let username = $("#updateusername").val();
         if (helper.validate(name, ip, type, tag, username, password)) {
-            var request = {
+            let request = {
                 url: "Edit.action",
                 data: "id=" + id + "&username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
                 runfunction: function (data) {
@@ -105,7 +105,7 @@ var main = {
 
     deletemonitor: function (id) {
         if (confirm("Do you want to delete?")) {
-            var request = {
+            let request = {
                 url: "Delete.action",
                 data: "id=" + id,
                 runfunction: function (data) {
@@ -118,7 +118,7 @@ var main = {
     }
 };
 
-var helper = {
+let helper = {
 
     ajaxpost: function (request) {
         $.ajax({
@@ -135,7 +135,7 @@ var helper = {
     },
 
     adddata: function (data) {
-        var tabledata = "";
+        let tabledata = "";
         $.each(data.monitorList, function () {
             tabledata += "<tr>" +
                 "<td>" + this.name + "</td>" +
@@ -153,7 +153,7 @@ var helper = {
     },
 
     validate: function (name, ip, type, tag, username, password) {
-        var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        let ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         if (name == "") {
             helper.customalert(".failure", "Enter Valid Name");
             return false;

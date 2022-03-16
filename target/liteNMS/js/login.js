@@ -26,7 +26,7 @@ var main = {
             url: "Login.action",
             runfunction: function (data) {
                 if (data.status == "Success") {
-                    window.location.replace('Dashboard.action');
+                    window.location='Dashboard.action';
                 } else {
                     helper.customalert("#failure")
                 }

@@ -1,9 +1,9 @@
 $(document).ready(function () {
     main.onload()
 });
-var bar;
-var pie;
-var main = {
+let bar;
+let pie;
+let main = {
 
     onload: function () {
         $("#close").click(function () {
@@ -25,7 +25,7 @@ var main = {
     },
 
     showstatistic: function (that, id) {
-        var type = $(that).parent().prev().prev().prev().text();
+        let type = $(that).parent().prev().prev().prev().text();
         if (type == "ssh") {
             helper.showsshdata(id, type);
         } else {
@@ -35,7 +35,7 @@ var main = {
 
     deletemonitor: function (id) {
         if(confirm("Do you want to delete?")){
-            var request = {
+            let request = {
                 url: "DeletePolling.action",
                 data: "id=" + id,
                 runfunction: function (data) {
@@ -48,7 +48,7 @@ var main = {
     }
 };
 
-var helper = {
+let helper = {
 
     ajaxpost: function (request) {
         $.ajax({
@@ -65,7 +65,7 @@ var helper = {
     },
 
     adddata: function (data) {
-        var tabledata = "";
+        let tabledata = "";
         $.each(data.pollingMonitorBeanList, function () {
             tabledata += "<tr>" +
                 "<td>" + this.name + "</td>" +
@@ -83,16 +83,16 @@ var helper = {
     },
 
     chartping: function (data) {
-        var xValues = ["Up", "Down"];
-        var yValues = data.pingStatistic.pie;
-        var barColors = [
+        let xValues = ["Up", "Down"];
+        let yValues = data.pingStatistic.pie;
+        let barColors = [
             "blue", "orange"
         ];
 
         if(pie){
             pie.destroy();
         }
-        var pie = new Chart("pie", {
+        let pie = new Chart("pie", {
             type: "doughnut",
             data: {
                 labels: xValues,
@@ -109,9 +109,9 @@ var helper = {
             }
         });
 
-        var xValues2 = data.pingStatistic.barx;
-        var yValues2 = data.pingStatistic.bary;
-        var barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
+        let xValues2 = data.pingStatistic.barx;
+        let yValues2 = data.pingStatistic.bary;
+        let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
         if(bar){
             bar.destroy();
@@ -157,9 +157,9 @@ var helper = {
     },
 
     chartssh: function (data) {
-        var xValues = ["Up", "Down"];
-        var yValues = data.sshStatistic.pie;
-        var barColors = [
+        let xValues = ["Up", "Down"];
+        let yValues = data.sshStatistic.pie;
+        let barColors = [
             "blue", "orange"
         ];
 
@@ -183,9 +183,9 @@ var helper = {
             }
         });
 
-        var xValues2 = data.sshStatistic.barx;
-        var yValues2 = data.sshStatistic.bary;
-        var barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
+        let xValues2 = data.sshStatistic.barx;
+        let yValues2 = data.sshStatistic.bary;
+        let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
         if(bar){
             bar.destroy();
@@ -232,14 +232,14 @@ var helper = {
     },
 
     showsshdata: function (id, type) {
-        var request = {
+        let request = {
             url: "PollingStatistic.action",
             data: "id=" + id + "&type=" + type,
             runfunction: function (data) {
                 helper.chartssh(data);
                 $("#matrix1").html("<h3>CPU Usage: " + data.sshStatistic.matrix[0] + "%</h3>");
-                $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br>Total Memory:"+data.sshStatistic.matrix[5]+"mb</h3>");
-                $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%\nTotal Disk:"+data.sshStatistic.matrix[4]+"</h3>");
+                $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br><br>Memory:"+data.sshStatistic.matrix[5]+"MB</h3>");
+                $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%<br><br>Disk:"+data.sshStatistic.matrix[4]+"</h3>");
                 $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3]+"</h3>");
             }
         }
@@ -248,7 +248,7 @@ var helper = {
     },
 
     showpingdata: function (id, type) {
-        var request = {
+        let request = {
             url: "PollingStatistic.action",
             data: "id=" + id + "&type=" + type,
             runfunction: function (data) {

@@ -2,12 +2,12 @@ $(document).ready(function () {
     main.onload()
 });
 
-var main = {
+let main = {
 
     onload: function () {
         $("#loginsubmit").click(function (event) {
-            var username = $("#username").val();
-            var password = $("#password").val();
+            let username = $("#username").val();
+            let password = $("#password").val();
             if (helper.validate(username, password)) {
                 main.login(username, password);
             } else {
@@ -21,12 +21,12 @@ var main = {
     },
 
     login: function (username, password) {
-        var request = {
+        let request = {
             data: "username=" + username + "&password=" + password,
             url: "Login.action",
             runfunction: function (data) {
                 if (data.status == "Success") {
-                    window.location.replace('Dashboard.action');
+                    window.location='Dashboard.action';
                 } else {
                     helper.customalert("#failure")
                 }
@@ -40,10 +40,10 @@ var main = {
     },
 
     submit: function (){
-        var registerusername=$("#registerusername").val();
-        var registerpassword=$("#registerpassword").val();
+        let registerusername=$("#registerusername").val();
+        let registerpassword=$("#registerpassword").val();
         if(helper.validate(registerusername, registerusername)){
-            var request={
+            let request={
                 data:"username="+registerusername+"&password="+registerpassword,
                 url:"Register.action",
                 runfunction: function (data){
@@ -60,7 +60,7 @@ var main = {
 
 };
 
-var helper = {
+let helper = {
 
     customalert: function (id) {
         $(id).show();

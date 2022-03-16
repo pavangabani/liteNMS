@@ -9,7 +9,7 @@ public class Database {
 
     Connection connection=ConnectionPool.getConnection();
 
-    public List<HashMap<String, String>> select(String query, ArrayList values) {
+    public List<HashMap<String, String>> select(String query, ArrayList<Object> values) {
 
         PreparedStatement preparedStatement=null;
 
@@ -77,7 +77,11 @@ public class Database {
 
             try {
 
-                preparedStatement.close();
+                if(preparedStatement!=null){
+
+                    preparedStatement.close();
+
+                }
 
             } catch (SQLException e) {
 
@@ -91,7 +95,7 @@ public class Database {
         return data;
     }
 
-    public int update(String query, ArrayList values) {
+    public int update(String query, ArrayList<Object> values) {
 
         PreparedStatement preparedStatement=null;
 
@@ -107,17 +111,17 @@ public class Database {
 
             for (Object value : values) {
 
-                if (value instanceof Integer) {
+                if (value.getClass()==Integer.class) {
 
                     preparedStatement.setInt(i, (Integer) value);
 
                 }
-                else if (value instanceof String) {
+                else if (value.getClass() == String.class) {
 
                     preparedStatement.setString(i, (String) value);
 
                 }
-                else if (value instanceof Timestamp) {
+                else if (value.getClass() == Timestamp.class) {
 
                     preparedStatement.setTimestamp(i, (Timestamp) value);
 
@@ -143,7 +147,11 @@ public class Database {
 
             try {
 
-                preparedStatement.close();
+                if(preparedStatement!=null){
+
+                    preparedStatement.close();
+
+                }
 
             } catch (SQLException e) {
 

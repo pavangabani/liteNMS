@@ -26,8 +26,11 @@ public class SessionInterceptor implements Interceptor {
 
             return actionInvocation.invoke();
 
+        }else{
+
+            return "loginUser";
+
         }
 
-        return "loginUser";
     }
 }

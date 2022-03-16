@@ -26,17 +26,17 @@ public class PingTread extends RecursiveTask<Boolean> {
     @Override
     protected Boolean compute() {
 
-        Database database=new Database();
-
         GetData getData=new GetData();
 
         PollingPingBean pollingPingBean=getData.getPingData(ip);
 
         //QueryStart
 
+        Database database=new Database();
+
         String query="insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
 
-        ArrayList values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
+        ArrayList<Object> values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
 
         database.update(query,values);
 
@@ -44,11 +44,11 @@ public class PingTread extends RecursiveTask<Boolean> {
 
         boolean test;
 
+        query="update pollingmonitor set availability=? where id=?";
+
         if(pollingPingBean.getPacketLoss()<50){
 
             values = new ArrayList(Arrays.asList("UP",id));
-
-            query="update pollingmonitor set availability=? where id=?";
 
             database.update(query,values);
 
@@ -58,11 +58,9 @@ public class PingTread extends RecursiveTask<Boolean> {
 
             values = new ArrayList(Arrays.asList("DOWN",id));
 
-            query="update pollingmonitor set availability=? where id=?";
-
             database.update(query,values);
 
-            test=true;
+            test=false;
 
         }
 

@@ -14,7 +14,7 @@ public class LoginExecutor {
 
         Database database = new Database();
 
-        ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
         String query = "select * from login where user=? AND pass=?";
 
@@ -40,7 +40,7 @@ public class LoginExecutor {
 
         Database database = new Database();
 
-        ArrayList values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
         String query = "insert into login values(?,?)";
 
@@ -54,7 +54,11 @@ public class LoginExecutor {
 
             loginBean.setStatus("User Registered");
 
-        } else {
+        } else if(affectedRow == -1){
+
+            loginBean.setStatus("Username is already taken");
+
+        }else {
 
             loginBean.setStatus("Fail to Register");
         }

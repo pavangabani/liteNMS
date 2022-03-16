@@ -6,7 +6,6 @@ import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
-import javax.swing.plaf.SpinnerUI;
 import java.util.Map;
 
 public class LoginAction implements ModelDriven, SessionAware {
@@ -40,8 +39,6 @@ public class LoginAction implements ModelDriven, SessionAware {
 
         return "LOGOUT";
     }
-
-
 
     @Override
     public Object getModel() {

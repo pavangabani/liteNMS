@@ -3,10 +3,10 @@ $(document).ready(function () {
 });
 
 
-var main = {
+let main = {
 
     onload: function () {
-        var request = {
+        let request = {
             url: "LoadDashboard.action",
             data: "",
             runfunction: function (data) {
@@ -17,7 +17,7 @@ var main = {
     },
 };
 
-var helper = {
+let helper = {
 
     adddata: function (data) {
         $("#one").append("<h1>" + data.availability[0] + "</h1>");

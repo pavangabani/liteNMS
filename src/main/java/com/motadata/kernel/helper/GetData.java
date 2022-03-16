@@ -145,13 +145,13 @@ public class GetData {
 
         // 1. Last 24 Hours Availability
 
-        ArrayList availability = getAvailability(id);
+        ArrayList<Object> availability = getAvailability(id);
 
         pingStatistic.put("pie", availability);
 
         //2. Live Data (Matrixs)
 
-        ArrayList values = new ArrayList(Arrays.asList(id));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
         String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
 
@@ -165,9 +165,9 @@ public class GetData {
 
         List<HashMap<String, String>> barData = database.select(query, values);
 
-        ArrayList bary = new ArrayList();
+        ArrayList<Object> bary = new ArrayList();
 
-        ArrayList barx = new ArrayList();
+        ArrayList<Object> barx = new ArrayList();
 
         for (HashMap<String, String> row : barData) {
 
@@ -196,7 +196,7 @@ public class GetData {
 
         //1. Last 24 Availability
 
-        ArrayList availability = getAvailability(id);
+        ArrayList<Object> availability = getAvailability(id);
 
         sshStatistic.put("pie", availability);
 
@@ -204,7 +204,7 @@ public class GetData {
 
         String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 1";
 
-        ArrayList values = new ArrayList(Arrays.asList(id));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
         List<HashMap<String, String>> matrixData = database.select(query, values);
 
@@ -216,9 +216,9 @@ public class GetData {
 
         List<HashMap<String, String>> barData = database.select(query, values);
 
-        ArrayList bary = new ArrayList();
+        ArrayList<Object> bary = new ArrayList();
 
-        ArrayList barx = new ArrayList();
+        ArrayList<Object> barx = new ArrayList();
 
         for (HashMap<String, String> row : barData) {
 
@@ -237,7 +237,7 @@ public class GetData {
         return sshStatistic;
     }
 
-    ArrayList getAvailability(String id) {
+    ArrayList<Object> getAvailability(String id) {
 
         Calendar calendar = Calendar.getInstance();
 
@@ -256,7 +256,7 @@ public class GetData {
         //QueryStart
         Database database=new Database();
 
-        ArrayList values = new ArrayList(Arrays.asList(id));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
         String query = "select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
 
@@ -284,7 +284,7 @@ public class GetData {
 
         int pieDown = 100 - pieUp;
 
-        ArrayList availability = new ArrayList();
+        ArrayList<Object> availability = new ArrayList();
 
         availability.add(pieUp);
 
@@ -385,7 +385,7 @@ public class GetData {
 
         String query = "select * from credential where ip=?";
 
-        ArrayList values = new ArrayList(Arrays.asList(ip));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(ip));
 
         List<HashMap<String, String>> data = database.select(query, values);
 
@@ -433,7 +433,7 @@ public class GetData {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
 
-            String temp = "";
+            String temp;
 
             String answer = "";
 
@@ -447,9 +447,9 @@ public class GetData {
 
             //-----------------------------------------------------------------------------
 
-            int totalmemory=Integer.valueOf(ansArray[0].trim());
+            int totalmemory=Integer.parseInt(ansArray[0].trim());
 
-            int memory = (int) ((Float.valueOf(ansArray[1].trim()) / Float.valueOf(ansArray[0].trim())) * 100);
+            int memory = (int) ((Float.parseFloat(ansArray[1].trim()) / Float.parseFloat(ansArray[0].trim())) * 100);
 
             int cpu = 100-(int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
 
@@ -477,8 +477,6 @@ public class GetData {
 
             pollingSshBean.setTotalMemory(-1);
 
-            e.printStackTrace();
-
             pollingSshBean.setMemory(-1);
 
             pollingSshBean.setCpu(-1);
@@ -488,6 +486,8 @@ public class GetData {
             pollingSshBean.setUpTime("-1");
 
             pollingSshBean.setTotalDisk("-1");
+
+            e.printStackTrace();
 
         }
 

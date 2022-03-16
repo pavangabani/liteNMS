@@ -9,10 +9,10 @@
 <div id="bg"></div>
 <form method="POST">
     <div class="form-field">
-        <input name="username" id="username" type="text" placeholder="Username" />
+        <input name="username" id="username" type="text" placeholder="Username"/>
     </div>
     <div class="form-field">
-        <input name="password" id="password" type="password" placeholder="Password" />
+        <input name="password" id="password" type="password" placeholder="Password"/>
     </div>
     <div id="failure" class="alert" style="display:none;">
         <strong>Failure! </strong> Wrong password or username.
@@ -20,20 +20,20 @@
     <div class="form-field">
         <button class="btn" id="loginsubmit">Log in</button>
     </div>
-    <div class="form-field">
-        <input type="button" value="Register" class="btn" onclick="main.register()">
-    </div>
+    <h2 style="margin-left: 130px"><p onclick="main.register()" style="font-weight: bold">Register</p></h2>
+
+
 </form>
 
 <div id="register" class="modal" style="display: none">
     <div class="modal-content">
         <span id="close">&times;</span>
-        <form id="registerform" >
+        <form id="registerform">
             <div class="form-field">
-                <input name="username" id="registerusername" type="text" placeholder="Username" />
+                <input name="username" id="registerusername" type="text" placeholder="Username"/>
             </div>
             <div class="form-field">
-                <input name="password" id="registerpassword" type="password" placeholder="Password" />
+                <input name="password" id="registerpassword" type="password" placeholder="Password"/>
             </div>
             <div id="registerfailure" class="alert" style="display:none;">
                 <strong>Failure! </strong> Enter Username or Password.

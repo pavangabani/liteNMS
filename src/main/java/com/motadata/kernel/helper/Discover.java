@@ -20,7 +20,7 @@ public class Discover {
 
             String query = "select * from credential where ip=?";
 
-            ArrayList values = new ArrayList(Arrays.asList(ip));
+            ArrayList<Object> values = new ArrayList(Arrays.asList(ip));
 
             List<HashMap<String, String>> data = database.select(query, values);
 
