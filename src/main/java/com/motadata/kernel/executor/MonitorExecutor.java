@@ -44,7 +44,7 @@ public class MonitorExecutor
 
             Discover discover = new Discover();
 
-            boolean discoveryTest = discover.discovery(monitorBean.getIp(), data.get(0).get("type"));
+            boolean discoveryTest = discover.discovery( data.get(0).get("ip"), data.get(0).get("type"));
 
             if (discoveryTest)
             {
@@ -189,7 +189,7 @@ public class MonitorExecutor
         {
             Database database = new Database();
 
-            if (monitorBean.getType().equals("ssh") && Discover.sshTypeTest(monitorBean.getIp(), monitorBean.getUsername(), monitorBean.getPassword()))
+            if (monitorBean.getType().equals("ssh"))
             {
                 //QueryStart
 

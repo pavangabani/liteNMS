@@ -58,9 +58,7 @@ public class Discover
 
             while ((line = reader.readLine()) != null)
             {
-
                 answer += line;
-
             }
 
             answer = answer.substring(answer.indexOf("statistics"));

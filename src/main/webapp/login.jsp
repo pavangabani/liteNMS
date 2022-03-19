@@ -18,7 +18,7 @@
         <strong>Failure! </strong> Wrong password or username.
     </div>
     <div class="form-field">
-        <button class="btn" id="loginsubmit">Log in</button>
+        <input type="button" class="btn" value="Login"  style="text-indent: 0px" onclick="main.login()"/>
     </div>
     <h2 style="margin-left: 130px"><p onclick="main.register()" style="font-weight: bold">Register</p></h2>
 
@@ -27,7 +27,7 @@
 
 <div id="register" class="modal" style="display: none">
     <div class="modal-content">
-        <span id="close">&times;</span>
+        <span id="close" onclick="helper.close()">&times;</span>
         <form id="registerform">
             <div class="form-field">
                 <input name="username" id="registerusername" type="text" placeholder="Username"/>

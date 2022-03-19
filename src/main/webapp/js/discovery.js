@@ -7,22 +7,12 @@ var main = {
 
     onload: function ()
     {
-        $("#myBtn").on("click", function ()
-        {
-            $("#myModal").show();
-        });
-        $("#close").click(function ()
-        {
-            $("#myModal").hide();
-        });
-        $("#close2").click(function ()
-        {
-            $("#myModalUpdate").hide();
-        });
-
         let request = {
+
             url: "Load",
+
             data: "",
+
             runfunction: function (data)
             {
                 helper.adddata(data);
@@ -34,11 +24,17 @@ var main = {
     add: function ()
     {
         let name = $("#name").val();
+
         let ip = $("#ip").val();
+
         let type = $("#type").val();
+
         let tag = $("#tag").val();
+
         let password = $("#password").val();
+
         let username = $("#username").val();
+
         let sdata = {
             username: username,
             password: password,
@@ -47,28 +43,42 @@ var main = {
             type: type,
             tag: tag
         };
+
         if (helper.validate(name, ip, type, tag, username, password))
         {
             let request = {
+
                 url: "Add",
+
                 data: sdata,
+
                 runfunction: function (data)
                 {
                     helper.adddata(data);
                 },
             };
             helper.ajaxpost(request);
-            $('#monitor').trigger("reset");
+
             $("#myModal").hide();
+
             location.reload();
         }
     },
 
-    addforpolling: function (id)
+    addforpolling: function (that)
     {
+        let id = $(that).data("id");
+
+        let sdata = {
+            id: id
+        };
+
         let request = {
+
             url: "AddPolling",
-            data: "id=" + id,
+
+            data: sdata,
+
             runfunction: function (data)
             {
                 alert(data.status);
@@ -77,21 +87,35 @@ var main = {
         helper.ajaxpost(request);
     },
 
-    edit: function (that, id)
+    edit: function (that)
     {
+
         $("#myModalUpdate").show();
+
+        let id = $(that).data("id");
+
         let name = $(that).parent().prev().prev().prev().prev().text();
+
         let ip = $(that).parent().prev().prev().prev().text();
+
         let type = $(that).parent().prev().prev().text();
+
         let tag = $(that).parent().prev().text();
+
         $("#rawid").val(id);
+
         $("#updateip").val(ip);
+
         $("#updatename").val(name);
+
         $("#updatetype").val(type);
+
         $("#updatetag").val(tag);
+
         if (type == "ssh")
         {
             $("#updatesshdivision").show();
+
         } else
         {
             $("#updatesshdivision").hide();
@@ -100,13 +124,20 @@ var main = {
 
     update: function ()
     {
-        let id = $("#rawid").val()
+        let id = $("#rawid").val();
+
         let name = $("#updatename").val();
+
         let ip = $("#updateip").val();
+
         let type = $("#updatetype").val();
+
         let tag = $("#updatetag").val();
+
         let password = $("#updatepassword").val();
+
         let username = $("#updateusername").val();
+
         let sdata = {
             id: id,
             username: username,
@@ -119,33 +150,47 @@ var main = {
         if (helper.validate(name, ip, type, tag, username, password))
         {
             let request = {
+
                 url: "Edit",
+
                 data: sdata,
+
                 runfunction: function (data)
                 {
                     helper.adddata(data);
                 },
             };
             helper.ajaxpost(request);
+
             $("#myModalUpdate").hide();
+
             location.reload();
         }
-
     },
 
-    deletemonitor: function (id)
+    deletemonitor: function (that)
     {
+        let id = $(that).data("id");
+
+        let sdata = {
+            id: id,
+        };
+
         if (confirm("Do you want to delete?"))
         {
             let request = {
+
                 url: "Delete",
-                data: "id=" + id,
+
+                data: sdata,
+
                 runfunction: function (data)
                 {
                     alert(data.status);
                 },
             };
             helper.ajaxpost(request);
+
             location.reload();
         }
     }
@@ -156,23 +201,29 @@ var helper = {
     ajaxpost: function (request)
     {
         $.ajax({
+
             type: 'POST',
+
             url: request.url,
+
             data: request.data,
+
             success: function (data)
             {
                 request.runfunction(data);
             },
-            error: function (data)
+            error: function ()
             {
                 alert("Some error occured.");
-            }
+            },
+            timeout: 10000
         });
     },
 
     adddata: function (data)
     {
         let tabledata = "";
+
         $.each(data.monitorList, function ()
         {
             tabledata += "<tr>" +
@@ -181,9 +232,9 @@ var helper = {
                 "<td>" + this.type + "</td>" +
                 "<td>" + this.tag + "</td>" +
                 "<td>" +
-                "<button onclick='main.addforpolling(" + this.id + ")' class='btn' style='margin-left: 5px'>Add</button>" +
-                "<button onclick='main.edit(this," + this.id + ")' class='btn' style='margin-left: 5px'>Edit</button>" +
-                "<button onclick='main.deletemonitor(" + this.id + ")' class='btn' style='margin-left: 5px'>Delete</button>" +
+                "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Add</button>" +
+                "<button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button>" +
+                "<button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" +
                 "</td>" +
                 "</tr>";
         });
@@ -226,12 +277,15 @@ var helper = {
         if ($("#updatetype").val() == "ssh")
         {
             $("#updatesshdivision").show();
+
         } else if ($("#type").val() == "ssh")
         {
             $("#sshdivision").show();
+
         } else
         {
             $("#sshdivision").hide();
+
             $("#updatesshdivision").hide();
         }
     },
@@ -239,12 +293,29 @@ var helper = {
     customalert: function (id, message)
     {
         $(id).text(message);
+
         $(id).show();
+
         setTimeout(function ()
         {
             $(id).hide();
+
         }, 2000);
     },
 
+    floatbtn: function ()
+    {
+        $("#myModal").show();
+    },
+
+    closeadd: function ()
+    {
+        $("#myModal").hide();
+    },
+
+    closeupdate: function ()
+    {
+        $("#myModalUpdate").hide();
+    }
 };
 
