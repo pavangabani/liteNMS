@@ -6,21 +6,25 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ConnectionPool {
+public class ConnectionPool
+{
 
     private static BlockingQueue<Connection> connectionsPool;
 
     private static ArrayList<Connection> usedConnection = new ArrayList<>();
 
-    public static void createFixedSizePool(Integer size) {
+    public static void createFixedSizePool(Integer size)
+    {
 
-        try {
+        try
+        {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             connectionsPool = new ArrayBlockingQueue(size);
 
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++)
+            {
 
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
 
@@ -28,23 +32,27 @@ public class ConnectionPool {
 
             }
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
 
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() {
+    public static Connection getConnection()
+    {
 
         Connection connection = null;
 
-        try {
+        try
+        {
 
             connection = connectionsPool.take();
 
             usedConnection.add(connection);
 
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
 
             e.printStackTrace();
 
@@ -54,15 +62,18 @@ public class ConnectionPool {
 
     }
 
-    public static void releaseConnection(Connection connection) {
+    public static void releaseConnection(Connection connection)
+    {
 
-        try {
+        try
+        {
 
             connectionsPool.put(connection);
 
             usedConnection.remove(connection);
 
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
 
             e.printStackTrace();
         }

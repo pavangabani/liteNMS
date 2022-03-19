@@ -9,14 +9,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PollingJob implements Job {
+public class PollingJob implements Job
+{
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) {
+    public void execute(JobExecutionContext jobExecutionContext)
+    {
 
         //QueryStart
 
-        Database database=new Database();
+        Database database = new Database();
 
         String query = "select id,ip,type from pollingmonitor";
 
@@ -24,15 +26,17 @@ public class PollingJob implements Job {
 
         //QueryEnd
 
-        for (HashMap<String, String> row : data) {
+        for (HashMap<String, String> row : data)
+        {
 
-            String id=row.get("id"),ip=row.get("ip"),type=row.get("type");
+            String id = row.get("id"), ip = row.get("ip"), type = row.get("type");
 
-            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingTread(id,ip));
+            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingTread(id, ip));
 
-            if (ping && type.equals("ssh")) {
+            if (ping && type.equals("ssh"))
+            {
 
-                PoolUtil.forkJoinPool.invoke(new SshTread(id,ip));
+                PoolUtil.forkJoinPool.invoke(new SshTread(id, ip));
             }
         }
 

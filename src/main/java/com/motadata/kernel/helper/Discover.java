@@ -6,15 +6,18 @@ import com.motadata.kernel.dao.Database;
 import java.io.*;
 import java.util.*;
 
-public class Discover {
+public class Discover
+{
 
-    public boolean discovery(String ip, String type) {
+    public boolean discovery(String ip, String type)
+    {
 
-        Database database=new Database();
+        Database database = new Database();
 
         boolean discoveryTest = ping(ip);
 
-        if (discoveryTest && type.equals("ssh")) {
+        if (discoveryTest && type.equals("ssh"))
+        {
 
             //QueryStart
 
@@ -36,21 +39,25 @@ public class Discover {
 
     }
 
-    public boolean ping(String ip) {
+    public boolean ping(String ip)
+    {
 
         int packetLoss = 100;
 
-        try {
+        try
+        {
+            List<String> command=new ArrayList<>(Arrays.asList("ping","-c", "4",ip));
 
-            Runtime runtime = Runtime.getRuntime();
+            ProcessBuilder processBuilder=new ProcessBuilder(command);
 
-            Process process = runtime.exec("ping -c 4 " + ip);
+            Process process = processBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line, answer = "";
 
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
 
                 answer += line;
 
@@ -62,13 +69,15 @@ public class Discover {
 
             packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
 
             e.printStackTrace();
 
         }
 
-        if (packetLoss < 50) {
+        if (packetLoss < 50)
+        {
 
             return true;
 
@@ -78,13 +87,15 @@ public class Discover {
 
     }
 
-    public boolean ssh(String ip, String username, String password) {
+    public boolean ssh(String ip, String username, String password)
+    {
 
         boolean sshTest = false;
 
         Session session;
 
-        try {
+        try
+        {
 
             Properties config = new Properties();
 
@@ -100,13 +111,15 @@ public class Discover {
 
             session.connect();
 
-            if (session.isConnected()) {
+            if (session.isConnected())
+            {
 
                 sshTest = true;
 
             }
 
-        } catch (JSchException e) {
+        } catch (JSchException e)
+        {
 
             e.printStackTrace();
 
@@ -116,9 +129,11 @@ public class Discover {
 
     }
 
-    public static boolean sshTypeTest(String ip,String username,String password){
+    public static boolean sshTypeTest(String ip, String username, String password)
+    {
 
-        try {
+        try
+        {
 
             Properties config = new Properties();
 
@@ -140,7 +155,7 @@ public class Discover {
 
             ((ChannelExec) channel).setCommand("uname");
 
-            ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             channel.setOutputStream(byteArrayOutputStream);
 
@@ -148,21 +163,24 @@ public class Discover {
 
             //GetData-----------------------------------------------------------------
 
-            if(channel.isConnected()){
+            if (channel.isConnected())
+            {
 
                 Thread.sleep(100);
 
             }
 
-            String answer= new String(byteArrayOutputStream.toByteArray()).trim();
+            String answer = new String(byteArrayOutputStream.toByteArray()).trim();
 
-            if (answer.equals("Linux")){
+            if (answer.equals("Linux"))
+            {
 
-               return true;
+                return true;
 
-           }
+            }
 
-        } catch (Exception e){
+        } catch (Exception e)
+        {
 
             e.printStackTrace();
 

@@ -8,24 +8,27 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
 
-public class LoginAction implements ModelDriven, SessionAware {
+public class LoginAction implements ModelDriven, SessionAware
+{
 
-    LoginBean loginBean=new LoginBean();
+    LoginBean loginBean = new LoginBean();
 
-    LoginExecutor loginExecutor =new LoginExecutor();
+    LoginExecutor loginExecutor = new LoginExecutor();
 
     SessionMap<String, Object> session;
 
-    public String login() {
+    public String login()
+    {
 
         loginExecutor.login(loginBean);
 
-        session.put("user",loginBean.getUsername());
+        session.put("user", loginBean.getUsername());
 
         return "LOGIN";
     }
 
-    public String register(){
+    public String register()
+    {
 
         loginExecutor.register(loginBean);
 
@@ -33,22 +36,22 @@ public class LoginAction implements ModelDriven, SessionAware {
 
     }
 
-    public String logout(){
-
+    public String logout()
+    {
         session.invalidate();
 
         return "LOGOUT";
     }
 
     @Override
-    public Object getModel() {
-
+    public Object getModel()
+    {
         return loginBean;
     }
 
     @Override
-    public void setSession(Map<String, Object> session) {
-
-        this.session=(SessionMap<String, Object>) session;
+    public void setSession(Map<String, Object> session)
+    {
+        this.session = (SessionMap<String, Object>) session;
     }
 }

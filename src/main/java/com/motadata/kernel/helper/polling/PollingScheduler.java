@@ -3,46 +3,53 @@ package com.motadata.kernel.helper.polling;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
-public class PollingScheduler {
+public class PollingScheduler
+{
 
     SchedulerFactory schedulerFactory;
 
     Scheduler scheduler;
 
-    public void createScheduler(){
+    public void createScheduler()
+    {
 
-        try {
+        try
+        {
 
-            schedulerFactory=new StdSchedulerFactory();
+            schedulerFactory = new StdSchedulerFactory();
 
-            scheduler=schedulerFactory.getScheduler();
+            scheduler = schedulerFactory.getScheduler();
 
-            JobDetail job= JobBuilder.newJob(PollingJob.class)
-                    .withIdentity("Polling","group")
+            JobDetail job = JobBuilder.newJob(PollingJob.class)
+                    .withIdentity("Polling", "group")
                     .build();
 
-            Trigger trigger=TriggerBuilder.newTrigger()
-                    .withIdentity("myTrigger","group")
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity("myTrigger", "group")
                     .startNow()
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever())
                     .build();
 
-            scheduler.scheduleJob(job,trigger);
+            scheduler.scheduleJob(job, trigger);
 
-        }catch (Exception e){
+        } catch (Exception e)
+        {
 
             e.printStackTrace();
 
         }
     }
 
-    public void startScheduler(){
+    public void startScheduler()
+    {
 
-        try {
+        try
+        {
 
             scheduler.start();
 
-        } catch (SchedulerException e) {
+        } catch (SchedulerException e)
+        {
 
             e.printStackTrace();
         }

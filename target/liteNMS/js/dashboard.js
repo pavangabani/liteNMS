@@ -2,12 +2,11 @@ $(document).ready(function () {
     main.onload()
 });
 
-
 var main = {
 
     onload: function () {
-        var request = {
-            url: "LoadDashboard.action",
+        let request = {
+            url: "LoadDashboard",
             data: "",
             runfunction: function (data) {
                 helper.adddata(data);

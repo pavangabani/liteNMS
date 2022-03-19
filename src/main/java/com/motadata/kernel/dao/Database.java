@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Database {
+public class Database
+{
 
-    Connection connection=ConnectionPool.getConnection();
+    Connection connection = ConnectionPool.getConnection();
 
-    public List<HashMap<String, String>> select(String query, ArrayList<Object> values) {
+    public List<HashMap<String, String>> select(String query, ArrayList<Object> values)
+    {
 
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
-        List<HashMap<String, String>> data=null;
+        List<HashMap<String, String>> data = null;
 
-        try {
+        try
+        {
 
             //Set Prepare statement
 
@@ -23,19 +26,21 @@ public class Database {
 
             int i = 1;
 
-            for (Object value : values) {
+            for (Object value : values)
+            {
 
-                if (value instanceof Integer) {
+                if (value.getClass()== Integer.class)
+                {
 
                     preparedStatement.setInt(i, (Integer) value);
 
-                }
-                else if (value instanceof String) {
+                } else if (value.getClass()==String.class)
+                {
 
                     preparedStatement.setString(i, (String) value);
 
-                }
-                else if (value instanceof Timestamp) {
+                } else if (value.getClass()== Timestamp.class)
+                {
 
                     preparedStatement.setTimestamp(i, (Timestamp) value);
 
@@ -53,13 +58,15 @@ public class Database {
 
             int columnCount = resultSetMetaData.getColumnCount();
 
-            data=new ArrayList<>();
+            data = new ArrayList<>();
 
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
 
                 HashMap<String, String> row = new HashMap<>();
 
-                for (int j = 1; j <= columnCount; j++) {
+                for (int j = 1; j <= columnCount; j++)
+                {
 
                     row.put(resultSetMetaData.getColumnName(j), resultSet.getString(j));
 
@@ -69,21 +76,26 @@ public class Database {
 
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
 
             e.printStackTrace();
 
-        } finally {
+        } finally
+        {
 
-            try {
+            try
+            {
 
-                if(preparedStatement!=null){
+                if (preparedStatement != null)
+                {
 
                     preparedStatement.close();
 
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
 
                 e.printStackTrace();
 
@@ -95,33 +107,37 @@ public class Database {
         return data;
     }
 
-    public int update(String query, ArrayList<Object> values) {
+    public int update(String query, ArrayList<Object> values)
+    {
 
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
-        int affectedRow=0;
+        int affectedRow = 0;
 
-        try {
+        try
+        {
 
             //Set Preparestatement
 
-             preparedStatement= connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(query);
 
             int i = 1;
 
-            for (Object value : values) {
+            for (Object value : values)
+            {
 
-                if (value.getClass()==Integer.class) {
+                if (value.getClass() == Integer.class)
+                {
 
                     preparedStatement.setInt(i, (Integer) value);
 
-                }
-                else if (value.getClass() == String.class) {
+                } else if (value.getClass() == String.class)
+                {
 
                     preparedStatement.setString(i, (String) value);
 
-                }
-                else if (value.getClass() == Timestamp.class) {
+                } else if (value.getClass() == Timestamp.class)
+                {
 
                     preparedStatement.setTimestamp(i, (Timestamp) value);
 
@@ -131,29 +147,34 @@ public class Database {
 
             }
 
-            affectedRow=preparedStatement.executeUpdate();
+            affectedRow = preparedStatement.executeUpdate();
 
 
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e)
+        {
 
             return -1;
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e)
+        {
 
             e.printStackTrace();
 
-        }finally {
+        } finally
+        {
 
-            try {
+            try
+            {
 
-                if(preparedStatement!=null){
+                if (preparedStatement != null)
+                {
 
                     preparedStatement.close();
 
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
 
                 e.printStackTrace();
 
@@ -164,9 +185,10 @@ public class Database {
         return affectedRow;
     }
 
-    public void releaseConnection(){
+    public void releaseConnection()
+    {
 
         ConnectionPool.releaseConnection(connection);
 
-     }
+    }
 }

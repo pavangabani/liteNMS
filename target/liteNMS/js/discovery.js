@@ -1,42 +1,59 @@
-$(document).ready(function () {
+$(document).ready(function ()
+{
     main.onload()
 });
 
 var main = {
 
-    onload: function () {
-        $("#myBtn").on("click", function () {
+    onload: function ()
+    {
+        $("#myBtn").on("click", function ()
+        {
             $("#myModal").show();
         });
-        $("#close").click(function () {
+        $("#close").click(function ()
+        {
             $("#myModal").hide();
         });
-        $("#close2").click(function () {
+        $("#close2").click(function ()
+        {
             $("#myModalUpdate").hide();
         });
 
-        var request = {
-            url: "Load.action",
+        let request = {
+            url: "Load",
             data: "",
-            runfunction: function (data) {
+            runfunction: function (data)
+            {
                 helper.adddata(data);
             },
         };
         helper.ajaxpost(request);
     },
 
-    add: function () {
-        var name = $("#name").val();
-        var ip = $("#ip").val();
-        var type = $("#type").val();
-        var tag = $("#tag").val();
-        var password = $("#password").val();
-        var username = $("#username").val();
-        if (helper.validate(name, ip, type, tag, username, password)) {
-            var request = {
-                url: "Add.action",
-                data: "username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
+    add: function ()
+    {
+        let name = $("#name").val();
+        let ip = $("#ip").val();
+        let type = $("#type").val();
+        let tag = $("#tag").val();
+        let password = $("#password").val();
+        let username = $("#username").val();
+        let sdata = {
+            username: username,
+            password: password,
+            name: name,
+            ip: ip,
+            type: type,
+            tag: tag
+        };
+        if (helper.validate(name, ip, type, tag, username, password))
+        {
+            let request = {
+                url: "Add",
+                data: sdata,
+                runfunction: function (data)
+                {
                     helper.adddata(data);
                 },
             };
@@ -47,52 +64,65 @@ var main = {
         }
     },
 
-    addforpolling: function (that, id) {
-        var name = $(that).parent().prev().prev().prev().prev().text();
-        var ip = $(that).parent().prev().prev().prev().text();
-        var type = $(that).parent().prev().prev().text();
-        var tag = $(that).parent().prev().text();
-        var request = {
-            url: "AddPolling.action",
-            data: "id=" + id + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-            runfunction: function (data) {
+    addforpolling: function (id)
+    {
+        let request = {
+            url: "AddPolling",
+            data: "id=" + id,
+            runfunction: function (data)
+            {
                 alert(data.status);
             },
         };
         helper.ajaxpost(request);
     },
 
-    edit: function (that, id) {
+    edit: function (that, id)
+    {
         $("#myModalUpdate").show();
-        var name = $(that).parent().prev().prev().prev().prev().text();
-        var ip = $(that).parent().prev().prev().prev().text();
-        var type = $(that).parent().prev().prev().text();
-        var tag = $(that).parent().prev().text();
+        let name = $(that).parent().prev().prev().prev().prev().text();
+        let ip = $(that).parent().prev().prev().prev().text();
+        let type = $(that).parent().prev().prev().text();
+        let tag = $(that).parent().prev().text();
         $("#rawid").val(id);
         $("#updateip").val(ip);
         $("#updatename").val(name);
         $("#updatetype").val(type);
         $("#updatetag").val(tag);
-        if (type == "ssh") {
+        if (type == "ssh")
+        {
             $("#updatesshdivision").show();
-        } else {
+        } else
+        {
             $("#updatesshdivision").hide();
         }
     },
 
-    update: function () {
-        var id = $("#rawid").val()
-        var name = $("#updatename").val();
-        var ip = $("#updateip").val();
-        var type = $("#updatetype").val();
-        var tag = $("#updatetag").val();
-        var password = $("#updatepassword").val();
-        var username = $("#updateusername").val();
-        if (helper.validate(name, ip, type, tag, username, password)) {
-            var request = {
-                url: "Edit.action",
-                data: "id=" + id + "&username=" + username + "&password=" + password + "&name=" + name + "&ip=" + ip + "&type=" + type + "&tag=" + tag,
-                runfunction: function (data) {
+    update: function ()
+    {
+        let id = $("#rawid").val()
+        let name = $("#updatename").val();
+        let ip = $("#updateip").val();
+        let type = $("#updatetype").val();
+        let tag = $("#updatetag").val();
+        let password = $("#updatepassword").val();
+        let username = $("#updateusername").val();
+        let sdata = {
+            id: id,
+            username: username,
+            password: password,
+            name: name,
+            ip: ip,
+            type: type,
+            tag: tag
+        };
+        if (helper.validate(name, ip, type, tag, username, password))
+        {
+            let request = {
+                url: "Edit",
+                data: sdata,
+                runfunction: function (data)
+                {
                     helper.adddata(data);
                 },
             };
@@ -103,12 +133,15 @@ var main = {
 
     },
 
-    deletemonitor: function (id) {
-        if (confirm("Do you want to delete?")) {
-            var request = {
-                url: "Delete.action",
+    deletemonitor: function (id)
+    {
+        if (confirm("Do you want to delete?"))
+        {
+            let request = {
+                url: "Delete",
                 data: "id=" + id,
-                runfunction: function (data) {
+                runfunction: function (data)
+                {
                     alert(data.status);
                 },
             };
@@ -120,78 +153,95 @@ var main = {
 
 var helper = {
 
-    ajaxpost: function (request) {
+    ajaxpost: function (request)
+    {
         $.ajax({
             type: 'POST',
             url: request.url,
             data: request.data,
-            success: function (data) {
+            success: function (data)
+            {
                 request.runfunction(data);
             },
-            error: function (data) {
+            error: function (data)
+            {
                 alert("Some error occured.");
             }
         });
     },
 
-    adddata: function (data) {
-        var tabledata = "";
-        $.each(data.monitorList, function () {
+    adddata: function (data)
+    {
+        let tabledata = "";
+        $.each(data.monitorList, function ()
+        {
             tabledata += "<tr>" +
                 "<td>" + this.name + "</td>" +
                 "<td>" + this.ip + "</td>" +
                 "<td>" + this.type + "</td>" +
                 "<td>" + this.tag + "</td>" +
                 "<td>" +
-                "<button onclick='main.addforpolling(this," + this.id + ")' className='btn' style='margin-left: 5px'>Add</button>" +
-                "<button onclick='main.edit(this," + this.id + ")' className='btn' style='margin-left: 5px'>Edit</button>" +
-                "<button onclick='main.deletemonitor(" + this.id + ")' className='btn' style='margin-left: 5px'>Delete</button>" +
+                "<button onclick='main.addforpolling(" + this.id + ")' class='btn' style='margin-left: 5px'>Add</button>" +
+                "<button onclick='main.edit(this," + this.id + ")' class='btn' style='margin-left: 5px'>Edit</button>" +
+                "<button onclick='main.deletemonitor(" + this.id + ")' class='btn' style='margin-left: 5px'>Delete</button>" +
                 "</td>" +
                 "</tr>";
         });
         $("#tablebody").html(tabledata);
     },
 
-    validate: function (name, ip, type, tag, username, password) {
-        var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-        if (name == "") {
+    validate: function (name, ip, type, tag, username, password)
+    {
+        let ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[1-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        if (name == "")
+        {
             helper.customalert(".failure", "Enter Valid Name");
             return false;
         }
-        if (ip == "") {
+        if (ip == "")
+        {
             helper.customalert(".failure", "Enter IP");
             return false;
         }
-        if (!ipformat.test(ip)) {
+        if (!ipformat.test(ip))
+        {
             helper.customalert(".failure", "Enter Valid IP");
             return false;
         }
-        if (tag == "") {
+        if (tag == "")
+        {
             helper.customalert(".failure", "Enter Tag");
             return false;
         }
-        if (type != "ping" && (username == "" || password == "")) {
+        if (type != "ping" && (username == "" || password == ""))
+        {
             helper.customalert(".failure", "Enter Username & Password");
             return false;
         }
         return true;
     },
 
-    showssh: function () {
-        if ($("#updatetype").val() == "ssh") {
+    showssh: function ()
+    {
+        if ($("#updatetype").val() == "ssh")
+        {
             $("#updatesshdivision").show();
-        } else if ($("#type").val() == "ssh") {
+        } else if ($("#type").val() == "ssh")
+        {
             $("#sshdivision").show();
-        } else {
+        } else
+        {
             $("#sshdivision").hide();
             $("#updatesshdivision").hide();
         }
     },
 
-    customalert: function (id, message) {
+    customalert: function (id, message)
+    {
         $(id).text(message);
         $(id).show();
-        setTimeout(function () {
+        setTimeout(function ()
+        {
             $(id).hide();
         }, 2000);
     },

@@ -4,22 +4,27 @@ import com.motadata.kernel.bean.DashboardBean;
 import com.motadata.kernel.executor.DashboardExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class DashboardAction implements ModelDriven {
+public class DashboardAction implements ModelDriven
+{
 
-    DashboardBean dashboardBean=new DashboardBean();
+    DashboardBean dashboardBean = new DashboardBean();
 
-    DashboardExecutor dashboardExecutor =new DashboardExecutor();
+    DashboardExecutor dashboardExecutor = new DashboardExecutor();
 
-    public String load(){
+    public String load()
+    {
 
         dashboardExecutor.load(dashboardBean);
 
         return "LOADED";
+
     }
 
     @Override
-    public Object getModel() {
+    public Object getModel()
+    {
 
         return dashboardBean;
+
     }
 }

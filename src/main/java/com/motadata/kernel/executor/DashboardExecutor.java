@@ -3,14 +3,20 @@ package com.motadata.kernel.executor;
 import com.motadata.kernel.bean.DashboardBean;
 import com.motadata.kernel.helper.GetData;
 
-public class DashboardExecutor {
+public class DashboardExecutor
+{
+    public void load(DashboardBean dashboardBean)
+    {
+        try
+        {
+            GetData getData = new GetData();
 
-    public void load(DashboardBean dashboardBean){
+            dashboardBean.setAvailability(getData.getDashboardData());
 
-        GetData getData=new GetData();
+        } catch (Exception e)
+        {
 
-        dashboardBean.setAvailability(getData.getDashboardData());
-
+            e.printStackTrace();
+        }
     }
-
 }

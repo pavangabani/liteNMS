@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" href="css/monitorstyle.css">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script src="js/monitor.js"></script>
 
@@ -28,8 +28,8 @@
 
 <div id="myModalStatistic" class="modal" style="display: none">
     <div class="modal-content">
-        <span id="close">&times;</span>
-        <div style="float:right;">Live Data</div>
+        <span id="close">&times;</span><br>
+        <div style="margin-left: 650px;font-weight: bold">Live Data</div>
         <div class="wrapper">
             <div id="pieDiv">
                 <canvas id="pie" style="width:100%;max-width:500px;height: 50%;max-height:500px;"></canvas>

@@ -1,33 +1,44 @@
-$(document).ready(function () {
+$(document).ready(function ()
+{
     main.onload()
 });
 
-let main = {
+var main = {
 
-    onload: function () {
-        $("#loginsubmit").click(function (event) {
+    onload: function ()
+    {
+        $("#loginsubmit").click(function (event)
+        {
             let username = $("#username").val();
             let password = $("#password").val();
-            if (helper.validate(username, password)) {
+            if (helper.validate(username, password))
+            {
                 main.login(username, password);
-            } else {
+            } else
+            {
                 helper.customalert("#failure");
             }
             event.preventDefault();
         });
-        $("#close").click(function () {
+        $("#close").click(function ()
+        {
             $("#register").hide();
         });
     },
 
-    login: function (username, password) {
+    login: function (username, password)
+    {
+        let sdata = {username: username, password: password};
         let request = {
-            data: "username=" + username + "&password=" + password,
-            url: "Login.action",
-            runfunction: function (data) {
-                if (data.status == "Success") {
-                    window.location='Dashboard.action';
-                } else {
+            data: sdata,
+            url: "Login",
+            runfunction: function (data)
+            {
+                if (data.status == "Success")
+                {
+                    window.location = 'Dashboard';
+                } else
+                {
                     helper.customalert("#failure")
                 }
             }
@@ -35,23 +46,29 @@ let main = {
         helper.ajaxpost(request);
     },
 
-    register: function (){
+    register: function ()
+    {
         $("#register").show();
     },
 
-    submit: function (){
-        let registerusername=$("#registerusername").val();
-        let registerpassword=$("#registerpassword").val();
-        if(helper.validate(registerusername, registerusername)){
-            let request={
-                data:"username="+registerusername+"&password="+registerpassword,
-                url:"Register.action",
-                runfunction: function (data){
+    submit: function ()
+    {
+        let registerusername = $("#registerusername").val();
+        let registerpassword = $("#registerpassword").val();
+        let sdata = {username: registerusername, password: registerpassword};
+        if (helper.validate(registerusername, registerusername))
+        {
+            let request = {
+                data: sdata,
+                url: "Register",
+                runfunction: function (data)
+                {
                     alert(data.status);
                 }
             }
             helper.ajaxpost(request);
-        }else {
+        } else
+        {
             helper.customalert("#registerfailure");
         }
         $("#registerform").trigger("reset");
@@ -60,32 +77,40 @@ let main = {
 
 };
 
-let helper = {
+var helper = {
 
-    customalert: function (id) {
+    customalert: function (id)
+    {
         $(id).show();
-        setTimeout(function () {
+        setTimeout(function ()
+        {
             $(id).hide();
         }, 2000);
     },
 
-    validate: function (username, password) {
-        if (username == "" || password == "") {
+    validate: function (username, password)
+    {
+        if (username == "" || password == "")
+        {
             return false;
-        } else {
+        } else
+        {
             return true;
         }
     },
 
-    ajaxpost: function (request) {
+    ajaxpost: function (request)
+    {
         $.ajax({
             type: 'POST',
             url: request.url,
             data: request.data,
-            success: function (data) {
+            success: function (data)
+            {
                 request.runfunction(data);
             },
-            error: function (data) {
+            error: function (data)
+            {
                 alert("Some error occured.");
             }
         });

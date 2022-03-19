@@ -10,63 +10,67 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.RecursiveTask;
 
-public class PingTread extends RecursiveTask<Boolean> {
+public class PingTread extends RecursiveTask<Boolean>
+{
 
     String id;
 
     String ip;
 
-    PingTread(String id,String ip){
+    PingTread(String id, String ip)
+    {
 
-        this.id=id;
+        this.id = id;
 
-        this.ip=ip;
+        this.ip = ip;
     }
 
     @Override
-    protected Boolean compute() {
+    protected Boolean compute()
+    {
 
-        GetData getData=new GetData();
+        GetData getData = new GetData();
 
-        PollingPingBean pollingPingBean=getData.getPingData(ip);
+        PollingPingBean pollingPingBean = getData.getPingData(ip);
 
         //QueryStart
 
-        Database database=new Database();
+        Database database = new Database();
 
-        String query="insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
+        String query = "insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
 
-        ArrayList<Object> values=new ArrayList(Arrays.asList(id,pollingPingBean.getSentPacket(),pollingPingBean.getReceivePacket(),pollingPingBean.getPacketLoss(),pollingPingBean.getRTT(),new Timestamp(new Date().getTime())));
+        ArrayList<Object> values = new ArrayList(Arrays.asList(id, pollingPingBean.getSentPacket(), pollingPingBean.getReceivePacket(), pollingPingBean.getPacketLoss(), pollingPingBean.getRTT(), new Timestamp(new Date().getTime())));
 
-        database.update(query,values);
+        database.update(query, values);
 
         //QueryEnd
 
-        boolean test;
+        boolean pingTest;
 
-        query="update pollingmonitor set availability=? where id=?";
+        query = "update pollingmonitor set availability=? where id=?";
 
-        if(pollingPingBean.getPacketLoss()<50){
+        if (pollingPingBean.getPacketLoss() < 50)
+        {
 
-            values = new ArrayList(Arrays.asList("UP",id));
+            values = new ArrayList(Arrays.asList("UP", id));
 
-            database.update(query,values);
+            database.update(query, values);
 
-            test=true;
+            pingTest = true;
 
-        }else {
+        } else
+        {
 
-            values = new ArrayList(Arrays.asList("DOWN",id));
+            values = new ArrayList(Arrays.asList("DOWN", id));
 
-            database.update(query,values);
+            database.update(query, values);
 
-            test=false;
+            pingTest = false;
 
         }
 
         database.releaseConnection();
 
-        return test;
-
+        return pingTest;
     }
 }

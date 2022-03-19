@@ -6,61 +6,88 @@ import com.motadata.kernel.helper.Cipher;
 
 import java.util.*;
 
-public class LoginExecutor {
+public class LoginExecutor
+{
 
-    public void login(LoginBean loginBean) {
+    public void login(LoginBean loginBean)
+    {
 
-        //QueryStart
+        try
+        {
+            //QueryStart
 
-        Database database = new Database();
+            Database database = new Database();
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            String query = "select * from login where user=? AND pass=?";
 
-        String query = "select * from login where user=? AND pass=?";
+            ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
-        List<HashMap<String, String>> data = database.select(query, values);
+            List<HashMap<String, String>> data = database.select(query, values);
 
-        database.releaseConnection();
+            database.releaseConnection();
 
-        //QueryEnd
+            //QueryEnd
 
-        if (data.size() == 1) {
+            if (data.size() == 1)
+            {
 
-            loginBean.setStatus("Success");
+                loginBean.setStatus("Success");
 
-        } else {
+            } else
+            {
 
-            loginBean.setStatus("Failure");
+                loginBean.setStatus("Failure");
+            }
+
+        } catch (Exception e)
+        {
+
+            e.printStackTrace();
+
         }
     }
 
-    public void register(LoginBean loginBean) {
+    public void register(LoginBean loginBean)
+    {
 
-        //QueryStart
+        try
+        {
 
-        Database database = new Database();
+            //QueryStart
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            Database database = new Database();
 
-        String query = "insert into login values(?,?)";
+            String query = "insert into login values(?,?)";
 
-        int affectedRow = database.update(query, values);
+            ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
-        database.releaseConnection();
+            int affectedRow = database.update(query, values);
 
-        //QueryEnd
+            database.releaseConnection();
 
-        if (affectedRow == 1) {
+            //QueryEnd
 
-            loginBean.setStatus("User Registered");
+            if (affectedRow == 1)
+            {
 
-        } else if(affectedRow == -1){
+                loginBean.setStatus("User Registered!");
 
-            loginBean.setStatus("Username is already taken");
+            } else if (affectedRow == -1)
+            {
 
-        }else {
+                loginBean.setStatus("Username already taken!");
 
-            loginBean.setStatus("Fail to Register");
+            } else
+            {
+
+                loginBean.setStatus("Fail to Register!");
+            }
+
+        } catch (Exception e)
+        {
+
+            e.printStackTrace();
+
         }
     }
 }

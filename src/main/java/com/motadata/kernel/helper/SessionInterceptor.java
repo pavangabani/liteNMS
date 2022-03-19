@@ -1,36 +1,70 @@
 package com.motadata.kernel.helper;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import org.apache.struts2.StrutsStatics;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-public class SessionInterceptor implements Interceptor {
+public class SessionInterceptor implements Interceptor
+{
+
+    String _allowedURLs[]={"/login.jsp"};
 
     @Override
-    public void destroy() {
+    public void destroy()
+    {
 
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
 
     }
 
     @Override
-    public String intercept(ActionInvocation actionInvocation) throws Exception {
+    public String intercept(ActionInvocation actionInvocation) throws Exception
+    {
 
-        Map<String,Object> session=actionInvocation.getInvocationContext().getSession();
+        final ActionContext context = actionInvocation.getInvocationContext();
 
-        if(session.get("user")!=null){
+        HttpServletRequest request = (HttpServletRequest) context.get(StrutsStatics.HTTP_REQUEST);
 
-            return actionInvocation.invoke();
+        Map<String, Object> session = ActionContext.getContext().getSession();
 
-        }else{
+        boolean userActionQualified = false;
 
-            return "loginUser";
+        if (session.get("user") != null)
+        {
+            actionInvocation.invoke();
+
+            userActionQualified = true;
+
+        } else
+        {
+            String requestURL = request.getRequestURI();
+
+            for (String url : _allowedURLs)
+            {
+                if (requestURL.contains(url))
+                {
+                    actionInvocation.invoke();
+
+                    userActionQualified = true;
+                }
+            }
 
         }
 
+        if (!userActionQualified)
+        {
+            return "loginUser";
+        }
+
+        return ActionSupport.SUCCESS;
     }
 }

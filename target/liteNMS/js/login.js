@@ -1,33 +1,44 @@
-$(document).ready(function () {
+$(document).ready(function ()
+{
     main.onload()
 });
 
 var main = {
 
-    onload: function () {
-        $("#loginsubmit").click(function (event) {
-            var username = $("#username").val();
-            var password = $("#password").val();
-            if (helper.validate(username, password)) {
+    onload: function ()
+    {
+        $("#loginsubmit").click(function (event)
+        {
+            let username = $("#username").val();
+            let password = $("#password").val();
+            if (helper.validate(username, password))
+            {
                 main.login(username, password);
-            } else {
+            } else
+            {
                 helper.customalert("#failure");
             }
             event.preventDefault();
         });
-        $("#close").click(function () {
+        $("#close").click(function ()
+        {
             $("#register").hide();
         });
     },
 
-    login: function (username, password) {
-        var request = {
-            data: "username=" + username + "&password=" + password,
-            url: "Login.action",
-            runfunction: function (data) {
-                if (data.status == "Success") {
-                    window.location='Dashboard.action';
-                } else {
+    login: function (username, password)
+    {
+        let sdata = {username: username, password: password};
+        let request = {
+            data: sdata,
+            url: "Login",
+            runfunction: function (data)
+            {
+                if (data.status == "Success")
+                {
+                    window.location = 'Dashboard';
+                } else
+                {
                     helper.customalert("#failure")
                 }
             }
@@ -35,23 +46,29 @@ var main = {
         helper.ajaxpost(request);
     },
 
-    register: function (){
+    register: function ()
+    {
         $("#register").show();
     },
 
-    submit: function (){
-        var registerusername=$("#registerusername").val();
-        var registerpassword=$("#registerpassword").val();
-        if(helper.validate(registerusername, registerusername)){
-            var request={
-                data:"username="+registerusername+"&password="+registerpassword,
-                url:"Register.action",
-                runfunction: function (data){
+    submit: function ()
+    {
+        let registerusername = $("#registerusername").val();
+        let registerpassword = $("#registerpassword").val();
+        let sdata = {username: registerusername, password: registerpassword};
+        if (helper.validate(registerusername, registerusername))
+        {
+            let request = {
+                data: sdata,
+                url: "Register",
+                runfunction: function (data)
+                {
                     alert(data.status);
                 }
             }
             helper.ajaxpost(request);
-        }else {
+        } else
+        {
             helper.customalert("#registerfailure");
         }
         $("#registerform").trigger("reset");
@@ -62,30 +79,38 @@ var main = {
 
 var helper = {
 
-    customalert: function (id) {
+    customalert: function (id)
+    {
         $(id).show();
-        setTimeout(function () {
+        setTimeout(function ()
+        {
             $(id).hide();
         }, 2000);
     },
 
-    validate: function (username, password) {
-        if (username == "" || password == "") {
+    validate: function (username, password)
+    {
+        if (username == "" || password == "")
+        {
             return false;
-        } else {
+        } else
+        {
             return true;
         }
     },
 
-    ajaxpost: function (request) {
+    ajaxpost: function (request)
+    {
         $.ajax({
             type: 'POST',
             url: request.url,
             data: request.data,
-            success: function (data) {
+            success: function (data)
+            {
                 request.runfunction(data);
             },
-            error: function (data) {
+            error: function (data)
+            {
                 alert("Some error occured.");
             }
         });

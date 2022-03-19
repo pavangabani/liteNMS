@@ -1,6 +1,7 @@
 package com.motadata.kernel.bean;
 
-public class PollingPingBean {
+public class PollingPingBean
+{
 
     Integer packetLoss;
 
@@ -10,35 +11,43 @@ public class PollingPingBean {
 
     Integer receivePacket;
 
-    public Integer getPacketLoss() {
+    public Integer getPacketLoss()
+    {
         return packetLoss;
     }
 
-    public void setPacketLoss(Integer packetLoss) {
+    public void setPacketLoss(Integer packetLoss)
+    {
         this.packetLoss = packetLoss;
     }
 
-    public Integer getRTT() {
+    public Integer getRTT()
+    {
         return RTT;
     }
 
-    public void setRTT(Integer RTT) {
+    public void setRTT(Integer RTT)
+    {
         this.RTT = RTT;
     }
 
-    public Integer getSentPacket() {
+    public Integer getSentPacket()
+    {
         return sentPacket;
     }
 
-    public void setSentPacket(Integer sentPacket) {
+    public void setSentPacket(Integer sentPacket)
+    {
         this.sentPacket = sentPacket;
     }
 
-    public Integer getReceivePacket() {
+    public Integer getReceivePacket()
+    {
         return receivePacket;
     }
 
-    public void setReceivePacket(Integer receivePacket) {
+    public void setReceivePacket(Integer receivePacket)
+    {
         this.receivePacket = receivePacket;
     }
 

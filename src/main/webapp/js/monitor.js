@@ -1,44 +1,55 @@
-$(document).ready(function () {
+$(document).ready(function ()
+{
     main.onload()
 });
-let bar;
-let pie;
-let main = {
+var bar;
+var pie;
+var main = {
 
-    onload: function () {
-        $("#close").click(function () {
+    onload: function ()
+    {
+        $("#close").click(function ()
+        {
             $("#myModalStatistic").hide();
 
         });
 
         $.ajax({
             type: "GET",
-            url: "LoadPolling.action",
-            success: function (data) {
+            url: "LoadPolling",
+            success: function (data)
+            {
                 helper.adddata(data);
             },
-            error: function (data) {
+            error: function (data)
+            {
                 alert("Some error occured.");
             }
         });
 
     },
 
-    showstatistic: function (that, id) {
+    showstatistic: function (that, id)
+    {
         let type = $(that).parent().prev().prev().prev().text();
-        if (type == "ssh") {
+        if (type == "ssh")
+        {
             helper.showsshdata(id, type);
-        } else {
+        } else
+        {
             helper.showpingdata(id, type);
         }
     },
 
-    deletemonitor: function (id) {
-        if(confirm("Do you want to delete?")){
+    deletemonitor: function (id)
+    {
+        if (confirm("Do you want to delete?"))
+        {
             let request = {
                 url: "DeletePolling.action",
                 data: "id=" + id,
-                runfunction: function (data) {
+                runfunction: function (data)
+                {
                     alert(data.status);
                 },
             };
@@ -48,25 +59,30 @@ let main = {
     }
 };
 
-let helper = {
+var helper = {
 
-    ajaxpost: function (request) {
+    ajaxpost: function (request)
+    {
         $.ajax({
             type: 'POST',
             url: request.url,
             data: request.data,
-            success: function (data) {
+            success: function (data)
+            {
                 request.runfunction(data);
             },
-            error: function (data) {
+            error: function (data)
+            {
                 alert("Some error occured.");
             }
         });
     },
 
-    adddata: function (data) {
+    adddata: function (data)
+    {
         let tabledata = "";
-        $.each(data.pollingMonitorBeanList, function () {
+        $.each(data.pollingMonitorBeanList, function ()
+        {
             tabledata += "<tr>" +
                 "<td>" + this.name + "</td>" +
                 "<td>" + this.ip + "</td>" +
@@ -82,17 +98,19 @@ let helper = {
         $("#tablebody").html(tabledata);
     },
 
-    chartping: function (data) {
+    chartping: function (data)
+    {
         let xValues = ["Up", "Down"];
         let yValues = data.pingStatistic.pie;
         let barColors = [
             "blue", "orange"
         ];
 
-        if(pie){
+        if (pie)
+        {
             pie.destroy();
         }
-        let pie = new Chart("pie", {
+        pie = new Chart("pie", {
             type: "doughnut",
             data: {
                 labels: xValues,
@@ -113,10 +131,11 @@ let helper = {
         let yValues2 = data.pingStatistic.bary;
         let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
-        if(bar){
+        if (bar)
+        {
             bar.destroy();
         }
-        bar=new Chart("bar", {
+        bar = new Chart("bar", {
             type: "bar",
             data: {
                 labels: xValues2,
@@ -156,14 +175,16 @@ let helper = {
         });
     },
 
-    chartssh: function (data) {
+    chartssh: function (data)
+    {
         let xValues = ["Up", "Down"];
         let yValues = data.sshStatistic.pie;
         let barColors = [
             "blue", "orange"
         ];
 
-        if(pie){
+        if (pie)
+        {
             pie.destroy();
         }
         pie = new Chart("pie", {
@@ -187,7 +208,8 @@ let helper = {
         let yValues2 = data.sshStatistic.bary;
         let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
-        if(bar){
+        if (bar)
+        {
             bar.destroy();
         }
         bar = new Chart("bar", {
@@ -231,32 +253,39 @@ let helper = {
         });
     },
 
-    showsshdata: function (id, type) {
+    showsshdata: function (id, type)
+    {
+
+        let sdata = {id: id, type: type};
         let request = {
-            url: "PollingStatistic.action",
-            data: "id=" + id + "&type=" + type,
-            runfunction: function (data) {
+            url: "PollingStatistic",
+            data: sdata,
+            runfunction: function (data)
+            {
                 helper.chartssh(data);
                 $("#matrix1").html("<h3>CPU Usage: " + data.sshStatistic.matrix[0] + "%</h3>");
-                $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br><br>Memory:"+data.sshStatistic.matrix[5]+"MB</h3>");
-                $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%<br><br>Disk:"+data.sshStatistic.matrix[4]+"</h3>");
-                $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3]+"</h3>");
+                $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br><br>Memory:" + data.sshStatistic.matrix[5] + "G</h3>");
+                $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%<br><br>Disk:" + data.sshStatistic.matrix[4] + "</h3>");
+                $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3] + "</h3>");
             }
         }
         helper.ajaxpost(request);
         $("#myModalStatistic").show();
     },
 
-    showpingdata: function (id, type) {
+    showpingdata: function (id, type)
+    {
+        let sdata = {id: id, type: type,test:1};
         let request = {
-            url: "PollingStatistic.action",
-            data: "id=" + id + "&type=" + type,
-            runfunction: function (data) {
+            url: "PollingStatistic",
+            data: sdata,
+            runfunction: function (data)
+            {
                 helper.chartping(data);
-                $("#matrix1").html("<h3>Sent Packet: " + data.pingStatistic.matrix[0]+"</h3>");
-                $("#matrix2").html("<h3>Receive Packet: " + data.pingStatistic.matrix[1]+"</h3>");
-                $("#matrix3").html("<h3>Packet Loss: " + data.pingStatistic.matrix[2]+"</h3>");
-                $("#matrix4").html("<h3>RTT(ms): " + data.pingStatistic.matrix[3]+"</h3>");
+                $("#matrix1").html("<h3>Sent Packet: " + data.pingStatistic.matrix[0] + "</h3>");
+                $("#matrix2").html("<h3>Receive Packet: " + data.pingStatistic.matrix[1] + "</h3>");
+                $("#matrix3").html("<h3>Packet Loss: " + data.pingStatistic.matrix[2] + "</h3>");
+                $("#matrix4").html("<h3>RTT(ms): " + data.pingStatistic.matrix[3] + "</h3>");
             }
         }
         helper.ajaxpost(request);

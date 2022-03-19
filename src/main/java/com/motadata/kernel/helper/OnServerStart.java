@@ -5,13 +5,14 @@ import com.motadata.kernel.helper.polling.PollingScheduler;
 
 import javax.servlet.http.HttpServlet;
 
-public class OnServerStart extends HttpServlet {
+public class OnServerStart extends HttpServlet
+{
 
     public void init()
     {
         //StartPolling
 
-        PollingScheduler pollingScheduler=new PollingScheduler();
+        PollingScheduler pollingScheduler = new PollingScheduler();
 
         pollingScheduler.createScheduler();
 

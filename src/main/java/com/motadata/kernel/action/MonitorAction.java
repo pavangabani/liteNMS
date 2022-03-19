@@ -4,41 +4,47 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.executor.MonitorExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class MonitorAction implements ModelDriven {
+public class MonitorAction implements ModelDriven
+{
 
-    MonitorBean monitorBean=new MonitorBean();
+    MonitorBean monitorBean = new MonitorBean();
 
-    MonitorExecutor monitorExecutor =new MonitorExecutor();
+    MonitorExecutor monitorExecutor = new MonitorExecutor();
 
-    public String load(){
+    public String load()
+    {
 
         monitorExecutor.load(monitorBean);
 
         return "LOADED";
     }
 
-    public String add() {
+    public String add()
+    {
 
         monitorExecutor.add(monitorBean);
 
         return "ADDED";
     }
 
-    public String addPolling(){
+    public String addPolling()
+    {
 
         monitorExecutor.addPolling(monitorBean);
 
         return "ADDED";
     }
 
-    public String edit(){
+    public String edit()
+    {
 
         monitorExecutor.edit(monitorBean);
 
         return "EDITED";
     }
 
-    public String delete(){
+    public String delete()
+    {
 
         monitorExecutor.delete(monitorBean);
 
@@ -46,7 +52,8 @@ public class MonitorAction implements ModelDriven {
     }
 
     @Override
-    public Object getModel() {
+    public Object getModel()
+    {
 
         return monitorBean;
     }

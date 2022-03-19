@@ -7,15 +7,22 @@
 <struts>
 
     <package name="Start" namespace="/" extends="struts-default">
+
+        <interceptors>
+            <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor" />
+        </interceptors>
+
         <action name="">
+            <interceptor-ref name="userSession" />
             <result>login.jsp</result>
         </action>
+
     </package>
 
     <package name="Main" extends="json-default,struts-default">
 
         <interceptors>
-            <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor"></interceptor>
+            <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor" />
         </interceptors>
 
         <global-results>
@@ -73,15 +80,15 @@
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="Discovery">
-            <interceptor-ref name="userSession"></interceptor-ref>
+            <interceptor-ref name="userSession" />
             <result>WEB-INF/discovery.jsp</result>
         </action>
         <action name="Monitor">
-            <interceptor-ref name="userSession"></interceptor-ref>
+            <interceptor-ref name="userSession" />
             <result>WEB-INF/monitor.jsp</result>
         </action>
         <action name="Dashboard">
-            <interceptor-ref name="userSession"></interceptor-ref>
+            <interceptor-ref name="userSession" />
             <result>WEB-INF/dashboard.jsp</result>
         </action>
 

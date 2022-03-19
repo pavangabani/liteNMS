@@ -7,56 +7,74 @@ import com.motadata.kernel.helper.GetData;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PollingMonitorExecutor {
+public class PollingMonitorExecutor
+{
 
-    public void load(PollingMonitorBean pollingMonitorBean) {
+    public void load(PollingMonitorBean pollingMonitorBean)
+    {
+        try
+        {
+            GetData getData = new GetData();
 
-        GetData getData = new GetData();
+            pollingMonitorBean.setPollingMonitorBeanList(getData.getAllPollingMonitor());
 
-        pollingMonitorBean.setPollingMonitorBeanList(getData.getAllPollingMonitor());
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    public void show(PollingMonitorBean pollingMonitorBean) {
-        
-        GetData getData = new GetData();
+    public void show(PollingMonitorBean pollingMonitorBean)
+    {
+        try
+        {
+            GetData getData = new GetData();
 
-        if (pollingMonitorBean.getType().equals("ping")) {
+            if (pollingMonitorBean.getType().equals("ping"))
+            {
+                pollingMonitorBean.setPingStatistic(getData.getPingStatistic(pollingMonitorBean.getId()));
 
-            pollingMonitorBean.setPingStatistic(getData.getPingStatistic(pollingMonitorBean.getId()));
+            } else
+            {
+                pollingMonitorBean.setSshStatistic(getData.getSshStatistic(pollingMonitorBean.getId()));
+            }
 
-        } else {
-
-            pollingMonitorBean.setSshStatistic(getData.getSshStatistic(pollingMonitorBean.getId()));
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
     }
 
-    public void delete(PollingMonitorBean pollingMonitorBean) {
+    public void delete(PollingMonitorBean pollingMonitorBean)
+    {
+        try
+        {
+            //QueryStart
 
-        //QueryStart
+            Database database = new Database();
 
-        Database database=new Database();
+            String query = "delete from pollingmonitor where id=?";
 
-        String query = "delete from pollingmonitor where id=?";
+            ArrayList<Object> values = new ArrayList(Arrays.asList(pollingMonitorBean.getId()));
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(pollingMonitorBean.getId()));
+            int affectedRaw = database.update(query, values);
 
-        int affectedRaw = database.update(query, values);
+            //QueryEnd
 
-        //QueryEnd
+            if (affectedRaw > 0)
+            {
+                pollingMonitorBean.setStatus("Monitor Deleted!");
 
-        if (affectedRaw > 0) {
+            } else
+            {
+                pollingMonitorBean.setStatus("Could not Delete!");
+            }
 
-            pollingMonitorBean.setStatus("Monitor Deleted!");
+            database.releaseConnection();
 
-        } else {
-
-            pollingMonitorBean.setStatus("Could not Delete!");
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        database.releaseConnection();
     }
 }

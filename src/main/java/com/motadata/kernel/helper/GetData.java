@@ -15,299 +15,346 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.*;
 
-public class GetData {
+public class GetData
+{
 
     //GetData_From_Database
 
-    public List<PollingMonitorBean> getAllPollingMonitor() {
+    public List<PollingMonitorBean> getAllPollingMonitor()
+    {
+        List<PollingMonitorBean> pollingmonitorList = null;
 
-        //QueryStart
-        Database database=new Database();
+        try
+        {
+            //QueryStart
 
-        String query = "select * from pollingmonitor";
+            Database database = new Database();
 
-        List<HashMap<String, String>> data = database.select(query, new ArrayList());
+            String query = "select * from pollingmonitor";
 
-        //QueryEnd
+            List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
-        List<PollingMonitorBean> pollingmonitorList = new ArrayList<>();
+            //QueryEnd
 
-        for (HashMap<String, String> row : data) {
+            pollingmonitorList = new ArrayList<>();
 
-            PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
+            for (HashMap<String, String> row : data)
+            {
+                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
 
-            pollingmonitorBean.setId(row.get("id"));
+                pollingmonitorBean.setId(row.get("id"));
 
-            pollingmonitorBean.setName(row.get("name"));
+                pollingmonitorBean.setName(row.get("name"));
 
-            pollingmonitorBean.setIp(row.get("ip"));
+                pollingmonitorBean.setIp(row.get("ip"));
 
-            pollingmonitorBean.setType(row.get("type"));
+                pollingmonitorBean.setType(row.get("type"));
 
-            pollingmonitorBean.setTag(row.get("tag"));
+                pollingmonitorBean.setTag(row.get("tag"));
 
-            pollingmonitorBean.setAvailability(row.get("availability"));
+                pollingmonitorBean.setAvailability(row.get("availability"));
 
-            pollingmonitorList.add(pollingmonitorBean);
+                pollingmonitorList.add(pollingmonitorBean);
+            }
+            database.releaseConnection();
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        database.releaseConnection();
-
         return pollingmonitorList;
     }
 
-    public List<MonitorBean> getAllMonitor() {
+    public List<MonitorBean> getAllMonitor()
+    {
+        List<MonitorBean> monitorList = null;
 
-        //QueryStart
+        try
+        {
+            //QueryStart
 
-        Database database=new Database();
+            Database database = new Database();
 
-        String query = "select * from monitor";
+            String query = "select * from monitor";
 
-        List<HashMap<String, String>> data = database.select(query, new ArrayList());
+            List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
-        //QueryEnd
+            //QueryEnd
 
-        List<MonitorBean> monitorList = new ArrayList<>();
+            monitorList = new ArrayList<>();
 
-        for (HashMap<String, String> row : data) {
+            for (HashMap<String, String> row : data)
+            {
+                MonitorBean monitorBean = new MonitorBean();
 
-            MonitorBean monitorBean = new MonitorBean();
+                monitorBean.setId(row.get("id"));
 
-            monitorBean.setId(row.get("id"));
+                monitorBean.setName(row.get("name"));
 
-            monitorBean.setName(row.get("name"));
+                monitorBean.setIp(row.get("ip"));
 
-            monitorBean.setIp(row.get("ip"));
+                monitorBean.setType(row.get("type"));
 
-            monitorBean.setType(row.get("type"));
+                monitorBean.setTag(row.get("tag"));
 
-            monitorBean.setTag(row.get("tag"));
+                monitorList.add(monitorBean);
+            }
+            database.releaseConnection();
 
-            monitorList.add(monitorBean);
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        database.releaseConnection();
-
         return monitorList;
     }
 
-    public List<Integer> getDashboardData() {
+    public List<Integer> getDashboardData()
+    {
+        List<Integer> availability = null;
 
-        //QueryStart
+        try
+        {
+            //QueryStart
 
-        Database database=new Database();
+            Database database = new Database();
 
-        String query = "select availability from pollingmonitor";
+            String query = "select availability from pollingmonitor";
 
-        List<HashMap<String, String>> data = database.select(query, new ArrayList());
+            List<HashMap<String, String>> data = database.select(query, new ArrayList());
 
-        //QueryEnd
+            //QueryEnd
 
-        int up = 0, down = 0, unrechable = 0, total = 0;
+            int up = 0, down = 0, unrechable = 0, total = 0;
 
-        for (HashMap<String, String> row : data) {
-
-            if (row.get("availability").equals("UP")) {
-
-                up++;
-
+            for (HashMap<String, String> row : data)
+            {
+                if (row.get("availability").equals("UP"))
+                {
+                    up++;
+                }
+                else if (row.get("availability").equals("DOWN"))
+                {
+                    down++;
+                }
+                else if (row.get("availability").equals("Unknown"))
+                {
+                    unrechable++;
+                }
+                total++;
             }
-            if (row.get("availability").equals("DOWN")) {
+            availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
 
-                down++;
+            database.releaseConnection();
 
-            }
-            if (row.get("availability").equals("Unknown")) {
-
-                unrechable++;
-
-            }
-
-            total++;
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        List<Integer> availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
-
-        database.releaseConnection();
 
         return availability;
     }
 
-    public HashMap<String, Object> getPingStatistic(String id) {
+    public HashMap<String, Object> getPingStatistic(String id)
+    {
+        HashMap<String, Object> pingStatistic = null;
 
-        Database database=new Database();
+        try
+        {
+            Database database = new Database();
 
-        HashMap<String, Object> pingStatistic = new HashMap<>();
+            pingStatistic = new HashMap<>();
 
-        // 1. Last 24 Hours Availability
+            // 1. Last 24 Hours Availability
 
-        ArrayList<Object> availability = getAvailability(id);
+            ArrayList<Object> availability = getAvailability(id);
 
-        pingStatistic.put("pie", availability);
+            pingStatistic.put("pie", availability);
 
-        //2. Live Data (Matrixs)
+            //2. Live Data (Matrixs)
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
+            ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
-        String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
+            String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
 
-        List<HashMap<String, String>> matrixData = database.select(query, values);
+            List<HashMap<String, String>> matrixData = database.select(query, values);
 
-        pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
+            pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
 
-        //3. Last Polling Data
+            //3. Last 10 Polling Data
 
-        query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
+            query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
 
-        List<HashMap<String, String>> barData = database.select(query, values);
+            List<HashMap<String, String>> barData = database.select(query, values);
 
-        ArrayList<Object> bary = new ArrayList();
+            ArrayList<Object> bary = new ArrayList();
 
-        ArrayList<Object> barx = new ArrayList();
+            ArrayList<Object> barx = new ArrayList();
 
-        for (HashMap<String, String> row : barData) {
+            for (HashMap<String, String> row : barData)
+            {
+                bary.add(row.get("receivepackets"));
 
-            bary.add(row.get("receivepackets"));
+                barx.add(row.get("pollingtime"));
+            }
 
-            barx.add(row.get("pollingtime"));
+            pingStatistic.put("barx", barx);
 
+            pingStatistic.put("bary", bary);
+
+            //End
+
+            database.releaseConnection();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        pingStatistic.put("barx", barx);
-
-        pingStatistic.put("bary", bary);
-
-        //End
-
-        database.releaseConnection();
 
         return pingStatistic;
     }
 
-    public HashMap<String, Object> getSshStatistic(String id) {
+    public HashMap<String, Object> getSshStatistic(String id)
+    {
 
-        Database database=new Database();
+        HashMap<String, Object> sshStatistic = null;
 
-        HashMap<String, Object> sshStatistic = new HashMap<>();
+        try
+        {
+            Database database = new Database();
 
-        //1. Last 24 Availability
+            sshStatistic = new HashMap<>();
 
-        ArrayList<Object> availability = getAvailability(id);
+            //1. Last 24 Availability
 
-        sshStatistic.put("pie", availability);
+            ArrayList<Object> availability = getAvailability(id);
 
-        //2. Live Data (Matrixs)
+            sshStatistic.put("pie", availability);
 
-        String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 1";
+            //2. Live Data (Matrixs)
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
+            String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 1";
 
-        List<HashMap<String, String>> matrixData = database.select(query, values);
+            ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
-        sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"),matrixData.get(0).get("totaldisk"),matrixData.get(0).get("totalmemory"))));
+            List<HashMap<String, String>> matrixData = database.select(query, values);
 
-        //3. Last 10 Polling
+            sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"), matrixData.get(0).get("totaldisk"), matrixData.get(0).get("totalmemory"))));
 
-        query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
+            //3. Last 10 Polling
 
-        List<HashMap<String, String>> barData = database.select(query, values);
+            query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
 
-        ArrayList<Object> bary = new ArrayList();
+            List<HashMap<String, String>> barData = database.select(query, values);
 
-        ArrayList<Object> barx = new ArrayList();
+            ArrayList<Object> bary = new ArrayList();
 
-        for (HashMap<String, String> row : barData) {
+            ArrayList<Object> barx = new ArrayList();
 
-            bary.add(row.get("cpu"));
+            for (HashMap<String, String> row : barData)
+            {
+                bary.add(row.get("cpu"));
 
-            barx.add(row.get("pollingtime"));
+                barx.add(row.get("pollingtime"));
+            }
 
+            sshStatistic.put("barx", barx);
+
+            sshStatistic.put("bary", bary);
+
+            database.releaseConnection();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        sshStatistic.put("barx", barx);
-
-        sshStatistic.put("bary", bary);
-
-        database.releaseConnection();
 
         return sshStatistic;
     }
 
-    ArrayList<Object> getAvailability(String id) {
+    ArrayList<Object> getAvailability(String id)
+    {
+        ArrayList<Object> availability = null;
 
-        Calendar calendar = Calendar.getInstance();
+        try
+        {
+            Calendar calendar = Calendar.getInstance();
 
-        Date date = new Date();
+            Date date = new Date();
 
-        calendar.setTime(date);
+            calendar.setTime(date);
 
-        calendar.add(Calendar.DATE, -1);
+            calendar.add(Calendar.DATE, -1);
 
-        Date lastDay = calendar.getTime();
+            Date lastDay = calendar.getTime();
 
-        Timestamp lastDayTimestamp = new Timestamp(lastDay.getTime());
+            Timestamp lastDayTimestamp = new Timestamp(lastDay.getTime());
 
-        Timestamp currentTimeStamp = new Timestamp(date.getTime());
+            Timestamp currentTimeStamp = new Timestamp(date.getTime());
 
-        //QueryStart
-        Database database=new Database();
+            //QueryStart
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(id));
+            Database database = new Database();
 
-        String query = "select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
+            ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
-        List<HashMap<String, String>> data = database.select(query, values);
+            String query = "select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
 
-        //QueryEnd
+            List<HashMap<String, String>> data = database.select(query, values);
 
-        int pingSuccess = 0;
+            //QueryEnd
 
-        int pingTotal = 0;
+            int pingSuccess = 0;
 
-        for (HashMap<String, String> row : data) {
+            int pingTotal = 0;
 
-            pingTotal += 1;
+            for (HashMap<String, String> row : data)
+            {
 
-            if (Integer.parseInt(row.get("packetloss")) < 50) {
+                pingTotal += 1;
 
-                pingSuccess += 1;
+                if (Integer.parseInt(row.get("packetloss")) < 50)
+                {
+
+                    pingSuccess += 1;
+
+                }
 
             }
 
+            int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
+
+            int pieDown = 100 - pieUp;
+
+            availability = new ArrayList();
+
+            availability.add(pieUp);
+
+            availability.add(pieDown);
+
+            database.releaseConnection();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
-
-        int pieDown = 100 - pieUp;
-
-        ArrayList<Object> availability = new ArrayList();
-
-        availability.add(pieUp);
-
-        availability.add(pieDown);
-
-        database.releaseConnection();
-
         return availability;
     }
 
     //Generate_Data
 
-    public PollingPingBean getPingData(String ip) {
-
+    public PollingPingBean getPingData(String ip)
+    {
         PollingPingBean pollingPingBean = new PollingPingBean();
 
-        try {
-
+        try
+        {
             //GetData
 
-            Runtime runtime = Runtime.getRuntime();
+            List<String> command=new ArrayList<>(Arrays.asList("ping","-c", "4",ip));
 
-            Process process = runtime.exec("ping -c 4 " + ip);
+            ProcessBuilder processBuilder=new ProcessBuilder(command);
+
+            Process process = processBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -315,16 +362,15 @@ public class GetData {
 
             String outputString = "";
 
-            while ((line = reader.readLine()) != null) {
-
+            while ((line = reader.readLine()) != null)
+            {
                 outputString += line;
-
             }
 
             //ManipulateData
 
-            if (outputString.indexOf("statistics") == -1) {
-
+            if (outputString.indexOf("statistics") == -1)
+            {
                 pollingPingBean.setPacketLoss(100);
 
                 pollingPingBean.setRTT(-1);
@@ -333,8 +379,8 @@ public class GetData {
 
                 pollingPingBean.setSentPacket(4);
 
-            } else {
-
+            } else
+            {
                 outputString = outputString.substring(outputString.indexOf("statistics"));
 
                 //-----------------------------------------------------------------------------------------
@@ -345,12 +391,11 @@ public class GetData {
 
                 int packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
 
-                int RTT=0;
+                int RTT = 0;
 
-                if(packetLoss!=100){
-
-                    RTT = (int)Float.parseFloat((outputString.substring(outputString.lastIndexOf("=")+1 ,outputString.lastIndexOf("=") + 7).trim()));
-
+                if (packetLoss != 100)
+                {
+                    RTT = (int) Float.parseFloat((outputString.substring(outputString.lastIndexOf("=") + 1, outputString.lastIndexOf("=") + 7).trim()));
                 }
 
                 //------------------------------------------------------------------------------------------
@@ -362,40 +407,38 @@ public class GetData {
                 pollingPingBean.setReceivePacket(receivedPacket);
 
                 pollingPingBean.setSentPacket(sentPacket);
-
             }
-
-
-        } catch (Exception e) {
-
+        } catch (Exception e)
+        {
             e.printStackTrace();
-
         }
 
         return pollingPingBean;
     }
 
-    public PollingSshBean getSshData(String ip) {
+    public PollingSshBean getSshData(String ip)
+    {
+        PollingSshBean pollingSshBean = null;
 
-        PollingSshBean pollingSshBean = new PollingSshBean();
+        try
+        {
+            pollingSshBean = new PollingSshBean();
 
-        //QueryStart
+            //QueryStart
 
-        Database database=new Database();
+            Database database = new Database();
 
-        String query = "select * from credential where ip=?";
+            String query = "select * from credential where ip=?";
 
-        ArrayList<Object> values = new ArrayList(Arrays.asList(ip));
+            ArrayList<Object> values = new ArrayList(Arrays.asList(ip));
 
-        List<HashMap<String, String>> data = database.select(query, values);
+            List<HashMap<String, String>> data = database.select(query, values);
 
-        //QueryEnd
+            //QueryEnd
 
-        String ussername = data.get(0).get("username");
+            String ussername = data.get(0).get("username");
 
-        String password = data.get(0).get("password");
-
-        try {
+            String password = data.get(0).get("password");
 
             //------------------------------------------------------------
 
@@ -415,7 +458,6 @@ public class GetData {
 
             //----------------------------------------------------------------------
 
-
             Channel channel = session.openChannel("exec");
 
             ((ChannelExec) channel).setCommand(
@@ -423,9 +465,9 @@ public class GetData {
                             "free -m | grep Mem | awk '{print $3}';" +
                             "mpstat | grep IST;" +
                             "df -hT /home | grep dev | awk '{print $6}';" +
-                            "uptime -p;"+
+                            "uptime -p;" +
                             "df -hT /home | grep dev | awk '{print $3}'"
-                            );
+            );
 
             channel.connect();
 
@@ -437,27 +479,26 @@ public class GetData {
 
             String answer = "";
 
-            while ((temp = bufferedReader.readLine()) != null) {
-
+            while ((temp = bufferedReader.readLine()) != null)
+            {
                 answer += temp + "\n";
-
             }
 
             String[] ansArray = answer.split("\n");
 
             //-----------------------------------------------------------------------------
 
-            int totalmemory=Integer.parseInt(ansArray[0].trim());
+            int totalmemory = (Integer.parseInt(ansArray[0].trim())/1024)+1;
 
             int memory = (int) ((Float.parseFloat(ansArray[1].trim()) / Float.parseFloat(ansArray[0].trim())) * 100);
 
-            int cpu = 100-(int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
+            int cpu = 100 - (int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
 
             int disk = Integer.parseInt(ansArray[4].substring(0, ansArray[4].indexOf("%")));
 
             String upTime = ansArray[5].substring(ansArray[5].indexOf("up") + 3).trim();
 
-            String totalDisk=ansArray[6].trim();
+            String totalDisk = ansArray[6].trim();
 
             //--------------------------------------------------------------------------------
 
@@ -473,8 +514,10 @@ public class GetData {
 
             pollingSshBean.setTotalMemory(totalmemory);
 
-        } catch (Exception e) {
+            database.releaseConnection();
 
+        } catch (Exception e)
+        {
             pollingSshBean.setTotalMemory(-1);
 
             pollingSshBean.setMemory(-1);
@@ -488,10 +531,7 @@ public class GetData {
             pollingSshBean.setTotalDisk("-1");
 
             e.printStackTrace();
-
         }
-
-        database.releaseConnection();
 
         return pollingSshBean;
     }
