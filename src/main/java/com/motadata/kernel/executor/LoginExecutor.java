@@ -8,10 +8,8 @@ import java.util.*;
 
 public class LoginExecutor
 {
-
     public void login(LoginBean loginBean)
     {
-
         try
         {
             //QueryStart
@@ -30,29 +28,22 @@ public class LoginExecutor
 
             if (data.size() == 1)
             {
-
                 loginBean.setStatus("Success");
 
             } else
             {
-
                 loginBean.setStatus("Failure");
             }
-
         } catch (Exception e)
         {
-
             e.printStackTrace();
-
         }
     }
 
     public void register(LoginBean loginBean)
     {
-
         try
         {
-
             //QueryStart
 
             Database database = new Database();
@@ -69,25 +60,19 @@ public class LoginExecutor
 
             if (affectedRow == 1)
             {
-
                 loginBean.setStatus("User Registered!");
 
             } else if (affectedRow == -1)
             {
-
                 loginBean.setStatus("Username already taken!");
 
             } else
             {
-
                 loginBean.setStatus("Fail to Register!");
             }
-
         } catch (Exception e)
         {
-
             e.printStackTrace();
-
         }
     }
 }

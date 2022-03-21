@@ -2,58 +2,68 @@ $(document).ready(function ()
 {
     main.onload()
 });
+
 var bar;
+
 var pie;
+
 var main = {
 
     onload: function ()
     {
-        $("#close").click(function ()
-        {
-            $("#myModalStatistic").hide();
+        let request = {
 
-        });
-
-        $.ajax({
-            type: "GET",
             url: "LoadPolling",
-            success: function (data)
+
+            data: "",
+
+            runfunction: function (data)
             {
                 helper.adddata(data);
-            },
-            error: function (data)
-            {
-                alert("Some error occured.");
             }
-        });
-
+        }
+        helper.ajaxpost(request);
     },
 
-    showstatistic: function (that, id)
+    showstatistic: function (that)
     {
-        let type = $(that).parent().prev().prev().prev().text();
+        let id = $(that).data("id");
+
+        let type = $(that).data("type");
+
         if (type == "ssh")
         {
             helper.showsshdata(id, type);
+
         } else
         {
             helper.showpingdata(id, type);
         }
     },
 
-    deletemonitor: function (id)
+    deletemonitor: function (that)
     {
+        let id = $(that).data("id");
+
+        let sdata = {
+            id: id
+        };
+
         if (confirm("Do you want to delete?"))
         {
             let request = {
-                url: "DeletePolling.action",
-                data: "id=" + id,
+
+                url: "DeletePolling",
+
+                data: sdata,
+
                 runfunction: function (data)
                 {
                     alert(data.status);
                 },
             };
             helper.ajaxpost(request);
+
             location.reload();
         }
     }
@@ -64,23 +74,29 @@ var helper = {
     ajaxpost: function (request)
     {
         $.ajax({
+
             type: 'POST',
+
             url: request.url,
+
             data: request.data,
+
             success: function (data)
             {
                 request.runfunction(data);
             },
-            error: function (data)
+            error: function ()
             {
-                alert("Some error occured.");
-            }
+                alert("Some error occurred.");
+            },
+            timeout: 10000
         });
     },
 
     adddata: function (data)
     {
         let tabledata = "";
+
         $.each(data.pollingMonitorBeanList, function ()
         {
             tabledata += "<tr>" +
@@ -90,8 +106,8 @@ var helper = {
                 "<td>" + this.tag + "</td>" +
                 "<td>" + this.availability + "</td>" +
                 "<td>" +
-                "<button onclick='main.showstatistic(this," + this.id + ")' className='btn' style='margin-left: 5px'>Show</button>" +
-                "<button onclick='main.deletemonitor(" + this.id + ")' className='btn' style='margin-left: 5px'>Delete</button>" +
+                "<button onclick='main.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' className='btn' style='margin-left: 5px'>Show</button>" +
+                "<button onclick='main.deletemonitor(this)' data-id='" + this.id + "' className='btn' style='margin-left: 5px'>Delete</button>" +
                 "</td>" +
                 "</tr>";
         });
@@ -101,17 +117,20 @@ var helper = {
     chartping: function (data)
     {
         let xValues = ["Up", "Down"];
+
         let yValues = data.pingStatistic.pie;
-        let barColors = [
-            "blue", "orange"
-        ];
+
+        let barColors = ["blue", "orange"];
 
         if (pie)
         {
             pie.destroy();
         }
+
         pie = new Chart("pie", {
+
             type: "doughnut",
+
             data: {
                 labels: xValues,
                 datasets: [{
@@ -119,6 +138,7 @@ var helper = {
                     data: yValues
                 }]
             },
+
             options: {
                 title: {
                     display: true,
@@ -127,16 +147,23 @@ var helper = {
             }
         });
 
+        //---------------------------------------------------------------------------------------------->
+
         let xValues2 = data.pingStatistic.barx;
+
         let yValues2 = data.pingStatistic.bary;
+
         let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
         if (bar)
         {
             bar.destroy();
         }
+
         bar = new Chart("bar", {
+
             type: "bar",
+
             data: {
                 labels: xValues2,
                 datasets: [{
@@ -144,12 +171,16 @@ var helper = {
                     data: yValues2
                 }]
             },
+
             options: {
+
                 legend: {display: false},
+
                 title: {
                     display: true,
                     text: "Last 10 polling receive packet"
                 },
+
                 scales: {
                     xAxes: [{
                         display: true,
@@ -167,7 +198,7 @@ var helper = {
                         ticks: {
                             min: 0,
                             max: 5,
-                            stepSize: 1 // <----- This prop sets the stepSize
+                            stepSize: 1
                         }
                     }]
                 }
@@ -178,17 +209,19 @@ var helper = {
     chartssh: function (data)
     {
         let xValues = ["Up", "Down"];
+
         let yValues = data.sshStatistic.pie;
-        let barColors = [
-            "blue", "orange"
-        ];
+
+        let barColors = ["blue", "orange"];
 
         if (pie)
         {
             pie.destroy();
         }
         pie = new Chart("pie", {
+
             type: "doughnut",
+
             data: {
                 labels: xValues,
                 datasets: [{
@@ -196,6 +229,7 @@ var helper = {
                     data: yValues
                 }]
             },
+
             options: {
                 title: {
                     display: true,
@@ -204,8 +238,12 @@ var helper = {
             }
         });
 
+        //---------------------------------------------------------------------------------------------->
+
         let xValues2 = data.sshStatistic.barx;
+
         let yValues2 = data.sshStatistic.bary;
+
         let barColors2 = ["orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"];
 
         if (bar)
@@ -213,7 +251,9 @@ var helper = {
             bar.destroy();
         }
         bar = new Chart("bar", {
+
             type: "bar",
+
             data: {
                 labels: xValues2,
                 datasets: [{
@@ -221,6 +261,7 @@ var helper = {
                     data: yValues2
                 }]
             },
+
             options: {
                 legend: {display: false},
                 title: {
@@ -244,7 +285,7 @@ var helper = {
                         ticks: {
                             min: 0,
                             max: 100,
-                            stepSize: 10 // <----- This prop sets the stepSize
+                            stepSize: 10
                         }
                     }]
                 }
@@ -256,40 +297,69 @@ var helper = {
     showsshdata: function (id, type)
     {
 
-        let sdata = {id: id, type: type};
+        let sdata = {
+            id: id,
+            type: type
+        };
+
         let request = {
+
             url: "PollingStatistic",
+
             data: sdata,
+
             runfunction: function (data)
             {
                 helper.chartssh(data);
+
                 $("#matrix1").html("<h3>CPU Usage: " + data.sshStatistic.matrix[0] + "%</h3>");
+
                 $("#matrix2").html("<h3>Memory Usage: " + data.sshStatistic.matrix[1] + "%<br><br>Memory:" + data.sshStatistic.matrix[5] + "G</h3>");
+
                 $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%<br><br>Disk:" + data.sshStatistic.matrix[4] + "</h3>");
+
                 $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3] + "</h3>");
             }
         }
         helper.ajaxpost(request);
+
         $("#myModalStatistic").show();
     },
 
     showpingdata: function (id, type)
     {
-        let sdata = {id: id, type: type,test:1};
+        let sdata = {
+            id: id,
+            type: type,
+        };
+
         let request = {
+
             url: "PollingStatistic",
+
             data: sdata,
+
             runfunction: function (data)
             {
                 helper.chartping(data);
+
                 $("#matrix1").html("<h3>Sent Packet: " + data.pingStatistic.matrix[0] + "</h3>");
+
                 $("#matrix2").html("<h3>Receive Packet: " + data.pingStatistic.matrix[1] + "</h3>");
+
                 $("#matrix3").html("<h3>Packet Loss: " + data.pingStatistic.matrix[2] + "</h3>");
+
                 $("#matrix4").html("<h3>RTT(ms): " + data.pingStatistic.matrix[3] + "</h3>");
             }
         }
         helper.ajaxpost(request);
+
         $("#myModalStatistic").show();
+    },
+
+    close: function ()
+    {
+        $("#myModalStatistic").hide();
     },
 };
 

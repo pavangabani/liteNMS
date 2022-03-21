@@ -11,13 +11,13 @@ import com.motadata.kernel.bean.PollingSshBean;
 import com.motadata.kernel.dao.Database;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.*;
 
 public class GetData
 {
-
     //GetData_From_Database
 
     public List<PollingMonitorBean> getAllPollingMonitor()
@@ -131,12 +131,10 @@ public class GetData
                 if (row.get("availability").equals("UP"))
                 {
                     up++;
-                }
-                else if (row.get("availability").equals("DOWN"))
+                } else if (row.get("availability").equals("DOWN"))
                 {
                     down++;
-                }
-                else if (row.get("availability").equals("Unknown"))
+                } else if (row.get("availability").equals("Unknown"))
                 {
                     unrechable++;
                 }
@@ -344,30 +342,32 @@ public class GetData
 
     public PollingPingBean getPingData(String ip)
     {
+        BufferedReader reader = null;
+
+        Process process = null;
+
         PollingPingBean pollingPingBean = new PollingPingBean();
 
         try
         {
-            //GetData
+            List<String> command = new ArrayList<>(Arrays.asList("ping", "-c", "4", ip));
 
-            List<String> command=new ArrayList<>(Arrays.asList("ping","-c", "4",ip));
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
 
-            ProcessBuilder processBuilder=new ProcessBuilder(command);
+            process = processBuilder.start();
 
-            Process process = processBuilder.start();
+            //-----------------------------------------------------------------------------------------------------
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-
-            String outputString = "";
+            String line, outputString = "";
 
             while ((line = reader.readLine()) != null)
             {
                 outputString += line;
             }
 
-            //ManipulateData
+            //ManipulateData-------------------------------------------------------------------------------------------
 
             if (outputString.indexOf("statistics") == -1)
             {
@@ -382,8 +382,6 @@ public class GetData
             } else
             {
                 outputString = outputString.substring(outputString.indexOf("statistics"));
-
-                //-----------------------------------------------------------------------------------------
 
                 int sentPacket = 4;
 
@@ -411,19 +409,34 @@ public class GetData
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
 
+        } finally
+        {
+            if (process != null)
+            {
+                process.destroy();
+            }
+            if (reader != null)
+            {
+                try
+                {
+                    reader.close();
+
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
         return pollingPingBean;
     }
 
     public PollingSshBean getSshData(String ip)
     {
-        PollingSshBean pollingSshBean = null;
+        PollingSshBean pollingSshBean = new PollingSshBean();;
 
         try
         {
-            pollingSshBean = new PollingSshBean();
-
             //QueryStart
 
             Database database = new Database();
@@ -436,59 +449,25 @@ public class GetData
 
             //QueryEnd
 
-            String ussername = data.get(0).get("username");
+            SSHCommand sshCommand = new SSHCommand();
+
+            String username = data.get(0).get("username");
 
             String password = data.get(0).get("password");
 
-            //------------------------------------------------------------
+            ArrayList<Object> credential = new ArrayList<>(Arrays.asList(ip, username, Cipher.decode(password)));
 
-            Properties config = new Properties();
-
-            config.put("StrictHostKeyChecking", "no");
-
-            JSch jsch = new JSch();
-
-            Session session = jsch.getSession(ussername, ip, 22);
-
-            session.setPassword(Cipher.decode(password));
-
-            session.setConfig(config);
-
-            session.connect();
-
-            //----------------------------------------------------------------------
-
-            Channel channel = session.openChannel("exec");
-
-            ((ChannelExec) channel).setCommand(
+            String answer = sshCommand.runCommand(credential,
                     "free -m | grep Mem | awk '{print $2}';" +
-                            "free -m | grep Mem | awk '{print $3}';" +
-                            "mpstat | grep IST;" +
-                            "df -hT /home | grep dev | awk '{print $6}';" +
-                            "uptime -p;" +
-                            "df -hT /home | grep dev | awk '{print $3}'"
-            );
-
-            channel.connect();
-
-            //GetData-----------------------------------------------------------------
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
-
-            String temp;
-
-            String answer = "";
-
-            while ((temp = bufferedReader.readLine()) != null)
-            {
-                answer += temp + "\n";
-            }
+                    "free -m | grep Mem | awk '{print $3}';" +
+                    "mpstat | grep IST;" +
+                    "df -hT /home | grep dev | awk '{print $6}';" +
+                    "uptime -p;" +
+                    "df -hT /home | grep dev | awk '{print $3}'");
 
             String[] ansArray = answer.split("\n");
 
-            //-----------------------------------------------------------------------------
-
-            int totalmemory = (Integer.parseInt(ansArray[0].trim())/1024)+1;
+            int totalmemory = (Integer.parseInt(ansArray[0].trim()) / 1024) + 1;
 
             int memory = (int) ((Float.parseFloat(ansArray[1].trim()) / Float.parseFloat(ansArray[0].trim())) * 100);
 
@@ -532,7 +511,6 @@ public class GetData
 
             e.printStackTrace();
         }
-
         return pollingSshBean;
     }
 }

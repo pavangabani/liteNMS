@@ -50,7 +50,7 @@ var helper = {
             },
             error: function () {
 
-                alert("Some error occured.");
+                alert("Some error occurred.");
             },
             timeout:10000
         });

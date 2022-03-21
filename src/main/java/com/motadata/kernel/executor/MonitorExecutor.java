@@ -25,11 +25,40 @@ public class MonitorExecutor
         }
     }
 
+    public void add(MonitorBean monitorBean)
+    {
+        try
+        {
+            Database database = new Database();
+
+            String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
+
+            ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+
+            database.update(query, values);
+
+            if (monitorBean.getType().equals("ssh"))
+            {
+                query = "insert into credential (ip,username,password) values(?,?,?)";
+
+                ArrayList<Object> credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+
+                database.update(query, credentialValues);
+            }
+            database.releaseConnection();
+
+            monitorBean.setStatus("Added!");
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void addPolling(MonitorBean monitorBean)
     {
         try
         {
-
             //QueryStart
 
             Database database = new Database();
@@ -136,7 +165,6 @@ public class MonitorExecutor
                     //QueryEnd
                 }
             }
-
             database.releaseConnection();
 
             //forLoad Data
@@ -183,50 +211,4 @@ public class MonitorExecutor
         }
     }
 
-    public void add(MonitorBean monitorBean)
-    {
-        try
-        {
-            Database database = new Database();
-
-            if (monitorBean.getType().equals("ssh"))
-            {
-                //QueryStart
-
-                String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
-
-                ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
-
-                database.update(query, values);
-
-                query = "insert into credential (ip,username,password) values(?,?,?)";
-
-                ArrayList<Object> credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
-
-                database.update(query, credentialValues);
-
-                //QueryEnd
-
-            }
-            if (monitorBean.getType().equals("ping"))
-            {
-                String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
-
-                ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
-
-                database.update(query, values);
-            }
-            database.releaseConnection();
-
-            //ForLoadData
-
-            GetData getData = new GetData();
-
-            monitorBean.setMonitorList(getData.getAllMonitor());
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

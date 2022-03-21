@@ -46,9 +46,7 @@ var main = {
         let id = $(that).data("id");
 
         let sdata = {
-
             id: id
-
         };
 
         if (confirm("Do you want to delete?"))
@@ -149,6 +147,8 @@ var helper = {
             }
         });
 
+        //---------------------------------------------------------------------------------------------->
+
         let xValues2 = data.pingStatistic.barx;
 
         let yValues2 = data.pingStatistic.bary;
@@ -198,7 +198,7 @@ var helper = {
                         ticks: {
                             min: 0,
                             max: 5,
-                            stepSize: 1 // <----- This prop sets the stepSize
+                            stepSize: 1
                         }
                     }]
                 }
@@ -237,6 +237,8 @@ var helper = {
                 }
             }
         });
+
+        //---------------------------------------------------------------------------------------------->
 
         let xValues2 = data.sshStatistic.barx;
 
@@ -283,7 +285,7 @@ var helper = {
                         ticks: {
                             min: 0,
                             max: 100,
-                            stepSize: 10 // <----- This prop sets the stepSize
+                            stepSize: 10
                         }
                     }]
                 }

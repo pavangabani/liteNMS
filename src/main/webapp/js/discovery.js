@@ -54,7 +54,7 @@ var main = {
 
                 runfunction: function (data)
                 {
-                    helper.adddata(data);
+                    alert(data.status);
                 },
             };
             helper.ajaxpost(request);
@@ -216,7 +216,6 @@ var helper = {
             {
                 alert("Some error occured.");
             },
-            timeout: 10000
         });
     },
 

@@ -1,3 +1,4 @@
+com/motadata/kernel/helper/SSHCommand.class
 com/motadata/kernel/executor/LoginExecutor.class
 com/motadata/kernel/action/MonitorAction.class
 com/motadata/kernel/bean/LoginBean.class

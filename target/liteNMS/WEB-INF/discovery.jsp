@@ -25,13 +25,13 @@
     </tbody>
 </table>
 
-<a href="#" class="float" id="myBtn">
+<a href="#" class="float" id="floatbtn" onclick="helper.floatbtn()">
     <i class="fa fa-plus my-float"></i>
 </a>
 
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <span id="close">&times;</span>
+        <span id="close" onclick="helper.closeadd()">&times;</span>
         <h3>Add Monitor</h3>
         <div class="alert failure" style="display:none;">
             <strong>Failure! </strong> Wrong password or username.
@@ -55,7 +55,7 @@
 
 <div id="myModalUpdate" class="modal">
     <div class="modal-content">
-        <span id="close2">&times;</span>
+        <span id="close2" onclick="helper.closeupdate()">&times;</span>
         <h3>Update</h3>
         <div class="alert failure" style="display:none;">
             <strong>Failure! </strong> Wrong password or username.

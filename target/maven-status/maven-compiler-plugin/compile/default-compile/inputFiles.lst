@@ -18,6 +18,7 @@
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/GetData.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/polling/SshTread.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/dao/Database.java
+/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/SSHCommand.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/dao/ConnectionPool.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/bean/DashboardBean.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/action/LoginAction.java

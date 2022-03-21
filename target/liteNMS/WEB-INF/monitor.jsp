@@ -28,7 +28,7 @@
 
 <div id="myModalStatistic" class="modal" style="display: none">
     <div class="modal-content">
-        <span id="close">&times;</span><br>
+        <span id="close" onclick="helper.close()">&times;</span><br>
         <div style="margin-left: 650px;font-weight: bold">Live Data</div>
         <div class="wrapper">
             <div id="pieDiv">
