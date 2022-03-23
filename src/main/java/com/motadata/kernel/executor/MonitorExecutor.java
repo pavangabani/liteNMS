@@ -30,7 +30,7 @@ public class MonitorExecutor
         {
             String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
             database.update(query, values);
 
@@ -38,7 +38,7 @@ public class MonitorExecutor
             {
                 query = "insert into credential (ip,username,password) values(?,?,?)";
 
-                ArrayList<Object> credentialValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+                ArrayList<Object> credentialValues = new ArrayList<Object>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
 
                 database.update(query, credentialValues);
             }
@@ -71,36 +71,40 @@ public class MonitorExecutor
 
             //QueryEnd
 
-            boolean discoveryTest = PoolUtil.forkJoinPool.invoke(new DiscoveryThread(data.get(0).get("ip"), data.get(0).get("type")));
-
-            if (discoveryTest)
+            if(data.size()==1)
             {
-                //QueryStart
+                boolean discoveryTest = PoolUtil.discoveryForkJoinPool.invoke(new DiscoveryThread(data.get(0).get("ip"), data.get(0).get("type")));
 
-                query = "insert into pollingmonitor (id,name,ip,type,tag,availability) values(?,?,?,?,?,?)";
-
-                values = new ArrayList(Arrays.asList(monitorBean.getId(), data.get(0).get("name"), data.get(0).get("ip"), data.get(0).get("type"),data.get(0).get("tag"), "Unknown"));
-
-                int affectedRaw = database.update(query, values);
-
-                //QueryEnd
-
-                if (affectedRaw > 0)
+                if (discoveryTest)
                 {
-                    monitorBean.setStatus("Monitor Added!");
+                    //QueryStart
 
-                } else if (affectedRaw == -1)
-                {
-                    monitorBean.setStatus("Monitor Already Added! ");
+                    query = "insert into pollingmonitor (id,name,ip,type,tag,availability) values(?,?,?,?,?,?)";
 
+                    values = new ArrayList<Object>(Arrays.asList(monitorBean.getId(), data.get(0).get("name"), data.get(0).get("ip"), data.get(0).get("type"), data.get(0).get("tag"), "Unknown"));
+
+                    int affectedRaw = database.update(query, values);
+
+                    //QueryEnd
+
+                    if (affectedRaw > 0)
+                    {
+                        monitorBean.setStatus("Monitor Added!");
+
+                    } else if (affectedRaw == -1)
+                    {
+                        monitorBean.setStatus("Monitor Already Added! ");
+
+                    } else
+                    {
+                        monitorBean.setStatus("Failed to Add!");
+                    }
                 } else
                 {
-                    monitorBean.setStatus("Failed to Add!");
+                    monitorBean.setStatus("Ping Fail!");
                 }
-            } else
-            {
-                monitorBean.setStatus("Ping Fail!");
             }
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -121,7 +125,7 @@ public class MonitorExecutor
 
             String query = "update monitor set name=?,ip=?,type=?,tag=? where id=?";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), monitorBean.getId()));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag(), monitorBean.getId()));
 
             database.update(query, values);
 
@@ -133,7 +137,7 @@ public class MonitorExecutor
 
                 query = "select * from credential where ip=?";
 
-                ArrayList<Object> valuesCheck = new ArrayList(Arrays.asList(monitorBean.getIp()));
+                ArrayList<Object> valuesCheck = new ArrayList<Object>(Arrays.asList(monitorBean.getIp()));
 
                 List<HashMap<String, String>> data = database.select(query, valuesCheck);
 
@@ -145,7 +149,7 @@ public class MonitorExecutor
 
                     query = "update credential set username=?,password=? where ip=?";
 
-                    ArrayList<Object> updateValues = new ArrayList(Arrays.asList(monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword()), monitorBean.getIp()));
+                    ArrayList<Object> updateValues = new ArrayList<Object>(Arrays.asList(monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword()), monitorBean.getIp()));
 
                     database.update(query, updateValues);
 
@@ -157,7 +161,7 @@ public class MonitorExecutor
 
                     query = "insert into credential (ip,username,password) values(?,?,?)";
 
-                    ArrayList<Object> insertValues = new ArrayList(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+                    ArrayList<Object> insertValues = new ArrayList<Object>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
 
                     database.update(query, insertValues);
 
@@ -191,7 +195,7 @@ public class MonitorExecutor
 
             String query = "delete from monitor where id=?";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getId()));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(monitorBean.getId()));
 
             int affectedRaw = database.update(query, values);
 

@@ -54,7 +54,7 @@ public class PollingMonitorExecutor
 
             String query = "delete from pollingmonitor where id=?";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(pollingMonitorBean.getId()));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(pollingMonitorBean.getId()));
 
             int affectedRaw = database.update(query, values);
 

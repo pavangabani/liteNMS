@@ -32,32 +32,34 @@ public class GetData
 
             //QueryEnd
 
-            pollingmonitorList = new ArrayList<>();
-
-            for (HashMap<String, String> row : data)
+            if (data.size() > 0)
             {
-                PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
+                pollingmonitorList = new ArrayList<>();
 
-                pollingmonitorBean.setId(row.get("id"));
+                for (HashMap<String, String> row : data)
+                {
+                    PollingMonitorBean pollingmonitorBean = new PollingMonitorBean();
 
-                pollingmonitorBean.setName(row.get("name"));
+                    pollingmonitorBean.setId(row.get("id"));
 
-                pollingmonitorBean.setIp(row.get("ip"));
+                    pollingmonitorBean.setName(row.get("name"));
 
-                pollingmonitorBean.setType(row.get("type"));
+                    pollingmonitorBean.setIp(row.get("ip"));
 
-                pollingmonitorBean.setTag(row.get("tag"));
+                    pollingmonitorBean.setType(row.get("type"));
 
-                pollingmonitorBean.setAvailability(row.get("availability"));
+                    pollingmonitorBean.setTag(row.get("tag"));
 
-                pollingmonitorList.add(pollingmonitorBean);
+                    pollingmonitorBean.setAvailability(row.get("availability"));
+
+                    pollingmonitorList.add(pollingmonitorBean);
+                }
             }
 
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -80,29 +82,32 @@ public class GetData
 
             //QueryEnd
 
-            monitorList = new ArrayList<>();
-
-            for (HashMap<String, String> row : data)
+            if (data.size() > 0)
             {
-                MonitorBean monitorBean = new MonitorBean();
+                monitorList = new ArrayList<>();
 
-                monitorBean.setId(row.get("id"));
+                for (HashMap<String, String> row : data)
+                {
+                    MonitorBean monitorBean = new MonitorBean();
 
-                monitorBean.setName(row.get("name"));
+                    monitorBean.setId(row.get("id"));
 
-                monitorBean.setIp(row.get("ip"));
+                    monitorBean.setName(row.get("name"));
 
-                monitorBean.setType(row.get("type"));
+                    monitorBean.setIp(row.get("ip"));
 
-                monitorBean.setTag(row.get("tag"));
+                    monitorBean.setType(row.get("type"));
 
-                monitorList.add(monitorBean);
+                    monitorBean.setTag(row.get("tag"));
+
+                    monitorList.add(monitorBean);
+                }
             }
 
         } catch (Exception e)
         {
             e.printStackTrace();
-        }finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -125,28 +130,32 @@ public class GetData
 
             //QueryEnd
 
-            int up = 0, down = 0, unrechable = 0, total = 0;
-
-            for (HashMap<String, String> row : data)
+            if (data.size() > 0)
             {
-                if (row.get("availability").equals("UP"))
-                {
-                    up++;
-                } else if (row.get("availability").equals("DOWN"))
-                {
-                    down++;
-                } else if (row.get("availability").equals("Unknown"))
-                {
-                    unrechable++;
-                }
-                total++;
-            }
-            availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
+                int up = 0, down = 0, unrechable = 0, total = 0;
 
+                for (HashMap<String, String> row : data)
+                {
+                    if (row.get("availability").equals("UP"))
+                    {
+                        up++;
+
+                    } else if (row.get("availability").equals("DOWN"))
+                    {
+                        down++;
+
+                    } else if (row.get("availability").equals("Unknown"))
+                    {
+                        unrechable++;
+                    }
+                    total++;
+                }
+                availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
-        }finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -178,7 +187,11 @@ public class GetData
 
             List<HashMap<String, String>> matrixData = database.select(query, values);
 
-            pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
+            if (matrixData.size() > 0)
+            {
+                pingStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
+
+            }
 
             //3. Last 10 Polling Data
 
@@ -186,28 +199,30 @@ public class GetData
 
             List<HashMap<String, String>> barData = database.select(query, values);
 
-            ArrayList<Object> bary = new ArrayList();
-
-            ArrayList<Object> barx = new ArrayList();
-
-            for (HashMap<String, String> row : barData)
+            if (barData.size() > 0)
             {
-                bary.add(row.get("receivepackets"));
+                ArrayList<Object> bary = new ArrayList();
 
-                barx.add(row.get("pollingtime"));
+                ArrayList<Object> barx = new ArrayList();
+
+                for (HashMap<String, String> row : barData)
+                {
+                    bary.add(row.get("receivepackets"));
+
+                    barx.add(row.get("pollingtime"));
+                }
+
+                pingStatistic.put("barx", barx);
+
+                pingStatistic.put("bary", bary);
             }
-
-            pingStatistic.put("barx", barx);
-
-            pingStatistic.put("bary", bary);
-
             //End
 
         } catch (Exception e)
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -238,7 +253,11 @@ public class GetData
 
             List<HashMap<String, String>> matrixData = database.select(query, values);
 
-            sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"), matrixData.get(0).get("totaldisk"), matrixData.get(0).get("totalmemory"))));
+            if (matrixData.size() > 0)
+            {
+                sshStatistic.put("matrix", new ArrayList(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"), matrixData.get(0).get("totaldisk"), matrixData.get(0).get("totalmemory"))));
+
+            }
 
             //3. Last 10 Polling
 
@@ -246,26 +265,28 @@ public class GetData
 
             List<HashMap<String, String>> barData = database.select(query, values);
 
-            ArrayList<Object> bary = new ArrayList();
-
-            ArrayList<Object> barx = new ArrayList();
-
-            for (HashMap<String, String> row : barData)
+            if (barData.size() > 0)
             {
-                bary.add(row.get("cpu"));
+                ArrayList<Object> bary = new ArrayList();
 
-                barx.add(row.get("pollingtime"));
+                ArrayList<Object> barx = new ArrayList();
+
+                for (HashMap<String, String> row : barData)
+                {
+                    bary.add(row.get("cpu"));
+
+                    barx.add(row.get("pollingtime"));
+                }
+
+                sshStatistic.put("barx", barx);
+
+                sshStatistic.put("bary", bary);
             }
-
-            sshStatistic.put("barx", barx);
-
-            sshStatistic.put("bary", bary);
-
         } catch (Exception e)
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -304,39 +325,37 @@ public class GetData
 
             //QueryEnd
 
-            int pingSuccess = 0;
-
-            int pingTotal = 0;
-
-            for (HashMap<String, String> row : data)
+            if (data.size() > 0)
             {
+                int pingSuccess = 0;
 
-                pingTotal += 1;
+                int pingTotal = 0;
 
-                if (Integer.parseInt(row.get("packetloss")) < 50)
+                for (HashMap<String, String> row : data)
                 {
+                    pingTotal += 1;
 
-                    pingSuccess += 1;
-
+                    if (Integer.parseInt(row.get("packetloss")) < 50)
+                    {
+                        pingSuccess += 1;
+                    }
                 }
 
+                int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
+
+                int pieDown = 100 - pieUp;
+
+                availability = new ArrayList();
+
+                availability.add(pieUp);
+
+                availability.add(pieDown);
             }
-
-            int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
-
-            int pieDown = 100 - pieUp;
-
-            availability = new ArrayList();
-
-            availability.add(pieUp);
-
-            availability.add(pieDown);
-
         } catch (Exception e)
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             database.releaseConnection();
         }
@@ -367,14 +386,14 @@ public class GetData
 
             String line, outputString = "";
 
-            while ((line = reader.readLine()) != null)
+            while ((line = reader.readLine())!=null)
             {
                 outputString += line;
             }
 
             //ManipulateData-------------------------------------------------------------------------------------------
 
-            if (outputString.indexOf("statistics") == -1)
+            if (!outputString.contains("statistics"))
             {
                 pollingPingBean.setPacketLoss(100);
 
@@ -442,7 +461,7 @@ public class GetData
 
         PollingSshBean pollingSshBean = new PollingSshBean();
 
-        SshConnection sshConnection=null;
+        SshConnection sshConnection = null;
 
         try
         {
@@ -450,91 +469,142 @@ public class GetData
 
             String query = "select * from credential where ip=?";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(ip));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(ip));
 
             List<HashMap<String, String>> data = database.select(query, values);
 
             //QueryEnd
 
-            String username = data.get(0).get("username");
+            if (data.size() > 0)
+            {
+                String username = data.get(0).get("username");
 
-            String password = data.get(0).get("password");
+                String password = data.get(0).get("password");
 
-            ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username,Cipher.decode(password)));
+                ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username, Cipher.decode(password)));
 
-            List<String> commands = new ArrayList();
+                List<String> commands = new ArrayList<String>();
 
-            commands.add("free -m | grep Mem | awk '{print $3}'\n");
+                commands.add("free -m | grep Mem | awk '{print $3}'\n");
 
-            commands.add("free -m | grep Mem | awk '{print $2}'\n");
+                commands.add("free -m | grep Mem | awk '{print $2}'\n");
 
-            commands.add("df -hT /home | grep dev | awk '{print $6}'\n");
+                commands.add("df -hT /home | grep dev | awk '{print $6}'\n");
 
-            commands.add("df -hT /home | grep dev | awk '{print $3}' \n");
+                commands.add("df -hT /home | grep dev | awk '{print $3}' \n");
 
-            commands.add("mpstat | grep IST | awk '{print $13}'\n");
+                commands.add("mpstat | grep all\n");
 
-            commands.add("uptime -p\n");
+                commands.add("uptime -p\n");
 
-            sshConnection=new SshConnection(credential);
+                sshConnection = new SshConnection(credential);
 
-            String output=sshConnection.executeCommands(commands);
+                String output = sshConnection.executeCommands(commands);
 
-            //--------------------------------------------------------------
 
-            String usedMemory=output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $3}'")+commands.get(0).length()-1,output.lastIndexOf("free -m | grep Mem | awk '{print $3}'")+commands.get(0).length()+3);
 
-            String totalMemory=output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $2}'")+commands.get(1).length()-1,output.lastIndexOf("free -m | grep Mem | awk '{print $2}'")+commands.get(1).length()+4);
+                try
+                {
+                    //1.
+                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $3}'") + commands.get(0).length() - 1);
 
-            String usedDisk=output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'")+commands.get(2).length(),output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'")+commands.get(2).length()+3);
+                    String usedMemory = output.substring(0, output.indexOf(username + "@"));
 
-            usedDisk=usedDisk.substring(0,usedDisk.indexOf("%"));
+                    //2.
+                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $2}'") + commands.get(1).length() - 1);
 
-            String totalDisk=output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'")+commands.get(3).length()-1,output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'")+commands.get(3).length()+3);
+                    String totalMemory = output.substring(0, output.indexOf(username + "@"));
 
-            String cpu=output.substring(output.lastIndexOf("mpstat | grep IST | awk '{print $13}'")+commands.get(4).length()+4,output.lastIndexOf("mpstat | grep IST | awk '{print $13}'")+commands.get(4).length()+6);
+                    //----------------------------------------------------------------------------------------------------------------------
 
-            String upTime=output.substring(output.lastIndexOf("uptime -p")+commands.get(5).length()-1,output.lastIndexOf(username+"@"));
+                    int memoryPercentage = (int) ((Float.parseFloat(usedMemory) / Float.parseFloat(totalMemory)) * 100);
 
-            //----------------------------------------------------------------
+                    int totalMemoryInt = (int) Math.ceil(Integer.parseInt(totalMemory) / 1024.0);
 
-            int memoryPercentage= (int) ((Float.parseFloat(usedMemory)/Float.parseFloat(totalMemory))*100);
+                    pollingSshBean.setTotalMemory(String.valueOf(totalMemoryInt));
 
-            int totalMemoryInt= (int) Math.ceil(Integer.parseInt(totalMemory)/1024.0);
+                    pollingSshBean.setMemory(memoryPercentage);
 
-            pollingSshBean.setMemory(memoryPercentage);
+                } catch (Exception e)
+                {
+                    pollingSshBean.setTotalMemory("-1");
 
-            pollingSshBean.setCpu(100-Integer.valueOf(cpu));
+                    pollingSshBean.setMemory(-1);
 
-            pollingSshBean.setDisk(Integer.valueOf(usedDisk));
+                    e.printStackTrace();
+                }
 
-            pollingSshBean.setUpTime(upTime);
+                try
+                {
+                    //3.
+                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'") + commands.get(2).length() - 1);
 
-            pollingSshBean.setTotalDisk(totalDisk);
+                    String usedDisk = output.substring(0, output.indexOf(username + "@"));
 
-            pollingSshBean.setTotalMemory(String.valueOf(totalMemoryInt));
+                    usedDisk = usedDisk.substring(0, usedDisk.indexOf("%"));
 
+                    //4.
+                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'") + commands.get(3).length() - 1);
+
+                    String totalDisk = output.substring(0, output.indexOf(username + "@"));
+
+                    pollingSshBean.setTotalDisk(totalDisk);
+
+                    pollingSshBean.setDisk(Integer.valueOf(usedDisk));
+
+                } catch (Exception e)
+                {
+                    pollingSshBean.setTotalDisk("-1");
+
+                    pollingSshBean.setDisk(Integer.valueOf(-1));
+
+                    e.printStackTrace();
+                }
+
+                try
+                {
+                    //5.
+                    output = output.substring(output.lastIndexOf("mpstat | grep all") + commands.get(4).length() - 1);
+
+                    String cpu = output.substring(output.indexOf(username + "@") - 5, output.indexOf(username + "@") - 3);
+
+                    pollingSshBean.setCpu(100 - Integer.parseInt(cpu));
+
+                } catch (Exception e)
+                {
+                    pollingSshBean.setCpu(-1);
+
+                    e.printStackTrace();
+
+                }
+                try
+                {
+                    //6.
+                    output = output.substring(output.lastIndexOf("uptime -p") + commands.get(5).length() - 1);
+
+                    String upTime = output.substring(0, output.indexOf(username + "@"));
+
+                    pollingSshBean.setUpTime(upTime);
+
+                } catch (Exception e)
+                {
+                    pollingSshBean.setUpTime("-1");
+
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e)
         {
-            pollingSshBean.setMemory(-1);
-
-            pollingSshBean.setCpu(-1);
-
-            pollingSshBean.setDisk(-1);
-
-            pollingSshBean.setUpTime("-1");
-
-            pollingSshBean.setTotalDisk("-1");
-
-            pollingSshBean.setTotalMemory("-1");
-
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             database.releaseConnection();
 
-            sshConnection.close();
+            if (sshConnection != null)
+            {
+                sshConnection.close();
+            }
         }
         return pollingSshBean;
     }

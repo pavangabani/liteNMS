@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 
 public class OnServerStart extends HttpServlet
 {
-
     public void init()
     {
         //StartPolling
@@ -20,7 +19,6 @@ public class OnServerStart extends HttpServlet
 
         //CreateConnectionPool
 
-        ConnectionPool.createFixedSizePool(5);
-
+        ConnectionPool.createFixedSizePool(10);
     }
 }

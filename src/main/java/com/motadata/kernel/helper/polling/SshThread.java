@@ -19,7 +19,6 @@ public class SshThread extends RecursiveAction
 
     SshThread(String id, String ip)
     {
-
         this.id = id;
 
         this.ip = ip;
@@ -38,7 +37,7 @@ public class SshThread extends RecursiveAction
 
             String query = "insert into sshdump (id,cpu,memory,disk,uptime,pollingtime,totaldisk,totalmemory) values(?,?,?,?,?,?,?,?)";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(id, pollingSshBean.getCpu(), pollingSshBean.getMemory(), pollingSshBean.getDisk(), pollingSshBean.getUpTime(), new Timestamp(new Date().getTime()), pollingSshBean.getTotalDisk(), pollingSshBean.getTotalMemory()));
+            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(id, pollingSshBean.getCpu(), pollingSshBean.getMemory(), pollingSshBean.getDisk(), pollingSshBean.getUpTime(), new Timestamp(new Date().getTime()), pollingSshBean.getTotalDisk(), pollingSshBean.getTotalMemory()));
 
             database.update(query, values);
 

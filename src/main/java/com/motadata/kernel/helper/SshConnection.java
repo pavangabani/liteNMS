@@ -13,11 +13,11 @@ class SshConnection
 
     private ChannelShell channel;
 
-    private String username;
+    private final String username;
 
-    private String password;
+    private final String password;
 
-    private String hostname;
+    private final String hostname;
 
     SshConnection(ArrayList<String> credential)
     {
@@ -39,18 +39,19 @@ class SshConnection
 
     private Channel getChannel()
     {
-        if (channel == null || !channel.isConnected())
+        try
         {
-            try
-            {
-                channel = (ChannelShell) getSession().openChannel("shell");
+            session = getSession();
 
-                channel.connect();
-
-            } catch (Exception e)
+            if (session != null && channel == null)
             {
-                e.printStackTrace();
+                channel = (ChannelShell) session.openChannel("shell");
+
+                channel.connect(10000);
             }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return channel;
     }
@@ -71,7 +72,7 @@ class SshConnection
 
             session.setPassword(password);
 
-            session.connect();
+            session.connect(10000);
 
         } catch (Exception e)
         {
@@ -108,7 +109,6 @@ class SshConnection
                 {
                     bufferedWriter.close();
                 }
-
             } catch (IOException e)
             {
                 e.printStackTrace();
@@ -118,7 +118,7 @@ class SshConnection
 
     private String readChannelOutput(Channel channel) throws IOException
     {
-        BufferedReader bufferedReader=null;
+        BufferedReader bufferedReader = null;
 
         String answer = "";
 
@@ -128,7 +128,7 @@ class SshConnection
 
             String temp;
 
-            while ((temp = bufferedReader.readLine()) != null)
+            while (!((temp = bufferedReader.readLine()).equals("logout")))
             {
                 answer += temp;
             }
@@ -136,14 +136,13 @@ class SshConnection
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             if (bufferedReader != null)
             {
                 bufferedReader.close();
             }
         }
-
         return answer;
     }
 
@@ -153,10 +152,12 @@ class SshConnection
         {
             Channel channel = getChannel();
 
-            sendCommands(channel, commands);
+            if (channel != null)
+            {
+                sendCommands(channel, commands);
 
-            return readChannelOutput(channel);
-
+                return readChannelOutput(channel);
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -166,17 +167,13 @@ class SshConnection
 
     public void close()
     {
-        if (channel.isConnected())
+        if (channel != null && channel.isConnected())
         {
-
             channel.disconnect();
-
         }
-        if (session.isConnected())
+        if (session != null && session.isConnected())
         {
-
             session.disconnect();
-
         }
     }
 }

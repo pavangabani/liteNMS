@@ -49,23 +49,26 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
                 List<HashMap<String, String>> data = database.select(query, values);
 
-                ArrayList<String> credential = new ArrayList(Arrays.asList(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password"))));
-
                 //QueryEnd
 
-                sshConnection = new SshConnection(credential);
-
-                ArrayList<String> commands = new ArrayList<>();
-
-                commands.add("uname\n");
-
-                String output = sshConnection.executeCommands(commands);
-
-                type = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
-
-                if (type.trim().equals("Linux"))
+                if (data.size() > 0)
                 {
-                    discoveryTest = true;
+                    ArrayList<String> credential = new ArrayList<String>(Arrays.asList(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password"))));
+
+                    sshConnection = new SshConnection(credential);
+
+                    ArrayList<String> commands = new ArrayList<>();
+
+                    commands.add("uname\n");
+
+                    String output = sshConnection.executeCommands(commands);
+
+                    type = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
+
+                    if (type.trim().equals("Linux"))
+                    {
+                        discoveryTest = true;
+                    }
                 }
             }
         } catch (Exception e)
@@ -108,12 +111,14 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
             {
                 answer += line;
             }
+            if (answer.contains("statistics"))
+            {
+                answer = answer.substring(answer.indexOf("statistics"));
 
-            answer = answer.substring(answer.indexOf("statistics"));
+                int receivedPacket = Integer.parseInt((answer.substring(answer.indexOf("transmitted") + 13, answer.indexOf("received"))).trim());
 
-            int receivedPacket = Integer.parseInt((answer.substring(answer.indexOf("transmitted") + 13, answer.indexOf("received"))).trim());
-
-            packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
+                packetLoss = (int) ((1 - (receivedPacket / 4.0)) * 100);
+            }
 
         } catch (Exception e)
         {

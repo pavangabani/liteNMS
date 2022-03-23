@@ -11,36 +11,43 @@ import java.util.List;
 
 public class PollingJob implements Job
 {
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext)
     {
-
-        //QueryStart
-
         Database database = new Database();
 
-        String query = "select id,ip,type from pollingmonitor";
-
-        List<HashMap<String, String>> data = database.select(query, new ArrayList());
-
-        //QueryEnd
-
-        for (HashMap<String, String> row : data)
+        try
         {
+            //QueryStart
 
-            String id = row.get("id"), ip = row.get("ip"), type = row.get("type");
+            String query = "select id,ip,type from pollingmonitor";
 
-            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingThread(id, ip));
+            List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
 
-            if (ping && type.equals("ssh"))
+            //QueryEnd
+
+            if (data.size() > 0)
             {
+                for (HashMap<String, String> row : data)
+                {
+                    String id = row.get("id"), ip = row.get("ip"), type = row.get("type");
 
-                PoolUtil.forkJoinPool.invoke(new SshThread(id, ip));
+                    Boolean ping = PoolUtil.forkJoinPool.invoke(new PingThread(id, ip));
+
+                    if (ping && type.equals("ssh"))
+                    {
+                        PoolUtil.forkJoinPool.invoke(new SshThread(id, ip));
+                    }
+                }
             }
-        }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
 
-        database.releaseConnection();
+        } finally
+        {
+            database.releaseConnection();
+        }
     }
 }
 
