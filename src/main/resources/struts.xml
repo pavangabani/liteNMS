@@ -40,6 +40,9 @@
         <action name="Logout" class="com.motadata.kernel.action.LoginAction" method="logout">
             <result name="LOGOUT">login.jsp</result>
         </action>
+        <action name="Profile" class="com.motadata.kernel.action.LoginAction" method="profile">
+            <result name="PROFILE" type="json"></result>
+        </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 

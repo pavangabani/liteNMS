@@ -2,7 +2,6 @@ package com.motadata.kernel.bean;
 
 public class PollingPingBean
 {
-
     Integer packetLoss;
 
     Integer RTT;
@@ -50,5 +49,4 @@ public class PollingPingBean
     {
         this.receivePacket = receivePacket;
     }
-
 }

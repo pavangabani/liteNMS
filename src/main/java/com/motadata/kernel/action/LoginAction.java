@@ -2,6 +2,7 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.executor.LoginExecutor;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
@@ -10,7 +11,6 @@ import java.util.Map;
 
 public class LoginAction implements ModelDriven, SessionAware
 {
-
     LoginBean loginBean = new LoginBean();
 
     LoginExecutor loginExecutor = new LoginExecutor();
@@ -19,7 +19,6 @@ public class LoginAction implements ModelDriven, SessionAware
 
     public String login()
     {
-
         loginExecutor.login(loginBean);
 
         session.put("user", loginBean.getUsername());
@@ -29,11 +28,9 @@ public class LoginAction implements ModelDriven, SessionAware
 
     public String register()
     {
-
         loginExecutor.register(loginBean);
 
         return "REGISTER";
-
     }
 
     public String logout()
@@ -41,6 +38,15 @@ public class LoginAction implements ModelDriven, SessionAware
         session.invalidate();
 
         return "LOGOUT";
+    }
+
+    public String profile()
+    {
+        Map session = (Map) ActionContext.getContext().get("session");
+
+        loginBean.setProfileName((String) session.get("user"));
+
+        return "PROFILE";
     }
 
     @Override

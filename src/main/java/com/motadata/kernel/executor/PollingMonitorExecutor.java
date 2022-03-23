@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 public class PollingMonitorExecutor
 {
-
     public void load(PollingMonitorBean pollingMonitorBean)
     {
         try
@@ -47,11 +46,11 @@ public class PollingMonitorExecutor
 
     public void delete(PollingMonitorBean pollingMonitorBean)
     {
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "delete from pollingmonitor where id=?";
 
@@ -70,11 +69,13 @@ public class PollingMonitorExecutor
                 pollingMonitorBean.setStatus("Could not Delete!");
             }
 
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
     }
 }

@@ -7,12 +7,13 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.apache.struts2.StrutsStatics;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class SessionInterceptor implements Interceptor
 {
 
-    String _allowedURLs[]={"/login.jsp"};
+    String _allowedURLs[] = {"/login.jsp"};
 
     @Override
     public void destroy()
@@ -29,10 +30,20 @@ public class SessionInterceptor implements Interceptor
     @Override
     public String intercept(ActionInvocation actionInvocation) throws Exception
     {
-
         final ActionContext context = actionInvocation.getInvocationContext();
 
         HttpServletRequest request = (HttpServletRequest) context.get(StrutsStatics.HTTP_REQUEST);
+
+        HttpServletResponse response = (HttpServletResponse) context.get(StrutsStatics.HTTP_RESPONSE);
+
+        if (response != null)
+        {
+            response.setHeader("Cache-control", "no-cache, no-store");
+
+            response.setHeader("Pragma", "no-cache");
+
+            response.setHeader("Expires", "-1");
+        }
 
         Map<String, Object> session = ActionContext.getContext().getSession();
 
@@ -57,7 +68,6 @@ public class SessionInterceptor implements Interceptor
                     userActionQualified = true;
                 }
             }
-
         }
 
         if (!userActionQualified)

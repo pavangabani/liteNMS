@@ -3,6 +3,7 @@ package com.motadata.kernel.executor;
 import com.motadata.kernel.bean.DashboardBean;
 import com.motadata.kernel.helper.GetData;
 
+
 public class DashboardExecutor
 {
     public void load(DashboardBean dashboardBean)
@@ -15,7 +16,6 @@ public class DashboardExecutor
 
         } catch (Exception e)
         {
-
             e.printStackTrace();
         }
     }

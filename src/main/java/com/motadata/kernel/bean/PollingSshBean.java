@@ -10,7 +10,7 @@ public class PollingSshBean
 
     String upTime;
 
-    Integer totalMemory;
+    String totalMemory;
 
     String totalDisk;
 
@@ -54,12 +54,12 @@ public class PollingSshBean
         this.upTime = upTime;
     }
 
-    public Integer getTotalMemory()
+    public String getTotalMemory()
     {
         return totalMemory;
     }
 
-    public void setTotalMemory(Integer totalMemory)
+    public void setTotalMemory(String totalMemory)
     {
         this.totalMemory = totalMemory;
     }
@@ -73,5 +73,4 @@ public class PollingSshBean
     {
         this.totalDisk = totalDisk;
     }
-
 }

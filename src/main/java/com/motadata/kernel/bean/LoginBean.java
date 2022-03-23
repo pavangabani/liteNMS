@@ -2,6 +2,7 @@ package com.motadata.kernel.bean;
 
 public class LoginBean
 {
+    private String profileName;
 
     private String username;
 
@@ -37,6 +38,16 @@ public class LoginBean
     public void setStatus(String status)
     {
         this.status = status;
+    }
+
+    public String getProfileName()
+    {
+        return profileName;
+    }
+
+    public void setProfileName(String profileName)
+    {
+        this.profileName = profileName;
     }
 
 }

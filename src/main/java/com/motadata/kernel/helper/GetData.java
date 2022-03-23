@@ -1,9 +1,5 @@
 package com.motadata.kernel.helper;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.bean.PollingPingBean;
@@ -24,11 +20,11 @@ public class GetData
     {
         List<PollingMonitorBean> pollingmonitorList = null;
 
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "select * from pollingmonitor";
 
@@ -56,11 +52,14 @@ public class GetData
 
                 pollingmonitorList.add(pollingmonitorBean);
             }
-            database.releaseConnection();
 
         } catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            database.releaseConnection();
         }
         return pollingmonitorList;
     }
@@ -69,11 +68,11 @@ public class GetData
     {
         List<MonitorBean> monitorList = null;
 
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "select * from monitor";
 
@@ -99,11 +98,13 @@ public class GetData
 
                 monitorList.add(monitorBean);
             }
-            database.releaseConnection();
 
         } catch (Exception e)
         {
             e.printStackTrace();
+        }finally
+        {
+            database.releaseConnection();
         }
         return monitorList;
     }
@@ -112,11 +113,11 @@ public class GetData
     {
         List<Integer> availability = null;
 
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "select availability from pollingmonitor";
 
@@ -142,11 +143,12 @@ public class GetData
             }
             availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
 
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
+        }finally
+        {
+            database.releaseConnection();
         }
 
         return availability;
@@ -156,10 +158,10 @@ public class GetData
     {
         HashMap<String, Object> pingStatistic = null;
 
+        Database database = new Database();
+
         try
         {
-            Database database = new Database();
-
             pingStatistic = new HashMap<>();
 
             // 1. Last 24 Hours Availability
@@ -201,25 +203,25 @@ public class GetData
 
             //End
 
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
 
+        }finally
+        {
+            database.releaseConnection();
+        }
         return pingStatistic;
     }
 
     public HashMap<String, Object> getSshStatistic(String id)
     {
-
         HashMap<String, Object> sshStatistic = null;
+
+        Database database = new Database();
 
         try
         {
-            Database database = new Database();
-
             sshStatistic = new HashMap<>();
 
             //1. Last 24 Availability
@@ -259,19 +261,22 @@ public class GetData
 
             sshStatistic.put("bary", bary);
 
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
 
+        }finally
+        {
+            database.releaseConnection();
+        }
         return sshStatistic;
     }
 
     ArrayList<Object> getAvailability(String id)
     {
         ArrayList<Object> availability = null;
+
+        Database database = new Database();
 
         try
         {
@@ -290,8 +295,6 @@ public class GetData
             Timestamp currentTimeStamp = new Timestamp(date.getTime());
 
             //QueryStart
-
-            Database database = new Database();
 
             ArrayList<Object> values = new ArrayList(Arrays.asList(id));
 
@@ -329,11 +332,13 @@ public class GetData
 
             availability.add(pieDown);
 
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
         return availability;
     }
@@ -433,13 +438,15 @@ public class GetData
 
     public PollingSshBean getSshData(String ip)
     {
-        PollingSshBean pollingSshBean = new PollingSshBean();;
+        Database database = new Database();
+
+        PollingSshBean pollingSshBean = new PollingSshBean();
+
+        SshConnection sshConnection=null;
 
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "select * from credential where ip=?";
 
@@ -449,56 +456,66 @@ public class GetData
 
             //QueryEnd
 
-            SSHCommand sshCommand = new SSHCommand();
-
             String username = data.get(0).get("username");
 
             String password = data.get(0).get("password");
 
-            ArrayList<Object> credential = new ArrayList<>(Arrays.asList(ip, username, Cipher.decode(password)));
+            ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username,Cipher.decode(password)));
 
-            String answer = sshCommand.runCommand(credential,
-                    "free -m | grep Mem | awk '{print $2}';" +
-                    "free -m | grep Mem | awk '{print $3}';" +
-                    "mpstat | grep IST;" +
-                    "df -hT /home | grep dev | awk '{print $6}';" +
-                    "uptime -p;" +
-                    "df -hT /home | grep dev | awk '{print $3}'");
+            List<String> commands = new ArrayList();
 
-            String[] ansArray = answer.split("\n");
+            commands.add("free -m | grep Mem | awk '{print $3}'\n");
 
-            int totalmemory = (Integer.parseInt(ansArray[0].trim()) / 1024) + 1;
+            commands.add("free -m | grep Mem | awk '{print $2}'\n");
 
-            int memory = (int) ((Float.parseFloat(ansArray[1].trim()) / Float.parseFloat(ansArray[0].trim())) * 100);
+            commands.add("df -hT /home | grep dev | awk '{print $6}'\n");
 
-            int cpu = 100 - (int) Float.parseFloat(ansArray[3].substring(ansArray[3].length() - 6).trim());
+            commands.add("df -hT /home | grep dev | awk '{print $3}' \n");
 
-            int disk = Integer.parseInt(ansArray[4].substring(0, ansArray[4].indexOf("%")));
+            commands.add("mpstat | grep IST | awk '{print $13}'\n");
 
-            String upTime = ansArray[5].substring(ansArray[5].indexOf("up") + 3).trim();
+            commands.add("uptime -p\n");
 
-            String totalDisk = ansArray[6].trim();
+            sshConnection=new SshConnection(credential);
 
-            //--------------------------------------------------------------------------------
+            String output=sshConnection.executeCommands(commands);
 
-            pollingSshBean.setMemory(memory);
+            //--------------------------------------------------------------
 
-            pollingSshBean.setCpu(cpu);
+            String usedMemory=output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $3}'")+commands.get(0).length()-1,output.lastIndexOf("free -m | grep Mem | awk '{print $3}'")+commands.get(0).length()+3);
 
-            pollingSshBean.setDisk(disk);
+            String totalMemory=output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $2}'")+commands.get(1).length()-1,output.lastIndexOf("free -m | grep Mem | awk '{print $2}'")+commands.get(1).length()+4);
+
+            String usedDisk=output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'")+commands.get(2).length(),output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'")+commands.get(2).length()+3);
+
+            usedDisk=usedDisk.substring(0,usedDisk.indexOf("%"));
+
+            String totalDisk=output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'")+commands.get(3).length()-1,output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'")+commands.get(3).length()+3);
+
+            String cpu=output.substring(output.lastIndexOf("mpstat | grep IST | awk '{print $13}'")+commands.get(4).length()+4,output.lastIndexOf("mpstat | grep IST | awk '{print $13}'")+commands.get(4).length()+6);
+
+            String upTime=output.substring(output.lastIndexOf("uptime -p")+commands.get(5).length()-1,output.lastIndexOf(username+"@"));
+
+            //----------------------------------------------------------------
+
+            int memoryPercentage= (int) ((Float.parseFloat(usedMemory)/Float.parseFloat(totalMemory))*100);
+
+            int totalMemoryInt= (int) Math.ceil(Integer.parseInt(totalMemory)/1024.0);
+
+            pollingSshBean.setMemory(memoryPercentage);
+
+            pollingSshBean.setCpu(100-Integer.valueOf(cpu));
+
+            pollingSshBean.setDisk(Integer.valueOf(usedDisk));
 
             pollingSshBean.setUpTime(upTime);
 
             pollingSshBean.setTotalDisk(totalDisk);
 
-            pollingSshBean.setTotalMemory(totalmemory);
-
-            database.releaseConnection();
+            pollingSshBean.setTotalMemory(String.valueOf(totalMemoryInt));
 
         } catch (Exception e)
         {
-            pollingSshBean.setTotalMemory(-1);
-
             pollingSshBean.setMemory(-1);
 
             pollingSshBean.setCpu(-1);
@@ -509,7 +526,15 @@ public class GetData
 
             pollingSshBean.setTotalDisk("-1");
 
+            pollingSshBean.setTotalMemory("-1");
+
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
+
+            sshConnection.close();
         }
         return pollingSshBean;
     }

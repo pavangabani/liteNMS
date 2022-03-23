@@ -2,15 +2,12 @@ package com.motadata.kernel.executor;
 
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
-import com.motadata.kernel.helper.Cipher;
-import com.motadata.kernel.helper.Discover;
-import com.motadata.kernel.helper.GetData;
+import com.motadata.kernel.helper.*;
 
 import java.util.*;
 
 public class MonitorExecutor
 {
-
     public void load(MonitorBean monitorBean)
     {
         try
@@ -27,10 +24,10 @@ public class MonitorExecutor
 
     public void add(MonitorBean monitorBean)
     {
+        Database database = new Database();
+
         try
         {
-            Database database = new Database();
-
             String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
 
             ArrayList<Object> values = new ArrayList(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
@@ -45,23 +42,26 @@ public class MonitorExecutor
 
                 database.update(query, credentialValues);
             }
-            database.releaseConnection();
 
             monitorBean.setStatus("Added!");
 
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
     }
 
     public void addPolling(MonitorBean monitorBean)
     {
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "select * from monitor where id=?";
 
@@ -71,9 +71,7 @@ public class MonitorExecutor
 
             //QueryEnd
 
-            Discover discover = new Discover();
-
-            boolean discoveryTest = discover.discovery( data.get(0).get("ip"), data.get(0).get("type"));
+            boolean discoveryTest = PoolUtil.forkJoinPool.invoke(new DiscoveryThread(data.get(0).get("ip"), data.get(0).get("type")));
 
             if (discoveryTest)
             {
@@ -99,26 +97,27 @@ public class MonitorExecutor
                 {
                     monitorBean.setStatus("Failed to Add!");
                 }
-
             } else
             {
                 monitorBean.setStatus("Ping Fail!");
             }
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
     }
 
     public void edit(MonitorBean monitorBean)
     {
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "update monitor set name=?,ip=?,type=?,tag=? where id=?";
 
@@ -165,7 +164,6 @@ public class MonitorExecutor
                     //QueryEnd
                 }
             }
-            database.releaseConnection();
 
             //forLoad Data
 
@@ -176,16 +174,20 @@ public class MonitorExecutor
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
     }
 
     public void delete(MonitorBean monitorBean)
     {
+        Database database = new Database();
+
         try
         {
             //QueryStart
-
-            Database database = new Database();
 
             String query = "delete from monitor where id=?";
 
@@ -203,12 +205,13 @@ public class MonitorExecutor
             {
                 monitorBean.setStatus("Could not Delete!");
             }
-            database.releaseConnection();
-
         } catch (Exception e)
         {
             e.printStackTrace();
+
+        }finally
+        {
+            database.releaseConnection();
         }
     }
-
 }

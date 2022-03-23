@@ -81,6 +81,7 @@ var main = {
             helper.customalert("#registerfailure");
         }
     },
+
 };
 
 var helper = {

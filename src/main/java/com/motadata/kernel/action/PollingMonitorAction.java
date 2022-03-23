@@ -2,7 +2,6 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.executor.PollingMonitorExecutor;
-import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class PollingMonitorAction implements ModelDriven
@@ -13,7 +12,6 @@ public class PollingMonitorAction implements ModelDriven
 
     public String load()
     {
-
         pollingMonitorExecutor.load(pollingMonitorBean);
 
         return "LOADED";
@@ -21,7 +19,6 @@ public class PollingMonitorAction implements ModelDriven
 
     public String show()
     {
-
         pollingMonitorExecutor.show(pollingMonitorBean);
 
         return "SHOW";
@@ -29,7 +26,6 @@ public class PollingMonitorAction implements ModelDriven
 
     public String delete()
     {
-
         pollingMonitorExecutor.delete(pollingMonitorBean);
 
         return "DELETED";
@@ -38,7 +34,6 @@ public class PollingMonitorAction implements ModelDriven
     @Override
     public Object getModel()
     {
-
         return pollingMonitorBean;
     }
 }

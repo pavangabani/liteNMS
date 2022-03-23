@@ -318,7 +318,7 @@ var helper = {
 
                 $("#matrix3").html("<h3>Disk Usage: " + data.sshStatistic.matrix[2] + "%<br><br>Disk:" + data.sshStatistic.matrix[4] + "</h3>");
 
-                $("#matrix4").html("<h3>Uptime : " + data.sshStatistic.matrix[3] + "</h3>");
+                $("#matrix4").html("<h3>" + data.sshStatistic.matrix[3] + "</h3>");
             }
         }
         helper.ajaxpost(request);

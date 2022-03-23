@@ -31,12 +31,12 @@ public class PollingJob implements Job
 
             String id = row.get("id"), ip = row.get("ip"), type = row.get("type");
 
-            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingTread(id, ip));
+            Boolean ping = PoolUtil.forkJoinPool.invoke(new PingThread(id, ip));
 
             if (ping && type.equals("ssh"))
             {
 
-                PoolUtil.forkJoinPool.invoke(new SshTread(id, ip));
+                PoolUtil.forkJoinPool.invoke(new SshThread(id, ip));
             }
         }
 

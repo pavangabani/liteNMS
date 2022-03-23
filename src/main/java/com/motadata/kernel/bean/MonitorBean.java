@@ -5,7 +5,6 @@ import java.util.List;
 
 public class MonitorBean
 {
-
     private String id;
 
     private String name;
@@ -113,5 +112,4 @@ public class MonitorBean
     {
         this.monitorList = monitorList;
     }
-
 }

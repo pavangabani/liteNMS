@@ -8,7 +8,6 @@ import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool
 {
-
     private static BlockingQueue<Connection> connectionsPool;
 
     private static ArrayList<Connection> usedConnection = new ArrayList<>();

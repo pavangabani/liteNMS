@@ -14,5 +14,4 @@ public class DashboardBean {
     public void setAvailability(List<Integer> availability) {
         this.availability = availability;
     }
-
 }

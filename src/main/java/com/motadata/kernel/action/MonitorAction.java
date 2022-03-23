@@ -6,14 +6,12 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class MonitorAction implements ModelDriven
 {
-
     MonitorBean monitorBean = new MonitorBean();
 
     MonitorExecutor monitorExecutor = new MonitorExecutor();
 
     public String load()
     {
-
         monitorExecutor.load(monitorBean);
 
         return "LOADED";
@@ -21,7 +19,6 @@ public class MonitorAction implements ModelDriven
 
     public String add()
     {
-
         monitorExecutor.add(monitorBean);
 
         return "ADDED";
@@ -29,7 +26,6 @@ public class MonitorAction implements ModelDriven
 
     public String addPolling()
     {
-
         monitorExecutor.addPolling(monitorBean);
 
         return "ADDED";
@@ -37,7 +33,6 @@ public class MonitorAction implements ModelDriven
 
     public String edit()
     {
-
         monitorExecutor.edit(monitorBean);
 
         return "EDITED";
@@ -45,7 +40,6 @@ public class MonitorAction implements ModelDriven
 
     public String delete()
     {
-
         monitorExecutor.delete(monitorBean);
 
         return "DELETED";
@@ -54,7 +48,6 @@ public class MonitorAction implements ModelDriven
     @Override
     public Object getModel()
     {
-
         return monitorBean;
     }
 }
