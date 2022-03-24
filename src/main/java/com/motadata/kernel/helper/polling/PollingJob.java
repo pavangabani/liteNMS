@@ -14,19 +14,23 @@ public class PollingJob implements Job
     @Override
     public void execute(JobExecutionContext jobExecutionContext)
     {
-        Database database = new Database();
+        Database database = null;
 
         try
         {
             //QueryStart
 
+            database = new Database();
+
             String query = "select id,ip,type from pollingmonitor";
 
             List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
 
+            database.releaseConnection();
+
             //QueryEnd
 
-            if (data.size() > 0)
+            if (!data.isEmpty())
             {
                 for (HashMap<String, String> row : data)
                 {
@@ -46,7 +50,10 @@ public class PollingJob implements Job
 
         } finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 }

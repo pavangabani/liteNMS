@@ -10,17 +10,21 @@ public class LoginExecutor
 {
     public void login(LoginBean loginBean)
     {
-        Database database = new Database();
+        Database database = null;
 
         try
         {
             //QueryStart
 
+            database = new Database();
+
             String query = "select * from login where user=? AND pass=?";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
             List<HashMap<String, String>> data = database.select(query, values);
+
+            database.releaseConnection();
 
             //QueryEnd
 
@@ -36,25 +40,32 @@ public class LoginExecutor
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 
     public void register(LoginBean loginBean)
     {
-        Database database = new Database();
+        Database database = null;
 
         try
         {
             //QueryStart
 
+            database = new Database();
+
             String query = "insert into login values(?,?)";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
 
             int affectedRow = database.update(query, values);
+
+            database.releaseConnection();
 
             //QueryEnd
 
@@ -64,7 +75,7 @@ public class LoginExecutor
 
             } else if (affectedRow == -1)
             {
-                loginBean.setStatus("Username is invalid!");
+                loginBean.setStatus("Username is Invalid!");
 
             } else
             {
@@ -74,9 +85,12 @@ public class LoginExecutor
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 }

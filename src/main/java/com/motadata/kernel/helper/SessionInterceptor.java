@@ -13,7 +13,7 @@ import java.util.Map;
 public class SessionInterceptor implements Interceptor
 {
 
-    String _allowedURLs[] = {"/login.jsp"};
+    String[] allowedURLs = {"/login.jsp"};
 
     @Override
     public void destroy()
@@ -59,7 +59,7 @@ public class SessionInterceptor implements Interceptor
         {
             String requestURL = request.getRequestURI();
 
-            for (String url : _allowedURLs)
+            for (String url : allowedURLs)
             {
                 if (requestURL.contains(url))
                 {

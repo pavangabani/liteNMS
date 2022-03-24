@@ -226,7 +226,7 @@ var helper = {
     {
         $.each(data.monitorList, function ()
         {
-            table.row.add([this.name,this.ip,this.type,this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Add</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" ]).draw();
+            table.row.add([this.name,this.ip,this.type,this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" ]).draw();
         });
     },
 

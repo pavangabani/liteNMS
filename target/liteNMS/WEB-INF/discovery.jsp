@@ -2,9 +2,11 @@
 <body>
 
 <link rel="stylesheet" href="css/discoverystyle.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/discovery.js"></script>
 
 <jsp:include page="navigation.jsp"/>
@@ -12,18 +14,21 @@
 <div class="monitorTitle">
     <h1 style="color: black">DISCOVERY</h1>
 </div>
-
-<table id="monitors" >
-    <tr>
-        <th>Name</th>
-        <th>IP</th>
-        <th>Type</th>
-        <th>Tag</th>
-        <th>Operation</th>
-    </tr>
-    <tbody id="tablebody">
-    </tbody>
-</table>
+<div style="background-color:#f2f2f2;padding: 10px;">
+    <table id="monitors">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>IP</th>
+            <th>Type</th>
+            <th>Tag</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody id="tablebody">
+        </tbody>
+    </table>
+</div>
 
 <a href="#" class="float" id="floatbtn" onclick="helper.floatbtn()">
     <i class="fa fa-plus my-float"></i>

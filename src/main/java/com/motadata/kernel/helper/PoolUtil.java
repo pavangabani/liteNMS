@@ -4,9 +4,10 @@ import java.util.concurrent.ForkJoinPool;
 
 public class PoolUtil
 {
-    static int processorCount = Runtime.getRuntime().availableProcessors();
+    private static final int processorCount = Runtime.getRuntime().availableProcessors();
 
-    public static ForkJoinPool forkJoinPool = new ForkJoinPool(processorCount);
+    public static final ForkJoinPool forkJoinPool = new ForkJoinPool(processorCount);
 
-    public static ForkJoinPool discoveryForkJoinPool = new ForkJoinPool(1);
+    public static final ForkJoinPool discoveryForkJoinPool = new ForkJoinPool(1);
+
 }

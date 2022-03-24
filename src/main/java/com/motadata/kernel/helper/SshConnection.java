@@ -30,7 +30,7 @@ class SshConnection
 
     private Session getSession()
     {
-        if (session == null || !session.isConnected())
+        if (session == null)
         {
             session = connect(hostname, username, password);
         }
@@ -128,7 +128,7 @@ class SshConnection
 
             String temp;
 
-            while (!((temp = bufferedReader.readLine()).equals("logout")))
+            while ((temp = bufferedReader.readLine())!=null && !temp.contains("logout"))
             {
                 answer += temp;
             }

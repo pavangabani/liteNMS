@@ -27,11 +27,11 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
     @Override
     protected Boolean compute()
     {
-        boolean discoveryTest = ping(ip);
-
-        Database database = new Database();
-
         SshConnection sshConnection = null;
+
+        Database database = null;
+
+        boolean discoveryTest = ping(ip);
 
         try
         {
@@ -43,31 +43,45 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
             {
                 //QueryStart
 
+                database = new Database();
+
                 String query = "select * from credential where ip=?";
 
                 ArrayList<Object> values = new ArrayList<>(Arrays.asList(ip));
 
                 List<HashMap<String, String>> data = database.select(query, values);
 
+                database.releaseConnection();
+
                 //QueryEnd
 
-                if (data.size() > 0)
+                if (!data.isEmpty())
                 {
-                    ArrayList<String> credential = new ArrayList<String>(Arrays.asList(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password"))));
+                    //credential
+
+                    ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password"))));
 
                     sshConnection = new SshConnection(credential);
+
+                    //command
 
                     ArrayList<String> commands = new ArrayList<>();
 
                     commands.add("uname\n");
 
+                    //execute
+
                     String output = sshConnection.executeCommands(commands);
 
-                    type = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
+                    sshConnection.close();
 
-                    if (type.trim().equals("Linux"))
+                    //check
+
+                    String monitorType = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
+
+                    if (!monitorType.trim().equals("Linux"))
                     {
-                        discoveryTest = true;
+                        discoveryTest = false;
                     }
                 }
             }
@@ -75,10 +89,14 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
         {
             e.printStackTrace();
 
+            discoveryTest = false;
+
         } finally
         {
-            database.releaseConnection();
-
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
             if (sshConnection != null)
             {
                 sshConnection.close();
@@ -103,6 +121,8 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
             process = processBuilder.start();
 
+            //read
+
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line, answer = "";
@@ -111,6 +131,9 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
             {
                 answer += line;
             }
+
+            //check
+
             if (answer.contains("statistics"))
             {
                 answer = answer.substring(answer.indexOf("statistics"));
@@ -123,6 +146,8 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
         } catch (Exception e)
         {
             e.printStackTrace();
+
+            return false;
 
         } finally
         {
@@ -142,11 +167,6 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
                 }
             }
         }
-        if (packetLoss < 50)
-        {
-            return true;
-        }
-        return false;
+        return packetLoss <= 25;
     }
-
 }

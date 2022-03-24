@@ -46,15 +46,17 @@ public class PollingMonitorExecutor
 
     public void delete(PollingMonitorBean pollingMonitorBean)
     {
-        Database database = new Database();
+        Database database = null;
 
         try
         {
             //QueryStart
 
+            database = new Database();
+
             String query = "delete from pollingmonitor where id=?";
 
-            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(pollingMonitorBean.getId()));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(pollingMonitorBean.getId()));
 
             int affectedRaw = database.update(query, values);
 
@@ -75,7 +77,10 @@ public class PollingMonitorExecutor
 
         }finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 }

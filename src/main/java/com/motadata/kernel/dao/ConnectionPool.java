@@ -10,7 +10,7 @@ public class ConnectionPool
 {
     private static BlockingQueue<Connection> connectionsPool;
 
-    private static ArrayList<Connection> usedConnection = new ArrayList<>();
+    private static final ArrayList<Connection> usedConnection = new ArrayList<>();
 
     public static void createFixedSizePool(Integer size)
     {
@@ -61,5 +61,10 @@ public class ConnectionPool
         {
             e.printStackTrace();
         }
+    }
+
+    public static Boolean isAvailable(Connection connection)
+    {
+        return !usedConnection.contains(connection);
     }
 }

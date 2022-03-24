@@ -4,7 +4,7 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.executor.MonitorExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class MonitorAction implements ModelDriven
+public class MonitorAction implements ModelDriven<MonitorBean>
 {
     MonitorBean monitorBean = new MonitorBean();
 
@@ -46,7 +46,7 @@ public class MonitorAction implements ModelDriven
     }
 
     @Override
-    public Object getModel()
+    public MonitorBean getModel()
     {
         return monitorBean;
     }

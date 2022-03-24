@@ -4,7 +4,7 @@ import com.motadata.kernel.bean.PollingMonitorBean;
 import com.motadata.kernel.executor.PollingMonitorExecutor;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class PollingMonitorAction implements ModelDriven
+public class PollingMonitorAction implements ModelDriven<PollingMonitorBean>
 {
     PollingMonitorBean pollingMonitorBean = new PollingMonitorBean();
 
@@ -32,7 +32,7 @@ public class PollingMonitorAction implements ModelDriven
     }
 
     @Override
-    public Object getModel()
+    public PollingMonitorBean getModel()
     {
         return pollingMonitorBean;
     }

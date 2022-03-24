@@ -17,47 +17,50 @@ public class Database
 
         try
         {
-            //Set Prepare statement
-
-            preparedStatement = connection.prepareStatement(query);
-
-            int i = 1;
-
-            for (Object value : values)
+            if (!connection.isClosed())
             {
-                if (value.getClass()== Integer.class)
-                {
-                    preparedStatement.setInt(i, (Integer) value);
+                //Set Prepare statement
 
-                } else if (value.getClass()==String.class)
-                {
-                    preparedStatement.setString(i, (String) value);
+                preparedStatement = connection.prepareStatement(query);
 
-                } else if (value.getClass()== Timestamp.class)
+                int i = 1;
+
+                for (Object value : values)
                 {
-                    preparedStatement.setTimestamp(i, (Timestamp) value);
+                    if (value.getClass() == Integer.class)
+                    {
+                        preparedStatement.setInt(i, (Integer) value);
+
+                    } else if (value.getClass() == String.class)
+                    {
+                        preparedStatement.setString(i, (String) value);
+
+                    } else if (value.getClass() == Timestamp.class)
+                    {
+                        preparedStatement.setTimestamp(i, (Timestamp) value);
+                    }
+                    i++;
                 }
-                i++;
-            }
-            ResultSet resultSet = preparedStatement.executeQuery();
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-            //Get data from Resultset
+                //Get data from Resultset
 
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 
-            int columnCount = resultSetMetaData.getColumnCount();
+                int columnCount = resultSetMetaData.getColumnCount();
 
-            data = new ArrayList<>();
+                data = new ArrayList<>();
 
-            while (resultSet.next())
-            {
-                HashMap<String, String> row = new HashMap<>();
-
-                for (int j = 1; j <= columnCount; j++)
+                while (resultSet.next())
                 {
-                    row.put(resultSetMetaData.getColumnName(j), resultSet.getString(j));
+                    HashMap<String, String> row = new HashMap<>();
+
+                    for (int j = 1; j <= columnCount; j++)
+                    {
+                        row.put(resultSetMetaData.getColumnName(j), resultSet.getString(j));
+                    }
+                    data.add(row);
                 }
-                data.add(row);
             }
         } catch (SQLException e)
         {
@@ -87,8 +90,6 @@ public class Database
 
         try
         {
-            //Set Preparestatement
-
             preparedStatement = connection.prepareStatement(query);
 
             int i = 1;
@@ -137,6 +138,9 @@ public class Database
 
     public void releaseConnection()
     {
-        ConnectionPool.releaseConnection(connection);
+        if (!ConnectionPool.isAvailable(connection))
+        {
+            ConnectionPool.releaseConnection(connection);
+        }
     }
 }

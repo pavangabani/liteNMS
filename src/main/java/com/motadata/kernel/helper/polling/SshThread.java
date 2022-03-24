@@ -27,7 +27,7 @@ public class SshThread extends RecursiveAction
     @Override
     protected void compute()
     {
-        Database database = new Database();
+        Database database = null;
 
         try
         {
@@ -35,9 +35,11 @@ public class SshThread extends RecursiveAction
 
             //QueryStart
 
+            database = new Database();
+
             String query = "insert into sshdump (id,cpu,memory,disk,uptime,pollingtime,totaldisk,totalmemory) values(?,?,?,?,?,?,?,?)";
 
-            ArrayList<Object> values = new ArrayList<Object>(Arrays.asList(id, pollingSshBean.getCpu(), pollingSshBean.getMemory(), pollingSshBean.getDisk(), pollingSshBean.getUpTime(), new Timestamp(new Date().getTime()), pollingSshBean.getTotalDisk(), pollingSshBean.getTotalMemory()));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(id, pollingSshBean.getCpu(), pollingSshBean.getMemory(), pollingSshBean.getDisk(), pollingSshBean.getUpTime(), new Timestamp(new Date().getTime()), pollingSshBean.getTotalDisk(), pollingSshBean.getTotalMemory()));
 
             database.update(query, values);
 
@@ -47,9 +49,12 @@ public class SshThread extends RecursiveAction
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 }

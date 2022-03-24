@@ -9,7 +9,7 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
 
-public class LoginAction implements ModelDriven, SessionAware
+public class LoginAction implements ModelDriven<LoginBean>, SessionAware
 {
     LoginBean loginBean = new LoginBean();
 
@@ -50,7 +50,7 @@ public class LoginAction implements ModelDriven, SessionAware
     }
 
     @Override
-    public Object getModel()
+    public LoginBean getModel()
     {
         return loginBean;
     }

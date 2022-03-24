@@ -15,7 +15,10 @@ var main = {
 
             runfunction: function (data)
             {
-                helper.adddata(data);
+                table=$('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
+
+                helper.adddata(data,table);
+
             },
         };
         helper.ajaxpost(request);
@@ -221,23 +224,10 @@ var helper = {
 
     adddata: function (data)
     {
-        let tabledata = "";
-
         $.each(data.monitorList, function ()
         {
-            tabledata += "<tr>" +
-                "<td>" + this.name + "</td>" +
-                "<td>" + this.ip + "</td>" +
-                "<td>" + this.type + "</td>" +
-                "<td>" + this.tag + "</td>" +
-                "<td>" +
-                "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Add</button>" +
-                "<button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button>" +
-                "<button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" +
-                "</td>" +
-                "</tr>";
+            table.row.add([this.name,this.ip,this.type,this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" ]).draw();
         });
-        $("#tablebody").html(tabledata);
     },
 
     validate: function (name, ip, type, tag, username, password)

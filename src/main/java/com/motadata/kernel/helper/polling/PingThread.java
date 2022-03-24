@@ -26,21 +26,24 @@ public class PingThread extends RecursiveTask<Boolean>
     @Override
     protected Boolean compute()
     {
-        boolean pingTest=false;
+        boolean pingTest = false;
 
-        Database database = new Database();
+        Database database = null;
 
         try
         {
+
             GetData getData = new GetData();
 
             PollingPingBean pollingPingBean = getData.getPingData(ip);
 
             //QueryStart
 
+            database = new Database();
+
             String query = "insert into pingdump (id,sentpackets,receivepackets,packetloss,rtt,pollingtime) values(?,?,?,?,?,?)";
 
-            ArrayList<Object> values = new ArrayList(Arrays.asList(id, pollingPingBean.getSentPacket(), pollingPingBean.getReceivePacket(), pollingPingBean.getPacketLoss(), pollingPingBean.getRTT(), new Timestamp(new Date().getTime())));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(id, pollingPingBean.getSentPacket(), pollingPingBean.getReceivePacket(), pollingPingBean.getPacketLoss(), pollingPingBean.getRTT(), new Timestamp(new Date().getTime())));
 
             database.update(query, values);
 
@@ -48,9 +51,9 @@ public class PingThread extends RecursiveTask<Boolean>
 
             query = "update pollingmonitor set availability=? where id=?";
 
-            if (pollingPingBean.getPacketLoss() < 50)
+            if (pollingPingBean.getPacketLoss() <= 25)
             {
-                values = new ArrayList(Arrays.asList("UP", id));
+                values = new ArrayList<>(Arrays.asList("UP", id));
 
                 database.update(query, values);
 
@@ -58,19 +61,20 @@ public class PingThread extends RecursiveTask<Boolean>
 
             } else
             {
-                values = new ArrayList(Arrays.asList("DOWN", id));
+                values = new ArrayList<>(Arrays.asList("DOWN", id));
 
                 database.update(query, values);
-
-                pingTest = false;
             }
         } catch (Exception e)
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
-            database.releaseConnection();
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
         return pingTest;
     }
