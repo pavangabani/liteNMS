@@ -28,32 +28,45 @@ public class MonitorExecutor
 
         try
         {
-            //QueryStart
-
             database = new Database();
 
-            String query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
+            String query = "select * from monitor where ip=? and type=?";
 
-            ArrayList<Object> values = new ArrayList<>(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getType()));
 
-            database.update(query, values);
+            List<HashMap<String, String>> data = database.select(query, values);
 
-            //QueryEnd
-
-            if (monitorBean.getType().equals("ssh"))
+            if (data.isEmpty())
             {
                 //QueryStart
 
-                query = "insert into credential (ip,username,password) values(?,?,?)";
+                query = "insert into monitor (name,ip,type,tag) values(?,?,?,?)";
 
-                ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+                values = new ArrayList<>(Arrays.asList(monitorBean.getName(), monitorBean.getIp(), monitorBean.getType(), monitorBean.getTag()));
 
-                database.update(query, credentialValues);
+                database.update(query, values);
 
                 //QueryEnd
-            }
 
-            monitorBean.setStatus("Added!");
+                if (monitorBean.getType().equals("ssh"))
+                {
+                    //QueryStart
+
+                    query = "insert into credential (ip,username,password) values(?,?,?)";
+
+                    ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+
+                    database.update(query, credentialValues);
+
+                    //QueryEnd
+                }
+
+                monitorBean.setStatus("Added!");
+
+            } else
+            {
+                monitorBean.setStatus("Already Added!");
+            }
 
         } catch (Exception e)
         {

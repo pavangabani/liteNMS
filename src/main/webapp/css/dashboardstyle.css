@@ -6,7 +6,16 @@
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: 200px;
 }
-
+.availabilitywrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 200px;
+}
+.healthwrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 200px;
+}
 #one{
     color: #000;
     background-color: orangered;
@@ -38,4 +47,29 @@
     letter-spacing: 5px;
     text-align: center;
     alignment: center;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: royalblue;}
+
+#toprtt {
+    grid-row: 1 / 3;
+}
+
+.tabletitle {
+    font-family: sans-serif;
+    text-shadow: 1px 1px 5px lightgray;
+    text-align: center;
+    alignment: center;
+    color: #001F3F;
 }

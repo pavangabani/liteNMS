@@ -432,7 +432,12 @@ public class GetData
 
             String line, outputString = "";
 
-            while ((line = reader.readLine())!=null)
+            while (!reader.ready())
+            {
+                Thread.sleep(5000);
+            }
+
+            while (reader.ready() && (line = reader.readLine())!=null)
             {
                 outputString += line;
             }
