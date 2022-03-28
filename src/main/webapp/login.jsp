@@ -5,6 +5,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="js/login.js"></script>
+<script src="js/helper/helper.js"></script>
 
 <div id="bg"></div>
 <form method="POST">

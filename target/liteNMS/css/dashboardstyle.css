@@ -6,7 +6,16 @@
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: 200px;
 }
-
+.availabilitywrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 200px;
+}
+.healthwrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 200px;
+}
 #one{
     color: #000;
     background-color: orangered;

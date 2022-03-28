@@ -18,7 +18,7 @@ public class ConnectionPool
         {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            connectionsPool = new ArrayBlockingQueue(size);
+            connectionsPool = new ArrayBlockingQueue<>(size);
 
             for (int i = 0; i < size; i++)
             {

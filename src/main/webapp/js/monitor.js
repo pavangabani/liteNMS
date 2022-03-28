@@ -24,7 +24,7 @@ var main = {
                 helper.adddata(data,table);
             }
         }
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
     },
 
     showstatistic: function (that)
@@ -64,7 +64,7 @@ var main = {
                     alert(data.status);
                 },
             };
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
             location.reload();
         }
@@ -72,28 +72,6 @@ var main = {
 };
 
 var helper = {
-
-    ajaxpost: function (request)
-    {
-        $.ajax({
-
-            type: 'POST',
-
-            url: request.url,
-
-            data: request.data,
-
-            success: function (data)
-            {
-                request.runfunction(data);
-            },
-            error: function ()
-            {
-                alert("Some error occurred.");
-            },
-            timeout: 10000
-        });
-    },
 
     adddata: function (data,table)
     {
@@ -310,7 +288,7 @@ var helper = {
                 $("#matrix4").html("<h3>" + data.sshStatistic.matrix[3] + "</h3>");
             }
         }
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
 
         $("#myModalStatistic").show();
     },
@@ -341,7 +319,7 @@ var helper = {
                 $("#matrix4").html("<h3>RTT(ms): " + data.pingStatistic.matrix[3] + "</h3>");
             }
         }
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
 
         $("#myModalStatistic").show();
     },

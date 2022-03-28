@@ -28,7 +28,7 @@ public class LoginExecutor
 
             //QueryEnd
 
-            if (data.size() == 1)
+            if (!data.isEmpty())
             {
                 loginBean.setStatus("Success");
 

@@ -27,15 +27,13 @@ public class SessionInterceptor implements Interceptor
     @Override
     public String intercept(ActionInvocation actionInvocation) throws Exception
     {
-        final ActionContext context = actionInvocation.getInvocationContext();
+        ActionContext context = actionInvocation.getInvocationContext();
 
         HttpServletResponse response = (HttpServletResponse) context.get(StrutsStatics.HTTP_RESPONSE);
 
         if (response != null)
         {
             response.setHeader("Cache-control", "no-cache, no-store");
-
-            response.setHeader("Pragma", "no-cache");
 
             response.setHeader("Expires", "-1");
         }
@@ -49,7 +47,6 @@ public class SessionInterceptor implements Interceptor
             actionInvocation.invoke();
 
             result = true;
-
         }
 
         if (!result)

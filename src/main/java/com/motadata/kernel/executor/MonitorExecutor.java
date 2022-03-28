@@ -129,7 +129,7 @@ public class MonitorExecutor
                     }
                 } else
                 {
-                    monitorBean.setStatus("Ping Fail!");
+                    monitorBean.setStatus("Discovery Fail!");
                 }
             }
 

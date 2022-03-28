@@ -8,6 +8,7 @@
 <script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/discovery.js"></script>
+<script src="js/helper/helper.js"></script>
 
 <jsp:include page="navigation.jsp"/>
 

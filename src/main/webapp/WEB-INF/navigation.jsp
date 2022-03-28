@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="css/navigationstyle.css">
 
 <script src="js/navigation.js"></script>
+<script src="js/helper/helper.js"></script>
 
 <nav class="navbar">
     <div class="logo">&nbsp;&nbsp;LiteNMS</div>

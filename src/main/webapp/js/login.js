@@ -32,7 +32,7 @@ var main = {
                     }
                 }
             };
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
         } else
         {
@@ -70,7 +70,7 @@ var main = {
                     alert(data.status);
                 }
             }
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
             $("#registerform").trigger("reset");
 
@@ -114,25 +114,4 @@ var helper = {
         $("#register").hide();
     },
 
-    ajaxpost: function (request)
-    {
-        $.ajax({
-
-            type: 'POST',
-
-            url: request.url,
-
-            data: request.data,
-
-            success: function (data)
-            {
-                request.runfunction(data);
-            },
-            error: function ()
-            {
-                alert("Some error occured.");
-            },
-            timeout:10000
-        });
-    }
 };
