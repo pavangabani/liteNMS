@@ -1,10 +1,12 @@
-$(document).ready(function () {
+$(document).ready(function ()
+{
     main.onload()
 });
 
 var main = {
 
-    onload: function () {
+    onload: function ()
+    {
 
         let request = {
 
@@ -12,10 +14,7 @@ var main = {
 
             data: "",
 
-            runfunction: function (data) {
-
-                helper.adddata(data);
-            },
+            callback: callback.onload,
         };
         helperMain.ajaxpost(request);
     },
@@ -23,7 +22,8 @@ var main = {
 
 var helper = {
 
-    adddata: function (data) {
+    adddata: function (data)
+    {
 
         $("#one").append("<h1>" + data.availability[0] + "</h1>");
 
@@ -34,3 +34,10 @@ var helper = {
         $("#four").append("<h1>" + data.availability[3] + "</h1>");
     },
 };
+var callback = {
+
+    onload: function (data)
+    {
+        helper.adddata(data);
+    },
+}

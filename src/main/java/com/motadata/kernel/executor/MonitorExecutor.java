@@ -201,13 +201,6 @@ public class MonitorExecutor
                     //QueryEnd
                 }
             }
-
-            //forLoad Data
-
-            GetData getData = new GetData();
-
-            monitorBean.setMonitorList(getData.getAllMonitor());
-
         } catch (Exception e)
         {
             e.printStackTrace();

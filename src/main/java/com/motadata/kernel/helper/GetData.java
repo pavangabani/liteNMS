@@ -455,6 +455,15 @@ public class GetData
                 pollingPingBean.setReceivePacket(receivedPacket);
 
                 pollingPingBean.setSentPacket(sentPacket);
+            } else
+            {
+                pollingPingBean.setPacketLoss(100);
+
+                pollingPingBean.setRTT(-1);
+
+                pollingPingBean.setReceivePacket(0);
+
+                pollingPingBean.setSentPacket(4);
             }
         } catch (Exception e)
         {

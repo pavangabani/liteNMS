@@ -20,17 +20,7 @@ var main = {
 
                 url: "Login",
 
-                runfunction: function (data)
-                {
-                    if (data.status == "Success")
-                    {
-                        window.location = 'Dashboard';
-
-                    } else
-                    {
-                        helper.customalert("#failure")
-                    }
-                }
+                callback: callback.login,
             };
             helperMain.ajaxpost(request);
 
@@ -65,10 +55,7 @@ var main = {
 
                 url: "Register",
 
-                runfunction: function (data)
-                {
-                    alert(data.status);
-                }
+                callback: callback.register,
             }
             helperMain.ajaxpost(request);
 
@@ -115,3 +102,22 @@ var helper = {
     },
 
 };
+
+var callback = {
+
+    login: function (data)
+    {
+        if (data.status == "Success")
+        {
+            window.location = 'Dashboard';
+
+        } else
+        {
+            helper.customalert("#failure")
+        }
+    },
+    register: function (data)
+    {
+        alert(data.status);
+    }
+}

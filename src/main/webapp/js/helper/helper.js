@@ -12,7 +12,18 @@ var helperMain={
 
             success: function (data)
             {
-                request.runfunction(data);
+                let callbacks;
+
+                if(request.callback!==undefined)
+                {
+                    callbacks = $.Callbacks();
+
+                    callbacks.add(request.callback);
+
+                    callbacks.fire(data);
+
+                    callbacks.remove(request.callback);
+                }
             },
             error: function ()
             {

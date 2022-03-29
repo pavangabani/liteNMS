@@ -13,13 +13,7 @@ var main = {
 
             data: "",
 
-            runfunction: function (data)
-            {
-                table=$('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
-
-                helper.adddata(data,table);
-
-            },
+            callback: callback.onload,
         };
         helperMain.ajaxpost(request);
     },
@@ -55,10 +49,7 @@ var main = {
 
                 data: sdata,
 
-                runfunction: function (data)
-                {
-                    alert(data.status);
-                },
+                callback: callback.add,
             };
             helperMain.ajaxpost(request);
 
@@ -82,10 +73,7 @@ var main = {
 
             data: sdata,
 
-            runfunction: function (data)
-            {
-                alert(data.status);
-            },
+            callback: callback.addforpolling,
         };
         helperMain.ajaxpost(request);
     },
@@ -158,10 +146,7 @@ var main = {
 
                 data: sdata,
 
-                runfunction: function (data)
-                {
-                    helper.adddata(data);
-                },
+                callback: callback.update,
             };
             helperMain.ajaxpost(request);
 
@@ -187,10 +172,7 @@ var main = {
 
                 data: sdata,
 
-                runfunction: function (data)
-                {
-                    alert(data.status);
-                },
+                callback: callback.deletemonitor,
             };
             helperMain.ajaxpost(request);
 
@@ -205,7 +187,7 @@ var helper = {
     {
         $.each(data.monitorList, function ()
         {
-            table.row.add([this.name,this.ip,this.type,this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>" ]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
@@ -286,4 +268,29 @@ var helper = {
         $("#myModalUpdate").hide();
     }
 };
+var callback =
+    {
+        onload: function (data)
+        {
+            table = $('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
+
+            helper.adddata(data, table);
+        },
+        add: function (data)
+        {
+            alert(data.status);
+        },
+        addforpolling: function (data)
+        {
+            alert(data.status);
+        },
+        update: function (data)
+        {
+            helper.adddata(data);
+        },
+        deletemonitor: function (data)
+        {
+            alert(data.status);
+        },
+    }
 
