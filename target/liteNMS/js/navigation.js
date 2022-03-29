@@ -5,14 +5,17 @@ var profilemain = {
         $("#profile").show();
 
         let request = {
+
             url: "Profile",
+
             data: "",
+
             runfunction: function (data)
             {
                 $("#profilename").text(data.profileName);
             }
         };
-        profilemain.ajaxpost(request);
+        helperMain.ajaxpost(request);
 
     },
 
@@ -21,32 +24,9 @@ var profilemain = {
         $("#profile").hide();
     },
 
-    ajaxpost: function (request)
+    logout: function ()
     {
-        $.ajax({
-
-            type: 'POST',
-
-            url: request.url,
-
-            data: request.data,
-
-            success: function (data)
-            {
-                request.runfunction(data);
-            },
-            error: function ()
-            {
-                alert("Some error occured.");
-            },
-            timeout: 10000
-        });
-    },
-
-    logout: function (){
-
-        window.location="Logout";
-
+        window.location = "Logout";
     }
 
 };

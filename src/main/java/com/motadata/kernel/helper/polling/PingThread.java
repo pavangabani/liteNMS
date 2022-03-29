@@ -55,16 +55,14 @@ public class PingThread extends RecursiveTask<Boolean>
             {
                 values = new ArrayList<>(Arrays.asList("UP", id));
 
-                database.update(query, values);
-
                 pingTest = true;
 
             } else
             {
                 values = new ArrayList<>(Arrays.asList("DOWN", id));
-
-                database.update(query, values);
             }
+            database.update(query, values);
+
         } catch (Exception e)
         {
             e.printStackTrace();

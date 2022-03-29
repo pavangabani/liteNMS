@@ -6,13 +6,34 @@ public class Cipher
 {
     public static String encode(String target)
     {
-        return Base64.getEncoder().encodeToString(target.getBytes());
+        String encoded = null;
+
+        try
+        {
+            encoded = Base64.getEncoder().encodeToString(target.getBytes());
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return encoded;
     }
 
     public static String decode(String target)
     {
-        byte[] passwordBytes = Base64.getDecoder().decode(target);
+        String decoded = null;
 
-        return new String(passwordBytes);
+        try
+        {
+            byte[] passwordBytes = Base64.getDecoder().decode(target);
+
+            decoded = new String(passwordBytes);
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return decoded;
     }
 }

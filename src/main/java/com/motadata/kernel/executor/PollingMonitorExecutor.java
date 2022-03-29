@@ -60,6 +60,14 @@ public class PollingMonitorExecutor
 
             int affectedRaw = database.update(query, values);
 
+            query = "delete from pingdump where id=?";
+
+            database.update(query, values);
+
+            query = "delete from sshdump where id=?";
+
+            database.update(query, values);
+
             //QueryEnd
 
             if (affectedRaw > 0)

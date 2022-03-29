@@ -21,7 +21,7 @@ var main = {
 
             },
         };
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
     },
 
     add: function ()
@@ -60,7 +60,7 @@ var main = {
                     alert(data.status);
                 },
             };
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
             $("#myModal").hide();
 
@@ -87,7 +87,7 @@ var main = {
                 alert(data.status);
             },
         };
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
     },
 
     edit: function (that)
@@ -163,7 +163,7 @@ var main = {
                     helper.adddata(data);
                 },
             };
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
             $("#myModalUpdate").hide();
 
@@ -192,7 +192,7 @@ var main = {
                     alert(data.status);
                 },
             };
-            helper.ajaxpost(request);
+            helperMain.ajaxpost(request);
 
             location.reload();
         }
@@ -200,27 +200,6 @@ var main = {
 };
 
 var helper = {
-
-    ajaxpost: function (request)
-    {
-        $.ajax({
-
-            type: 'POST',
-
-            url: request.url,
-
-            data: request.data,
-
-            success: function (data)
-            {
-                request.runfunction(data);
-            },
-            error: function ()
-            {
-                alert("Some error occured.");
-            },
-        });
-    },
 
     adddata: function (data)
     {

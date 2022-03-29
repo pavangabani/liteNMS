@@ -22,9 +22,20 @@ public class ConnectionPool
 
             for (int i = 0; i < size; i++)
             {
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
+                try
+                {
+                    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
 
-                connectionsPool.add(connection);
+                    connectionsPool.add(connection);
+
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connectionsPool.size() != size)
+            {
+                createFixedSizePool(size);
             }
         } catch (Exception e)
         {

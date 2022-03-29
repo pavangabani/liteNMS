@@ -17,7 +17,7 @@ var main = {
                 helper.adddata(data);
             },
         };
-        helper.ajaxpost(request);
+        helperMain.ajaxpost(request);
     },
 };
 
@@ -33,26 +33,4 @@ var helper = {
 
         $("#four").append("<h1>" + data.availability[3] + "</h1>");
     },
-
-    ajaxpost: function (request) {
-
-        $.ajax({
-
-            type: 'POST',
-
-            url: request.url,
-
-            data: request.data,
-
-            success: function (data) {
-
-                request.runfunction(data);
-            },
-            error: function () {
-
-                alert("Some error occurred.");
-            },
-            timeout:10000
-        });
-    }
 };

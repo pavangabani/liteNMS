@@ -142,7 +142,7 @@ public class GetData
 
             database = new Database();
 
-            String query = "select availability from pollingmonitor";
+            String query = "select count(*), availability from pollingmonitor group by availability;";
 
             List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
 
@@ -156,20 +156,23 @@ public class GetData
 
                 for (HashMap<String, String> row : data)
                 {
-                    if (row.get("availability").equals("UP"))
-                    {
-                        up++;
+                    String status = row.get("availability");
 
-                    } else if (row.get("availability").equals("DOWN"))
+                    if (status.equals("UP"))
                     {
-                        down++;
-
-                    } else if (row.get("availability").equals("Unknown"))
-                    {
-                        unrechable++;
+                        up = Integer.parseInt(row.get("count(*)"));
                     }
-                    total++;
+                    if (status.equals("DOWN"))
+                    {
+                        down = Integer.parseInt(row.get("count(*)"));
+                    }
+                    if (status.equals("Unknown"))
+                    {
+                        unrechable = Integer.parseInt(row.get("count(*)"));
+                    }
                 }
+                total = up + down + unrechable;
+
                 availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
             }
         } catch (Exception e)
@@ -203,25 +206,13 @@ public class GetData
 
             pingStatistic.put("pie", availability);
 
-            //2. Live Data (Matrixs)
+            //2. Last 10 Polling Data
 
             database = new Database();
 
-            String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 1";
+            String query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
-
-            List<HashMap<String, String>> matrixData = database.select(query, values);
-
-            if (!matrixData.isEmpty())
-            {
-                pingStatistic.put("matrix", new ArrayList<>(Arrays.asList(matrixData.get(0).get("sentpackets"), matrixData.get(0).get("receivepackets"), matrixData.get(0).get("packetloss"), matrixData.get(0).get("rtt"))));
-
-            }
-
-            //3. Last 10 Polling Data
-
-            query = "select * from pingdump where id=? ORDER BY pollingtime DESC limit 10";
 
             List<HashMap<String, String>> barData = database.select(query, values);
 
@@ -243,8 +234,11 @@ public class GetData
                 pingStatistic.put("barx", barx);
 
                 pingStatistic.put("bary", bary);
-            }
 
+                //3. Live Data (Matrixs)
+
+                pingStatistic.put("matrix", new ArrayList(Arrays.asList(barData.get(0).get("sentpackets"), barData.get(0).get("receivepackets"), barData.get(0).get("packetloss"), barData.get(0).get("rtt"))));
+            }
             //End
 
         } catch (Exception e)
@@ -277,25 +271,13 @@ public class GetData
 
             sshStatistic.put("pie", availability);
 
-            //2. Live Data (Matrixs)
+            //2. Last 10 Polling
 
             database = new Database();
 
-            String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 1";
+            String query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
-
-            List<HashMap<String, String>> matrixData = database.select(query, values);
-
-            if (!matrixData.isEmpty())
-            {
-                sshStatistic.put("matrix", new ArrayList<>(Arrays.asList(matrixData.get(0).get("cpu"), matrixData.get(0).get("memory"), matrixData.get(0).get("disk"), matrixData.get(0).get("uptime"), matrixData.get(0).get("totaldisk"), matrixData.get(0).get("totalmemory"))));
-
-            }
-
-            //3. Last 10 Polling
-
-            query = "select * from sshdump where id=? ORDER BY pollingtime DESC limit 10";
 
             List<HashMap<String, String>> barData = database.select(query, values);
 
@@ -317,7 +299,13 @@ public class GetData
                 sshStatistic.put("barx", barx);
 
                 sshStatistic.put("bary", bary);
+
+                //3. Live Data (Matrixs)
+
+                sshStatistic.put("matrix", new ArrayList<>(Arrays.asList(barData.get(0).get("cpu"), barData.get(0).get("memory"), barData.get(0).get("disk"), barData.get(0).get("uptime"), barData.get(0).get("totaldisk"), barData.get(0).get("totalmemory"))));
+
             }
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -358,7 +346,7 @@ public class GetData
 
             database = new Database();
 
-            String query = "select * from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=?";
+            String query = "select count(*),packetloss from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=? group by packetloss";
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
 
@@ -370,23 +358,24 @@ public class GetData
 
             if (!data.isEmpty())
             {
-                int pingSuccess = 0;
-
-                int pingTotal = 0;
+                int pieUp = 0, pieDown = 0;
 
                 for (HashMap<String, String> row : data)
                 {
-                    pingTotal += 1;
+                    int packetloss = Integer.parseInt(row.get("packetloss"));
 
-                    if (Integer.parseInt(row.get("packetloss")) < 50)
+                    if (packetloss <= 25)
                     {
-                        pingSuccess += 1;
+                        pieUp += Integer.parseInt(row.get("count(*)"));
+                    } else
+                    {
+                        pieDown += Integer.parseInt(row.get("count(*)"));
                     }
                 }
 
-                int pieUp = (int) ((float) pingSuccess / (float) pingTotal * 100);
+                pieUp = (int) (((float) pieUp / (float) (pieDown + pieUp) * 1.0) * 100);
 
-                int pieDown = 100 - pieUp;
+                pieDown = 100 - pieUp;
 
                 availability = new ArrayList<>();
 
@@ -426,7 +415,7 @@ public class GetData
 
             process = processBuilder.start();
 
-            //-----------------------------------------------------------------------------------------------------
+            //read-------------------------------------------------------------------------------------------------
 
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -437,24 +426,12 @@ public class GetData
                 Thread.sleep(5000);
             }
 
-            while (reader.ready() && (line = reader.readLine())!=null)
+            while (reader.ready() && (line = reader.readLine()) != null)
             {
                 outputString += line;
             }
 
-            //ManipulateData-------------------------------------------------------------------------------------------
-
-            if (!outputString.contains("statistics"))
-            {
-                pollingPingBean.setPacketLoss(100);
-
-                pollingPingBean.setRTT(-1);
-
-                pollingPingBean.setReceivePacket(0);
-
-                pollingPingBean.setSentPacket(4);
-
-            } else
+            if (outputString.contains("statistics"))
             {
                 outputString = outputString.substring(outputString.indexOf("statistics"));
 
@@ -470,8 +447,6 @@ public class GetData
                 {
                     RTT = (int) Float.parseFloat((outputString.substring(outputString.lastIndexOf("=") + 1, outputString.lastIndexOf("=") + 7).trim()));
                 }
-
-                //------------------------------------------------------------------------------------------
 
                 pollingPingBean.setPacketLoss(packetLoss);
 
@@ -556,7 +531,7 @@ public class GetData
 
                 commands.add("df -hT /home | grep dev | awk '{print $3}' \n");
 
-                commands.add("mpstat | grep all\n");
+                commands.add("top -bn  2 | grep Cpu\n");
 
                 commands.add("uptime -p\n");
 
@@ -627,11 +602,13 @@ public class GetData
                 try
                 {
                     //5.
-                    output = output.substring(output.lastIndexOf("mpstat | grep all") + commands.get(4).length() - 1);
+                    output = output.substring(output.lastIndexOf("top -bn  2 | grep Cpu") + commands.get(4).length() - 1);
 
-                    String cpu = output.substring(output.indexOf(username + "@") - 5, output.indexOf(username + "@") - 3);
+                    output = output.substring(output.indexOf("id") + 2);
 
-                    pollingSshBean.setCpu(100 - Integer.parseInt(cpu.trim()));
+                    String cpu = output.substring(output.indexOf("id") - 5, output.indexOf("id"));
+
+                    pollingSshBean.setCpu((int) (100 - Float.parseFloat(cpu.trim())));
 
                 } catch (Exception e)
                 {

@@ -77,7 +77,7 @@ var helper = {
     {
         $.each(data.pollingMonitorBeanList, function ()
         {
-            table.row.add([this.name,this.ip,this.type,this.tag,this.availability,"<button onclick='main.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' className='btn' style='margin-left: 5px'>Show</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' className='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name,this.ip,this.type,this.tag,this.availability,"<button onclick='main.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Show</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 

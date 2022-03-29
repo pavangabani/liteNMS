@@ -35,10 +35,6 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
         try
         {
-            if (type.equals("ping"))
-            {
-                return discoveryTest;
-            }
             if (discoveryTest && type.equals("ssh"))
             {
                 //QueryStart
@@ -129,7 +125,7 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
             while (!reader.ready())
             {
-                Thread.sleep(5000);
+                Thread.sleep(6000);
             }
 
             while (reader.ready() && (line = reader.readLine()) != null)
