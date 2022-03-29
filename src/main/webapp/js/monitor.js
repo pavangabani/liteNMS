@@ -148,13 +148,13 @@ var helper = {
     {
         $("#myModalStatistic").hide();
 
-        $("#matrix1").html("<h3>CPU Usage: </h3>");
+        $("#matrix1").html("<h3>CPU Usage: Unknown</h3>");
 
-        $("#matrix2").html("<h3>Memory Usage: </h3>");
+        $("#matrix2").html("<h3>Memory Usage: Unknown</h3>");
 
-        $("#matrix3").html("<h3>Disk Usage: </h3>");
+        $("#matrix3").html("<h3>Disk Usage: Unknown</h3>");
 
-        $("#matrix4").html("<h3>UpTime</h3>");
+        $("#matrix4").html("<h3>UpTime: Unknown</h3>");
 
     },
 
@@ -246,10 +246,12 @@ var callback={
 
         helper.adddata(data, table);
     },
+
     deletemonitor:function (data)
     {
         alert(data.status);
     },
+
     showsshdata:function (data)
     {
         helper.chartssh(data);
@@ -262,6 +264,7 @@ var callback={
 
         $("#matrix4").html("<h3>" + data.sshStatistic.matrix[3] + "</h3>");
     },
+
     showpingdata:function (data)
     {
         helper.chartping(data);

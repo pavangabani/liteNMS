@@ -80,18 +80,29 @@ var main = {
 
     edit: function (that)
     {
-
         $("#myModalUpdate").show();
+
+        //--------------------------------------------------------------------------------------------
+
+        let tagElement = $(that).parent().prev();
+
+        let typeElement = tagElement.prev();
+
+        let ipElement = typeElement.prev();
+
+        let nameElement = ipElement.prev();
+
+        //-------------------------------------------------------------
 
         let id = $(that).data("id");
 
-        let name = $(that).parent().prev().prev().prev().prev().text();
+        let name = nameElement.text();
 
-        let ip = $(that).parent().prev().prev().prev().text();
+        let ip = ipElement.text();
 
-        let type = $(that).parent().prev().prev().text();
+        let type = typeElement.text();
 
-        let tag = $(that).parent().prev().text();
+        let tag = tagElement.text();
 
         $("#rawid").val(id);
 
@@ -276,18 +287,22 @@ var callback =
 
             helper.adddata(data, table);
         },
+
         add: function (data)
         {
             alert(data.status);
         },
+
         addforpolling: function (data)
         {
             alert(data.status);
         },
+
         update: function (data)
         {
             helper.adddata(data);
         },
+
         deletemonitor: function (data)
         {
             alert(data.status);

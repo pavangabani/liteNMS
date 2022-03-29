@@ -34,6 +34,7 @@ var helper = {
         $("#four").append("<h1>" + data.availability[3] + "</h1>");
     },
 };
+
 var callback = {
 
     onload: function (data)
