@@ -244,7 +244,7 @@ var monitorcallback={
     {
         profilemain.monitor();
 
-        alert(data.status);
+        profilemain.allalert(data.status);
     },
 
     showsshdata:function (data)

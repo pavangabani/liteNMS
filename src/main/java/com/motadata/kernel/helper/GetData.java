@@ -421,7 +421,7 @@ public class GetData
 
             String line, outputString = "";
 
-            while (!reader.ready())
+            if(!reader.ready())
             {
                 Thread.sleep(5000);
             }

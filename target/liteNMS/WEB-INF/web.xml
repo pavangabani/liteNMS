@@ -2,6 +2,15 @@
 
     <display-name>LiteNMS</display-name>
 
+    <context-param>
+        <param-name>protocol</param-name>
+        <param-value>http</param-value>
+    </context-param>
+    <context-param>
+        <param-name>port</param-name>
+        <param-value>8600</param-value>
+    </context-param>
+
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>

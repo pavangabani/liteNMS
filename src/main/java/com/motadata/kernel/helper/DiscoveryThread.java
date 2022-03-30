@@ -123,9 +123,9 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
             String line, answer = "";
 
-            while (!reader.ready())
+            if(!reader.ready())
             {
-                Thread.sleep(6000);
+                Thread.sleep(5000);
             }
 
             while (reader.ready() && (line = reader.readLine()) != null)

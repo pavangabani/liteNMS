@@ -61,11 +61,11 @@ public class MonitorExecutor
                     //QueryEnd
                 }
 
-                monitorBean.setStatus("Added!");
+                monitorBean.setStatus(monitorBean.getIp()+" Added!");
 
             } else
             {
-                monitorBean.setStatus("Already Added!");
+                monitorBean.setStatus(monitorBean.getIp()+" Already Added!");
             }
 
         } catch (Exception e)
@@ -117,19 +117,19 @@ public class MonitorExecutor
 
                     if (affectedRaw > 0)
                     {
-                        monitorBean.setStatus("Monitor Added!");
+                        monitorBean.setStatus(data.get(0).get("ip")+" Monitor Added!");
 
                     } else if (affectedRaw == -1)
                     {
-                        monitorBean.setStatus("Monitor Already Added! ");
+                        monitorBean.setStatus(data.get(0).get("ip")+" Monitor Already Added! ");
 
                     } else
                     {
-                        monitorBean.setStatus("Failed to Add!");
+                        monitorBean.setStatus(data.get(0).get("ip")+" Failed to Add!");
                     }
                 } else
                 {
-                    monitorBean.setStatus("Discovery Fail!");
+                    monitorBean.setStatus(data.get(0).get("ip")+" Discovery Fail!");
                 }
             }
 

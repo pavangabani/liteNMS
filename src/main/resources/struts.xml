@@ -19,8 +19,20 @@
 
     <package name="Main" extends="json-default,struts-default">
 
+        <result-types>
+            <result-type name="json" class="org.apache.struts2.json.JSONResult">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="enableGZIP">true</param>
+            </result-type>
+        </result-types>
+
         <interceptors>
             <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor" />
+            <interceptor-stack name="loginSession">
+                <interceptor-ref name="userSession"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
         </interceptors>
 
         <global-results>
@@ -42,42 +54,52 @@
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="Load" class="com.motadata.kernel.action.MonitorAction" method="load">
+            <interceptor-ref name="loginSession"/>
             <result name="LOADED" type="json"/>
         </action>
         <action name="Add" class="com.motadata.kernel.action.MonitorAction" method="add">
+            <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>
         </action>
         <action name="AddPolling" class="com.motadata.kernel.action.MonitorAction" method="addPolling">
+            <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>
         </action>
         <action name="Edit" class="com.motadata.kernel.action.MonitorAction" method="edit">
+            <interceptor-ref name="loginSession"/>
             <result name="EDITED" type="json"/>
         </action>
         <action name="Delete" class="com.motadata.kernel.action.MonitorAction" method="delete">
+            <interceptor-ref name="loginSession"/>
             <result name="DELETED" type="json"/>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="LoadPolling" class="com.motadata.kernel.action.PollingMonitorAction" method="load">
+            <interceptor-ref name="loginSession"/>
             <result name="LOADED" type="json"/>
         </action>
         <action name="PollingStatistic" class="com.motadata.kernel.action.PollingMonitorAction" method="show">
+            <interceptor-ref name="loginSession"/>
             <result name="SHOW" type="json"/>
         </action>
         <action name="DeletePolling" class="com.motadata.kernel.action.PollingMonitorAction" method="delete">
+            <interceptor-ref name="loginSession"/>
             <result name="DELETED" type="json"/>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="LoadDashboard" class="com.motadata.kernel.action.DashboardAction" method="load">
+            <interceptor-ref name="loginSession"/>
             <result name="LOADED" type="json"/>
         </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
         <action name="Profile" class="com.motadata.kernel.action.LoginAction" method="profile">
+            <interceptor-ref name="loginSession"/>
             <result name="PROFILE" type="json"/>
         </action>
 

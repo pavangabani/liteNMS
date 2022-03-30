@@ -49,7 +49,20 @@ var profilemain = {
         $("#change").html("<body><link rel=\"stylesheet\" href=\"css/dashboardstyle.css\"><div class=\"monitorTitle\"> <h1 style=\"color: black\">Monitors Availability</h1></div><div class=\"wrapper\"> <div id=\"one\"><label style=\"font-size: 30px;font-weight: bold\">Unknown:</label></div> <div id=\"two\"><label style=\"font-size: 30px;font-weight: bold\">UP:</label></div> <div id=\"three\"><label style=\"font-size: 30px;font-weight: bold\">Down:</label></div> <div id=\"four\"><label style=\"font-size: 30px;font-weight: bold\">Total:</label></div></div></div></body>");
 
         dashboardmain.onload();
-    }
+    },
+
+    allalert: function (message)
+    {
+        $("#status").show();
+
+        $("#message").text(message);
+
+        setTimeout(function ()
+        {
+            $("#status").hide();
+
+        }, 2000);
+    },
 };
 
 var profilecallback = {

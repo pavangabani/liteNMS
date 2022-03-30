@@ -36,5 +36,8 @@
         </form>
     </div>
 </div>
+<div id="status" class="allalert" style="display:none;">
+    <p id="message" style="padding-left:30px;padding-right:50px;color: black"></p>
+</div>
 <div id="change"></div>
 

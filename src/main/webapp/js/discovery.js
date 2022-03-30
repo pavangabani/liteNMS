@@ -279,12 +279,12 @@ var discoverycallback = {
     {
         profilemain.discovery();
 
-        alert(data.status);
+        profilemain.allalert(data.status);
     },
 
     addforpolling: function (data)
     {
-        alert(data.status);
+        profilemain.allalert(data.status);
     },
 
     update: function ()
@@ -296,7 +296,7 @@ var discoverycallback = {
     {
         profilemain.discovery();
 
-        alert(data.status);
+        profilemain.allalert(data.status);
     },
 }
 
