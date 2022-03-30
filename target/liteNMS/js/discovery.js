@@ -1,9 +1,4 @@
-$(document).ready(function ()
-{
-    main.onload()
-});
-
-var main = {
+var discoverymain = {
 
     onload: function ()
     {
@@ -13,7 +8,7 @@ var main = {
 
             data: "",
 
-            callback: callback.onload,
+            callback: discoverycallback.onload,
         };
         helperMain.ajaxpost(request);
     },
@@ -41,7 +36,7 @@ var main = {
             tag: tag
         };
 
-        if (helper.validate(name, ip, type, tag, username, password))
+        if (discoveryhelper.validate(name, ip, type, tag, username, password))
         {
             let request = {
 
@@ -49,13 +44,11 @@ var main = {
 
                 data: sdata,
 
-                callback: callback.add,
+                callback: discoverycallback.add,
             };
             helperMain.ajaxpost(request);
 
             $("#myModal").hide();
-
-            location.reload();
         }
     },
 
@@ -73,7 +66,7 @@ var main = {
 
             data: sdata,
 
-            callback: callback.addforpolling,
+            callback: discoverycallback.addforpolling,
         };
         helperMain.ajaxpost(request);
     },
@@ -81,8 +74,6 @@ var main = {
     edit: function (that)
     {
         $("#myModalUpdate").show();
-
-        //--------------------------------------------------------------------------------------------
 
         let tagElement = $(that).parent().prev();
 
@@ -92,7 +83,7 @@ var main = {
 
         let nameElement = ipElement.prev();
 
-        //-------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------
 
         let id = $(that).data("id");
 
@@ -149,7 +140,7 @@ var main = {
             type: type,
             tag: tag
         };
-        if (helper.validate(name, ip, type, tag, username, password))
+        if (discoveryhelper.validate(name, ip, type, tag, username, password))
         {
             let request = {
 
@@ -157,13 +148,11 @@ var main = {
 
                 data: sdata,
 
-                callback: callback.update,
+                callback: discoverycallback.update,
             };
             helperMain.ajaxpost(request);
 
             $("#myModalUpdate").hide();
-
-            location.reload();
         }
     },
 
@@ -183,22 +172,20 @@ var main = {
 
                 data: sdata,
 
-                callback: callback.deletemonitor,
+                callback: discoverycallback.deletemonitor,
             };
             helperMain.ajaxpost(request);
-
-            location.reload();
         }
     }
 };
 
-var helper = {
+var discoveryhelper = {
 
     adddata: function (data)
     {
         $.each(data.monitorList, function ()
         {
-            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='main.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='main.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='discoverymain.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='discoverymain.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='discoverymain.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
@@ -207,27 +194,27 @@ var helper = {
         let ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[1-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         if (name == "")
         {
-            helper.customalert(".failure", "Enter Valid Name");
+            discoveryhelper.customalert(".failure", "Enter Valid Name");
             return false;
         }
         if (ip == "")
         {
-            helper.customalert(".failure", "Enter IP");
+            discoveryhelper.customalert(".failure", "Enter IP");
             return false;
         }
         if (!ipformat.test(ip))
         {
-            helper.customalert(".failure", "Enter Valid IP");
+            discoveryhelper.customalert(".failure", "Enter Valid IP");
             return false;
         }
         if (tag == "")
         {
-            helper.customalert(".failure", "Enter Tag");
+            discoveryhelper.customalert(".failure", "Enter Tag");
             return false;
         }
         if (type != "ping" && (username == "" || password == ""))
         {
-            helper.customalert(".failure", "Enter Username & Password");
+            discoveryhelper.customalert(".failure", "Enter Username & Password");
             return false;
         }
         return true;
@@ -279,33 +266,37 @@ var helper = {
         $("#myModalUpdate").hide();
     }
 };
-var callback =
+var discoverycallback = {
+
+    onload: function (data)
     {
-        onload: function (data)
-        {
-            table = $('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
+        table = $('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
 
-            helper.adddata(data, table);
-        },
+        discoveryhelper.adddata(data, table);
+    },
 
-        add: function (data)
-        {
-            alert(data.status);
-        },
+    add: function (data)
+    {
+        profilemain.discovery();
 
-        addforpolling: function (data)
-        {
-            alert(data.status);
-        },
+        alert(data.status);
+    },
 
-        update: function (data)
-        {
-            helper.adddata(data);
-        },
+    addforpolling: function (data)
+    {
+        alert(data.status);
+    },
 
-        deletemonitor: function (data)
-        {
-            alert(data.status);
-        },
-    }
+    update: function ()
+    {
+        profilemain.discovery();
+    },
+
+    deletemonitor: function (data)
+    {
+        profilemain.discovery();
+
+        alert(data.status);
+    },
+}
 

@@ -1,30 +1,23 @@
-$(document).ready(function ()
-{
-    main.onload()
-});
-
-var main = {
+var dashboardmain = {
 
     onload: function ()
     {
-
         let request = {
 
             url: "LoadDashboard",
 
             data: "",
 
-            callback: callback.onload,
+            callback: dashboardcallback.onload,
         };
         helperMain.ajaxpost(request);
     },
 };
 
-var helper = {
+var dashboardhelper = {
 
     adddata: function (data)
     {
-
         $("#one").append("<h1>" + data.availability[0] + "</h1>");
 
         $("#two").append("<h1>" + data.availability[1] + "</h1>");
@@ -35,10 +28,10 @@ var helper = {
     },
 };
 
-var callback = {
+var dashboardcallback = {
 
     onload: function (data)
     {
-        helper.adddata(data);
+        dashboardhelper.adddata(data);
     },
 }

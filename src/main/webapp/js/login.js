@@ -1,4 +1,4 @@
-var main = {
+var loginmain = {
 
     login: function ()
     {
@@ -6,27 +6,28 @@ var main = {
 
         let password = $("#password").val();
 
-        if (helper.validate(username, password))
+        let sdata = {
+
+            username: username,
+
+            password: password
+        };
+
+        if (loginhelper.validate(username, password))
         {
-            let sdata = {
-
-                username: username,
-
-                password: password
-            };
             let request = {
 
                 data: sdata,
 
                 url: "Login",
 
-                callback: callback.login,
+                callback: logincallback.login,
             };
             helperMain.ajaxpost(request);
 
         } else
         {
-            helper.customalert("#failure");
+            loginhelper.customalert("#failure");
         }
     },
 
@@ -47,7 +48,7 @@ var main = {
 
             password: registerpassword
         };
-        if (helper.validate(registerusername, registerpassword))
+        if (loginhelper.validate(registerusername, registerpassword))
         {
             let request = {
 
@@ -55,7 +56,7 @@ var main = {
 
                 url: "Register",
 
-                callback: callback.register,
+                callback: logincallback.register,
             }
             helperMain.ajaxpost(request);
 
@@ -65,13 +66,13 @@ var main = {
 
         } else
         {
-            helper.customalert("#registerfailure");
+            loginhelper.customalert("#registerfailure");
         }
     },
 
 };
 
-var helper = {
+var loginhelper = {
 
     customalert: function (id)
     {
@@ -103,19 +104,20 @@ var helper = {
 
 };
 
-var callback = {
+var logincallback = {
 
     login: function (data)
     {
         if (data.status == "Success")
         {
-            window.location = 'Dashboard';
+            window.location.href ='Navigation';
 
         } else
         {
-            helper.customalert("#failure")
+            loginhelper.customalert("#failure")
         }
     },
+
     register: function (data)
     {
         alert(data.status);

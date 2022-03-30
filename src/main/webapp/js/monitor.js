@@ -1,13 +1,8 @@
-$(document).ready(function ()
-{
-    main.onload()
-});
-
 var bar;
 
 var pie;
 
-var main = {
+var monitormain = {
 
     onload: function ()
     {
@@ -17,7 +12,7 @@ var main = {
 
             data: "",
 
-            callback: callback.onload,
+            callback: monitorcallback.onload,
         }
         helperMain.ajaxpost(request);
     },
@@ -30,11 +25,11 @@ var main = {
 
         if (type == "ssh")
         {
-            helper.showsshdata(id, type);
+            monitorhelper.showsshdata(id, type);
 
         } else
         {
-            helper.showpingdata(id, type);
+            monitorhelper.showpingdata(id, type);
         }
     },
 
@@ -54,28 +49,26 @@ var main = {
 
                 data: sdata,
 
-                callback: callback.deletemonitor,
+                callback: monitorcallback.deletemonitor,
             };
             helperMain.ajaxpost(request);
-
-            location.reload();
         }
     }
 };
 
-var helper = {
+var monitorhelper = {
 
     adddata: function (data, table)
     {
         $.each(data.pollingMonitorBeanList, function ()
         {
-            table.row.add([this.name, this.ip, this.type, this.tag, this.availability, "<button onclick='main.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Show</button><button onclick='main.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, this.availability, "<button onclick='monitormain.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Show</button><button onclick='monitormain.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
     chartping: function (data)
     {
-        helper.pie(data.pingStatistic.pie);
+        monitorhelper.pie(data.pingStatistic.pie);
 
         baraData = {
             x: data.pingStatistic.barx,
@@ -86,12 +79,12 @@ var helper = {
             step: 4,
         };
 
-        helper.bar(baraData);
+        monitorhelper.bar(baraData);
     },
 
     chartssh: function (data)
     {
-        helper.pie(data.sshStatistic.pie);
+        monitorhelper.pie(data.sshStatistic.pie);
 
         baraData = {
             x: data.sshStatistic.barx,
@@ -102,7 +95,7 @@ var helper = {
             step: 10,
         };
 
-        helper.bar(baraData);
+        monitorhelper.bar(baraData);
     },
 
     showsshdata: function (id, type)
@@ -118,7 +111,7 @@ var helper = {
 
             data: sdata,
 
-            callback: callback.showsshdata,
+            callback: monitorcallback.showsshdata,
         }
         helperMain.ajaxpost(request);
 
@@ -137,7 +130,7 @@ var helper = {
 
             data: sdata,
 
-            callback:callback.showpingdata,
+            callback:monitorcallback.showpingdata,
         }
         helperMain.ajaxpost(request);
 
@@ -238,23 +231,25 @@ var helper = {
     },
 };
 
-var callback={
+var monitorcallback={
 
     onload:function (data)
     {
         table = $('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
 
-        helper.adddata(data, table);
+        monitorhelper.adddata(data, table);
     },
 
     deletemonitor:function (data)
     {
+        profilemain.monitor();
+
         alert(data.status);
     },
 
     showsshdata:function (data)
     {
-        helper.chartssh(data);
+        monitorhelper.chartssh(data);
 
         $("#matrix1").html("<h3>CPU Usage: " + data.sshStatistic.matrix[0] + "%</h3>");
 
@@ -267,7 +262,7 @@ var callback={
 
     showpingdata:function (data)
     {
-        helper.chartping(data);
+        monitorhelper.chartping(data);
 
         $("#matrix1").html("<h3>Sent Packet: " + data.pingStatistic.matrix[0] + "</h3>");
 
