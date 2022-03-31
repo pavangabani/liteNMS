@@ -36,12 +36,7 @@ public class PollingJob implements Job
                 {
                     String id = row.get("id"), ip = row.get("ip"), type = row.get("type");
 
-                    Boolean ping = PoolUtil.forkJoinPool.invoke(new PingThread(id, ip));
-
-                    if (ping && type.equals("ssh"))
-                    {
-                        PoolUtil.forkJoinPool.invoke(new SshThread(id, ip));
-                    }
+                    PoolUtil.forkJoinPool.execute(new PollingThread(id,ip,type));
                 }
             }
         } catch (Exception e)

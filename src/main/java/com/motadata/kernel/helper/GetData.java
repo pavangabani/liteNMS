@@ -130,14 +130,18 @@ public class GetData
         return monitorList;
     }
 
-    public List<Integer> getDashboardData()
+    public ArrayList<Object> getDashboardData()
     {
+        ArrayList<Object> dashboardData = new ArrayList<>();
+
         List<Integer> availability = null;
 
         Database database = null;
 
         try
         {
+            //1. Monitor Availability
+
             //QueryStart
 
             database = new Database();
@@ -145,8 +149,6 @@ public class GetData
             String query = "select count(*), availability from pollingmonitor group by availability;";
 
             List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
-
-            database.releaseConnection();
 
             //QueryEnd
 
@@ -174,6 +176,114 @@ public class GetData
                 total = up + down + unrechable;
 
                 availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
+
+                dashboardData.add(availability);
+
+                //2.Monitor Group
+
+                //QueryStart
+
+                query = "select count(*),availability,type from pollingmonitor group by type, availability";
+
+                data = database.select(query, new ArrayList<>());
+
+                //QueryEnd
+
+                List<HashMap<String, String>> monitorGroup = new ArrayList<>();
+
+                if (!data.isEmpty())
+                {
+                    int pingUp = 0, pingDown = 0, pingTotal = 0, sshUp = 0, sshDown = 0, sshTotal = 0;
+
+                    for (HashMap<String, String> row : data)
+                    {
+                        String type = row.get("type");
+
+                        if (type.equals("ping"))
+                        {
+                            if (row.get("availability").equals("UP"))
+                            {
+                                pingUp += Integer.parseInt(row.get("count(*)"));
+
+                            } else if (row.get("availability").equals("DOWN"))
+                            {
+                                pingDown += Integer.parseInt(row.get("count(*)"));
+                            }
+                        } else
+                        {
+                            if (row.get("availability").equals("UP"))
+                            {
+                                sshUp += Integer.parseInt(row.get("count(*)"));
+
+                            } else if (row.get("availability").equals("DOWN"))
+                            {
+                                sshDown += Integer.parseInt(row.get("count(*)"));
+                            }
+                        }
+                    }
+
+                    pingTotal = pingDown + pingUp;
+
+                    sshTotal = sshDown + sshUp;
+
+                    HashMap<String, String> ping = new HashMap<>();
+
+                    ping.put("type", "ping");
+
+                    ping.put("up", String.valueOf(pingUp));
+
+                    ping.put("down", String.valueOf(pingDown));
+
+                    ping.put("total", String.valueOf(pingTotal));
+
+                    HashMap<String, String> ssh = new HashMap<>();
+
+                    ssh.put("type", "ssh");
+
+                    ssh.put("up", String.valueOf(sshUp));
+
+                    ssh.put("down", String.valueOf(sshDown));
+
+                    ssh.put("total", String.valueOf(sshTotal));
+
+                    monitorGroup.add(ping);
+
+                    monitorGroup.add(ssh);
+
+                    dashboardData.add(monitorGroup);
+                }
+
+                //3. top 5 rtt
+
+                query = "select ip, max(rtt) as rtt from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) group by ip order by max(rtt) desc limit 5";
+
+                List<HashMap<String, String>> dataTopRtt = database.select(query, new ArrayList<>());
+
+                dashboardData.add(dataTopRtt);
+
+                // top 5 ssh cpu
+
+                query = "select ip,cpu from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by cpu desc limit 5";
+
+                List<HashMap<String, String>> dataTopCpu = database.select(query, new ArrayList<>());
+
+                dashboardData.add(dataTopCpu);
+
+                //top 5 ssh memory
+
+                query = "select ip,memory from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by memory desc limit 5";
+
+                List<HashMap<String, String>> dataTopMemory = database.select(query, new ArrayList<>());
+
+                dashboardData.add(dataTopMemory);
+
+                //top 5 ssh disk
+
+                query = "select ip,disk from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by disk desc limit 5";
+
+                List<HashMap<String, String>> dataTopDisk = database.select(query, new ArrayList<>());
+
+                dashboardData.add(dataTopDisk);
             }
         } catch (Exception e)
         {
@@ -187,7 +297,7 @@ public class GetData
             }
         }
 
-        return availability;
+        return dashboardData;
     }
 
     public HashMap<String, Object> getPingStatistic(String id)
@@ -421,7 +531,7 @@ public class GetData
 
             String line, outputString = "";
 
-            if(!reader.ready())
+            if (!reader.ready())
             {
                 Thread.sleep(5000);
             }
