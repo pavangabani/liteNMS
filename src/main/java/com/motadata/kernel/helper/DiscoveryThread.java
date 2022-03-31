@@ -55,7 +55,11 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
                 {
                     //credential
 
-                    ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, data.get(0).get("username"), Cipher.decode(data.get(0).get("password"))));
+                    String password = Cipher.decode(data.get(0).get("password"));
+
+                    if (password == null) throw new NullPointerException();
+
+                    ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, data.get(0).get("username"), password));
 
                     sshConnection = new SshConnection(credential);
 

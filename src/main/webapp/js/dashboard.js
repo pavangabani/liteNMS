@@ -58,7 +58,7 @@ var dashboardhelper = {
 
             tdata+="<tr>"+
                 "<td>"+this.ip+"</td>"+
-                "<td>"+this.cpu+"</td>"+
+                "<td>"+this.cpu+"%</td>"+
                 "</tr>";
         });
 
@@ -70,7 +70,7 @@ var dashboardhelper = {
 
             tdata+="<tr>"+
                 "<td>"+this.ip+"</td>"+
-                "<td>"+this.memory+"</td>"+
+                "<td>"+this.memory+"%</td>"+
                 "</tr>";
         });
 
@@ -82,7 +82,7 @@ var dashboardhelper = {
 
             tdata+="<tr>"+
                 "<td>"+this.ip+"</td>"+
-                "<td>"+this.disk+"</td>"+
+                "<td>"+this.disk+"%</td>"+
                 "</tr>";
         });
 

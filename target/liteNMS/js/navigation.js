@@ -61,7 +61,7 @@ var profilemain = {
         {
             $("#status").hide();
 
-        }, 2000);
+        }, 3000);
     },
 };
 

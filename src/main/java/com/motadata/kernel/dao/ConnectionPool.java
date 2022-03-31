@@ -12,7 +12,7 @@ public class ConnectionPool
 
     private static final ArrayList<Connection> usedConnection = new ArrayList<>();
 
-    public static void createFixedSizePool(Integer size)
+    public static int createFixedSizePool(Integer size)
     {
         try
         {
@@ -33,14 +33,11 @@ public class ConnectionPool
                     e.printStackTrace();
                 }
             }
-            if (connectionsPool.size() != size)
-            {
-                createFixedSizePool(size);
-            }
         } catch (Exception e)
         {
             e.printStackTrace();
         }
+        return connectionsPool.size();
     }
 
     public static Connection getConnection()

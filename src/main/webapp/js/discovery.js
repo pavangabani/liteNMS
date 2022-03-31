@@ -156,26 +156,24 @@ var discoverymain = {
         }
     },
 
-    deletemonitor: function (that)
+    deletemonitor: function (id)
     {
-        let id = $(that).data("id");
+
 
         let sdata = {
             id: id,
         };
 
-        if (confirm("Do you want to delete?"))
-        {
-            let request = {
+        let request = {
 
-                url: "Delete",
+            url: "Delete",
 
-                data: sdata,
+            data: sdata,
 
-                callback: discoverycallback.deletemonitor,
-            };
-            helperMain.ajaxpost(request);
-        }
+            callback: discoverycallback.deletemonitor,
+        };
+        helperMain.ajaxpost(request);
+
     }
 };
 
@@ -185,7 +183,7 @@ var discoveryhelper = {
     {
         $.each(data.monitorList, function ()
         {
-            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='discoverymain.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='discoverymain.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='discoverymain.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='discoverymain.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='discoverymain.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='discoveryhelper.deleteconfirm(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
@@ -264,7 +262,31 @@ var discoveryhelper = {
     closeupdate: function ()
     {
         $("#myModalUpdate").hide();
+    },
+
+    deleteconfirm: function (that)
+    {
+        let id = $(that).data("id");
+
+        $("#deleteid").text(id);
+
+        $("#deletebox").show();
+    },
+
+    yes: function ()
+    {
+        id = $("#deleteid").text();
+
+        discoverymain.deletemonitor(id);
+
+        $("#deletebox").hide();
+    },
+
+    no: function ()
+    {
+        $("#deletebox").hide();
     }
+
 };
 var discoverycallback = {
 

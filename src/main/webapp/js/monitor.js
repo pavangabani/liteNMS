@@ -33,26 +33,21 @@ var monitormain = {
         }
     },
 
-    deletemonitor: function (that)
+    deletemonitor: function (id)
     {
-        let id = $(that).data("id");
-
         let sdata = {
             id: id
         };
 
-        if (confirm("Do you want to delete?"))
-        {
-            let request = {
+        let request = {
 
-                url: "DeletePolling",
+            url: "DeletePolling",
 
-                data: sdata,
+            data: sdata,
 
-                callback: monitorcallback.deletemonitor,
-            };
-            helperMain.ajaxpost(request);
-        }
+            callback: monitorcallback.deletemonitor,
+        };
+        helperMain.ajaxpost(request);
     }
 };
 
@@ -62,7 +57,7 @@ var monitorhelper = {
     {
         $.each(data.pollingMonitorBeanList, function ()
         {
-            table.row.add([this.name, this.ip, this.type, this.tag, this.availability, "<button onclick='monitormain.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Show</button><button onclick='monitormain.deletemonitor(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, this.availability, "<button onclick='monitormain.showstatistic(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Show</button><button onclick='monitorhelper.deleteconfirm(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
@@ -130,7 +125,7 @@ var monitorhelper = {
 
             data: sdata,
 
-            callback:monitorcallback.showpingdata,
+            callback: monitorcallback.showpingdata,
         }
         helperMain.ajaxpost(request);
 
@@ -229,25 +224,49 @@ var monitorhelper = {
             }
         });
     },
+
+    deleteconfirm: function (that)
+    {
+        let id = $(that).data("id");
+
+        $("#deleteidm").text(id);
+
+        $("#deleteboxm").show();
+
+    },
+
+    yes: function ()
+    {
+        id = $("#deleteidm").text();
+
+        monitormain.deletemonitor(id);
+
+        $("#deleteboxm").hide();
+    },
+
+    no: function ()
+    {
+        $("#deleteboxm").hide();
+    }
 };
 
-var monitorcallback={
+var monitorcallback = {
 
-    onload:function (data)
+    onload: function (data)
     {
         table = $('#monitors').DataTable({lengthMenu: [5, 10, 20, 50, 100, 200, 500]});
 
         monitorhelper.adddata(data, table);
     },
 
-    deletemonitor:function (data)
+    deletemonitor: function (data)
     {
         profilemain.monitor();
 
         profilemain.allalert(data.status);
     },
 
-    showsshdata:function (data)
+    showsshdata: function (data)
     {
         monitorhelper.chartssh(data);
 
@@ -260,7 +279,7 @@ var monitorcallback={
         $("#matrix4").html("<h3>" + data.sshStatistic.matrix[3] + "</h3>");
     },
 
-    showpingdata:function (data)
+    showpingdata: function (data)
     {
         monitorhelper.chartping(data);
 

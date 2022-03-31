@@ -14,6 +14,8 @@ import java.util.*;
 
 public class GetData
 {
+    private static final int packetlosspercentage = 25;
+
     //GetData_From_Database
 
     public List<PollingMonitorBean> getAllPollingMonitor()
@@ -134,7 +136,6 @@ public class GetData
     {
         ArrayList<Object> dashboardData = new ArrayList<>();
 
-        List<Integer> availability = null;
 
         Database database = null;
 
@@ -151,6 +152,8 @@ public class GetData
             List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
 
             //QueryEnd
+
+            List<Integer> availability = null;
 
             if (!data.isEmpty())
             {
@@ -176,115 +179,116 @@ public class GetData
                 total = up + down + unrechable;
 
                 availability = new ArrayList<>(Arrays.asList(unrechable, up, down, total));
+            }
 
-                dashboardData.add(availability);
+            dashboardData.add(availability);
 
-                //2.Monitor Group
+            //2.Monitor Group
 
-                //QueryStart
+            //QueryStart
 
-                query = "select count(*),availability,type from pollingmonitor group by type, availability";
+            query = "select count(*),availability,type from pollingmonitor group by type, availability";
 
-                data = database.select(query, new ArrayList<>());
+            data = database.select(query, new ArrayList<>());
 
-                //QueryEnd
+            //QueryEnd
 
-                List<HashMap<String, String>> monitorGroup = new ArrayList<>();
+            List<HashMap<String, String>> monitorGroup = new ArrayList<>();
 
-                if (!data.isEmpty())
+            if (!data.isEmpty())
+            {
+                int pingUp = 0, pingDown = 0, pingTotal = 0, sshUp = 0, sshDown = 0, sshTotal = 0;
+
+                for (HashMap<String, String> row : data)
                 {
-                    int pingUp = 0, pingDown = 0, pingTotal = 0, sshUp = 0, sshDown = 0, sshTotal = 0;
+                    String type = row.get("type");
 
-                    for (HashMap<String, String> row : data)
+                    if (type.equals("ping"))
                     {
-                        String type = row.get("type");
-
-                        if (type.equals("ping"))
+                        if (row.get("availability").equals("UP"))
                         {
-                            if (row.get("availability").equals("UP"))
-                            {
-                                pingUp += Integer.parseInt(row.get("count(*)"));
+                            pingUp += Integer.parseInt(row.get("count(*)"));
 
-                            } else if (row.get("availability").equals("DOWN"))
-                            {
-                                pingDown += Integer.parseInt(row.get("count(*)"));
-                            }
-                        } else
+                        } else if (row.get("availability").equals("DOWN"))
                         {
-                            if (row.get("availability").equals("UP"))
-                            {
-                                sshUp += Integer.parseInt(row.get("count(*)"));
+                            pingDown += Integer.parseInt(row.get("count(*)"));
+                        }
+                    } else
+                    {
+                        if (row.get("availability").equals("UP"))
+                        {
+                            sshUp += Integer.parseInt(row.get("count(*)"));
 
-                            } else if (row.get("availability").equals("DOWN"))
-                            {
-                                sshDown += Integer.parseInt(row.get("count(*)"));
-                            }
+                        } else if (row.get("availability").equals("DOWN"))
+                        {
+                            sshDown += Integer.parseInt(row.get("count(*)"));
                         }
                     }
-
-                    pingTotal = pingDown + pingUp;
-
-                    sshTotal = sshDown + sshUp;
-
-                    HashMap<String, String> ping = new HashMap<>();
-
-                    ping.put("type", "ping");
-
-                    ping.put("up", String.valueOf(pingUp));
-
-                    ping.put("down", String.valueOf(pingDown));
-
-                    ping.put("total", String.valueOf(pingTotal));
-
-                    HashMap<String, String> ssh = new HashMap<>();
-
-                    ssh.put("type", "ssh");
-
-                    ssh.put("up", String.valueOf(sshUp));
-
-                    ssh.put("down", String.valueOf(sshDown));
-
-                    ssh.put("total", String.valueOf(sshTotal));
-
-                    monitorGroup.add(ping);
-
-                    monitorGroup.add(ssh);
-
-                    dashboardData.add(monitorGroup);
                 }
 
-                //3. top 5 rtt
+                pingTotal = pingDown + pingUp;
 
-                query = "select ip, max(rtt) as rtt from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) group by ip order by max(rtt) desc limit 5";
+                sshTotal = sshDown + sshUp;
 
-                List<HashMap<String, String>> dataTopRtt = database.select(query, new ArrayList<>());
+                HashMap<String, String> ping = new HashMap<>();
 
-                dashboardData.add(dataTopRtt);
+                ping.put("type", "ping");
 
-                // top 5 ssh cpu
+                ping.put("up", String.valueOf(pingUp));
 
-                query = "select ip,cpu from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by cpu desc limit 5";
+                ping.put("down", String.valueOf(pingDown));
 
-                List<HashMap<String, String>> dataTopCpu = database.select(query, new ArrayList<>());
+                ping.put("total", String.valueOf(pingTotal));
 
-                dashboardData.add(dataTopCpu);
+                HashMap<String, String> ssh = new HashMap<>();
 
-                //top 5 ssh memory
+                ssh.put("type", "ssh");
 
-                query = "select ip,memory from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by memory desc limit 5";
+                ssh.put("up", String.valueOf(sshUp));
 
-                List<HashMap<String, String>> dataTopMemory = database.select(query, new ArrayList<>());
+                ssh.put("down", String.valueOf(sshDown));
 
-                dashboardData.add(dataTopMemory);
+                ssh.put("total", String.valueOf(sshTotal));
 
-                //top 5 ssh disk
+                monitorGroup.add(ping);
 
-                query = "select ip,disk from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by disk desc limit 5";
+                monitorGroup.add(ssh);
 
-                List<HashMap<String, String>> dataTopDisk = database.select(query, new ArrayList<>());
-
-                dashboardData.add(dataTopDisk);
+                dashboardData.add(monitorGroup);
             }
+
+            //3. top 5 rtt
+
+            query = "select ip, max(rtt) as rtt from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) group by ip order by max(rtt) desc limit 5";
+
+            List<HashMap<String, String>> dataTopRtt = database.select(query, new ArrayList<>());
+
+            dashboardData.add(dataTopRtt);
+
+            // top 5 ssh cpu
+
+            query = "select ip,cpu from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by cpu desc limit 5";
+
+            List<HashMap<String, String>> dataTopCpu = database.select(query, new ArrayList<>());
+
+            dashboardData.add(dataTopCpu);
+
+            //top 5 ssh memory
+
+            query = "select ip,memory from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by memory desc limit 5";
+
+            List<HashMap<String, String>> dataTopMemory = database.select(query, new ArrayList<>());
+
+            dashboardData.add(dataTopMemory);
+
+            //top 5 ssh disk
+
+            query = "select ip,disk from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by disk desc limit 5";
+
+            List<HashMap<String, String>> dataTopDisk = database.select(query, new ArrayList<>());
+
+            dashboardData.add(dataTopDisk);
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -474,9 +478,10 @@ public class GetData
                 {
                     int packetloss = Integer.parseInt(row.get("packetloss"));
 
-                    if (packetloss <= 25)
+                    if (packetloss <= packetlosspercentage)
                     {
                         pieUp += Integer.parseInt(row.get("count(*)"));
+
                     } else
                     {
                         pieDown += Integer.parseInt(row.get("count(*)"));
@@ -636,9 +641,11 @@ public class GetData
             {
                 String username = data.get(0).get("username");
 
-                String password = data.get(0).get("password");
+                String password = Cipher.decode(data.get(0).get("password"));
 
-                ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username, Cipher.decode(password)));
+                if (password == null) throw new NullPointerException();
+
+                ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username, password));
 
                 List<String> commands = new ArrayList<>();
 

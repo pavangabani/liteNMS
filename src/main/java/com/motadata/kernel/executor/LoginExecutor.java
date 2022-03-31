@@ -20,7 +20,11 @@ public class LoginExecutor
 
             String query = "select * from login where user=? AND pass=?";
 
-            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            String password = Cipher.encode(loginBean.getPassword());
+
+            if (password == null) throw new NullPointerException();
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), password));
 
             List<HashMap<String, String>> data = database.select(query, values);
 
@@ -61,7 +65,11 @@ public class LoginExecutor
 
             String query = "insert into login values(?,?)";
 
-            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), Cipher.encode(loginBean.getPassword())));
+            String password = Cipher.encode(loginBean.getPassword());
+
+            if (password == null) throw new NullPointerException();
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), password));
 
             int affectedRow = database.update(query, values);
 

@@ -54,7 +54,11 @@ public class MonitorExecutor
 
                     query = "insert into credential (ip,username,password) values(?,?,?)";
 
-                    ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+                    String password = Cipher.encode(monitorBean.getPassword());
+
+                    if (password == null) throw new NullPointerException();
+
+                    ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(),password ));
 
                     database.update(query, credentialValues);
 
@@ -182,7 +186,11 @@ public class MonitorExecutor
 
                     query = "update credential set username=?,password=? where ip=?";
 
-                    ArrayList<Object> updateValues = new ArrayList<>(Arrays.asList(monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword()), monitorBean.getIp()));
+                    String password = Cipher.encode(monitorBean.getPassword());
+
+                    if (password == null) throw new NullPointerException();
+
+                    ArrayList<Object> updateValues = new ArrayList<>(Arrays.asList(monitorBean.getUsername(), password, monitorBean.getIp()));
 
                     database.update(query, updateValues);
 
@@ -194,7 +202,11 @@ public class MonitorExecutor
 
                     query = "insert into credential (ip,username,password) values(?,?,?)";
 
-                    ArrayList<Object> insertValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), Cipher.encode(monitorBean.getPassword())));
+                    String password = Cipher.encode(monitorBean.getPassword());
+
+                    if (password == null) throw new NullPointerException();
+
+                    ArrayList<Object> insertValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), password));
 
                     database.update(query, insertValues);
 

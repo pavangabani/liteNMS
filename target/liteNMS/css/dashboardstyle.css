@@ -48,3 +48,43 @@
     text-align: center;
     alignment: center;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: royalblue;}
+
+#toprtt {
+    grid-row: 1 / 3;
+    grid-column: 1 / 2;
+}
+#monitorgroup {
+    grid-row: 1 / 3;
+    grid-column: 2 / 4;
+}
+#topcpu {
+    grid-row: 3 / 5;
+}
+#topmemory {
+    grid-row: 3 / 5;
+}
+#topdisk {
+    grid-row: 3 / 5;
+}
+
+
+.tabletitle {
+    font-family: sans-serif;
+    text-shadow: 1px 1px 5px lightgray;
+    text-align: center;
+    alignment: center;
+    color: #001F3F;
+}
