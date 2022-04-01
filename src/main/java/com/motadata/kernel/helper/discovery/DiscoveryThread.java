@@ -1,6 +1,8 @@
-package com.motadata.kernel.helper;
+package com.motadata.kernel.helper.discovery;
 
 import com.motadata.kernel.dao.Database;
+import com.motadata.kernel.helper.Cipher;
+import com.motadata.kernel.helper.SshConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

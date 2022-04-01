@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-class SshConnection
+public class SshConnection
 {
     private Session session;
 
@@ -19,7 +19,7 @@ class SshConnection
 
     private final String hostname;
 
-    SshConnection(ArrayList<String> credential)
+    public SshConnection(ArrayList<String> credential)
     {
         hostname = credential.get(0);
 
@@ -146,7 +146,7 @@ class SshConnection
         return answer;
     }
 
-    String executeCommands(List<String> commands)
+    public String executeCommands(List<String> commands)
     {
         try
         {

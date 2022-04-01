@@ -1,8 +1,11 @@
 package com.motadata.kernel.executor;
 
+import com.github.brainlag.nsq.NSQProducer;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
 import com.motadata.kernel.helper.*;
+import com.motadata.kernel.helper.discovery.Consumer;
+import com.motadata.kernel.helper.discovery.Producer;
 
 import java.util.*;
 
@@ -58,18 +61,18 @@ public class MonitorExecutor
 
                     if (password == null) throw new NullPointerException();
 
-                    ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(),password ));
+                    ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), password));
 
                     database.update(query, credentialValues);
 
                     //QueryEnd
                 }
 
-                monitorBean.setStatus(monitorBean.getIp()+" Added!");
+                monitorBean.setStatus(monitorBean.getIp() + " Added!");
 
             } else
             {
-                monitorBean.setStatus(monitorBean.getIp()+" Already Added!");
+                monitorBean.setStatus(monitorBean.getIp() + " Already Added!");
             }
 
         } catch (Exception e)
@@ -87,67 +90,25 @@ public class MonitorExecutor
 
     public void addPolling(MonitorBean monitorBean)
     {
-        Database database = null;
-
         try
         {
-            //QueryStart
+            NSQProducer producer = Producer.getProducer();
 
-            database = new Database();
+            String id = monitorBean.getId();
 
-            String query = "select * from monitor where id=?";
+            producer.produce("Discovery", id.getBytes());
 
-            ArrayList<Object> values = new ArrayList<>(Arrays.asList(monitorBean.getId()));
-
-            List<HashMap<String, String>> data = database.select(query, values);
-
-            //QueryEnd
-
-            if (!data.isEmpty())
+            if (!Consumer.isStart)
             {
-                boolean discoveryTest = PoolUtil.discoveryForkJoinPool.invoke(new DiscoveryThread(data.get(0).get("ip"), data.get(0).get("type")));
-
-
-                if (discoveryTest)
-                {
-                    //QueryStart
-
-                    query = "insert into pollingmonitor (id,name,ip,type,tag,availability) values(?,?,?,?,?,?)";
-
-                    values = new ArrayList<>(Arrays.asList(monitorBean.getId(), data.get(0).get("name"), data.get(0).get("ip"), data.get(0).get("type"), data.get(0).get("tag"), "Unknown"));
-
-                    int affectedRaw = database.update(query, values);
-
-                    //QueryEnd
-
-                    if (affectedRaw > 0)
-                    {
-                        monitorBean.setStatus(data.get(0).get("ip")+" Monitor Added!");
-
-                    } else if (affectedRaw == -1)
-                    {
-                        monitorBean.setStatus(data.get(0).get("ip")+" Monitor Already Added! ");
-
-                    } else
-                    {
-                        monitorBean.setStatus(data.get(0).get("ip")+" Failed to Add!");
-                    }
-                } else
-                {
-                    monitorBean.setStatus(data.get(0).get("ip")+" Discovery Fail!");
-                }
+                Consumer.startConsumer();
             }
+
+            monitorBean.setStatus("Monitor Queued for Discovery");
 
         } catch (Exception e)
         {
             e.printStackTrace();
 
-        } finally
-        {
-            if (database != null)
-            {
-                database.releaseConnection();
-            }
         }
     }
 
