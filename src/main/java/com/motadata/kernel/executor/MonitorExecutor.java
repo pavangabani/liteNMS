@@ -107,6 +107,7 @@ public class MonitorExecutor
             {
                 boolean discoveryTest = PoolUtil.discoveryForkJoinPool.invoke(new DiscoveryThread(data.get(0).get("ip"), data.get(0).get("type")));
 
+
                 if (discoveryTest)
                 {
                     //QueryStart

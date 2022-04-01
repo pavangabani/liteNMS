@@ -12,7 +12,6 @@
         </interceptors>
 
         <action name="">
-            <interceptor-ref name="userSession" />
             <result>login.jsp</result>
         </action>
     </package>

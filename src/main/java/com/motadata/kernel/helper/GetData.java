@@ -136,7 +136,6 @@ public class GetData
     {
         ArrayList<Object> dashboardData = new ArrayList<>();
 
-
         Database database = null;
 
         try
@@ -259,7 +258,7 @@ public class GetData
 
             //3. top 5 rtt
 
-            query = "select ip, max(rtt) as rtt from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) group by ip order by max(rtt) desc limit 5";
+            query = "select ip, max(rtt) as rtt from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) and rtt!=-1 group by ip order by max(rtt) desc limit 5";
 
             List<HashMap<String, String>> dataTopRtt = database.select(query, new ArrayList<>());
 
@@ -267,7 +266,7 @@ public class GetData
 
             // top 5 ssh cpu
 
-            query = "select ip,cpu from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by cpu desc limit 5";
+            query = "select ip,cpu from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) and cpu!=-1 order by cpu desc limit 5";
 
             List<HashMap<String, String>> dataTopCpu = database.select(query, new ArrayList<>());
 
@@ -275,7 +274,7 @@ public class GetData
 
             //top 5 ssh memory
 
-            query = "select ip,memory from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by memory desc limit 5";
+            query = "select ip,memory from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) and memory!=-1 order by memory desc limit 5";
 
             List<HashMap<String, String>> dataTopMemory = database.select(query, new ArrayList<>());
 
@@ -283,7 +282,7 @@ public class GetData
 
             //top 5 ssh disk
 
-            query = "select ip,disk from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) order by disk desc limit 5";
+            query = "select ip,disk from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id where pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) and disk!=-1 order by disk desc limit 5";
 
             List<HashMap<String, String>> dataTopDisk = database.select(query, new ArrayList<>());
 
