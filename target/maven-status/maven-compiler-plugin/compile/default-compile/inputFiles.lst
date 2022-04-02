@@ -1,7 +1,6 @@
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/executor/LoginExecutor.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/bean/PollingSshBean.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/executor/MonitorExecutor.java
-/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/DiscoveryThread.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/bean/PollingPingBean.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/action/PollingMonitorAction.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/SshConnection.java
@@ -13,7 +12,9 @@
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/polling/SshThread.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/executor/PollingMonitorExecutor.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/OnServerStart.java
+/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/discovery/Producer.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/SessionInterceptor.java
+/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/discovery/Nsq.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/executor/DashboardExecutor.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/action/DashboardAction.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/bean/LoginBean.java
@@ -21,6 +22,8 @@
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/action/MonitorAction.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/GetData.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/dao/Database.java
+/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/discovery/DiscoveryThread.java
+/home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/helper/discovery/Consumer.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/dao/ConnectionPool.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/bean/DashboardBean.java
 /home/pavan/Desktop/Motadata/liteNMS/src/main/java/com/motadata/kernel/action/LoginAction.java

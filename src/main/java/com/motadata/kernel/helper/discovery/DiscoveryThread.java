@@ -11,87 +11,151 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.RecursiveAction;
 
-public class DiscoveryThread extends RecursiveTask<Boolean>
+public class DiscoveryThread extends RecursiveAction
 {
-    String ip;
+    String id;
 
-    String type;
-
-    public DiscoveryThread(String ip, String type)
+    public DiscoveryThread(String id)
     {
-        this.ip = ip;
-
-        this.type = type;
+        this.id = id;
     }
 
     @Override
-    protected Boolean compute()
+    protected void compute()
     {
-        SshConnection sshConnection = null;
-
         Database database = null;
-
-        boolean discoveryTest = ping(ip);
 
         try
         {
-            if (discoveryTest && type.equals("ssh"))
+            //QueryStart
+
+            database = new Database();
+
+            String query = "select * from monitor where id=?";
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
+
+            List<HashMap<String, String>> data = database.select(query, values);
+
+            //QueryEnd
+
+            if (!data.isEmpty())
             {
-                //QueryStart
+                String ip=data.get(0).get("ip");
 
-                database = new Database();
+                String type=data.get(0).get("type");
 
-                String query = "select * from credential where ip=?";
+                boolean discoveryTest = ping(ip);
 
-                ArrayList<Object> values = new ArrayList<>(Arrays.asList(ip));
-
-                List<HashMap<String, String>> data = database.select(query, values);
-
-                database.releaseConnection();
-
-                //QueryEnd
-
-                if (!data.isEmpty())
+                if (discoveryTest && type.equals("ssh"))
                 {
-                    //credential
+                    discoveryTest = sshTypeTest(ip);
+                }
 
-                    String password = Cipher.decode(data.get(0).get("password"));
+                if (discoveryTest)
+                {
+                    //QueryStart
 
-                    if (password == null) throw new NullPointerException();
+                    query = "insert into pollingmonitor (id,name,ip,type,tag,availability) values(?,?,?,?,?,?)";
 
-                    ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, data.get(0).get("username"), password));
+                    values = new ArrayList<>(Arrays.asList(id, data.get(0).get("name"), data.get(0).get("ip"), data.get(0).get("type"), data.get(0).get("tag"), "Unknown"));
 
-                    sshConnection = new SshConnection(credential);
+                    int affectedRow = database.update(query, values);
 
-                    //command
+                    //QueryEnd
 
-                    ArrayList<String> commands = new ArrayList<>();
-
-                    commands.add("uname\n");
-
-                    //execute
-
-                    String output = sshConnection.executeCommands(commands);
-
-                    sshConnection.close();
-
-                    //check
-
-                    String monitorType = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
-
-                    if (!monitorType.trim().equals("Linux"))
+                    if (affectedRow == -1)
                     {
-                        discoveryTest = false;
+                        System.out.println("Monitor already added");
                     }
+                    else if (affectedRow > 0)
+                    {
+                        System.out.println("Monitor added");
+
+                    } else
+                    {
+                        System.out.println("Monitor not added");
+                    }
+                } else
+                {
+                    System.out.println("ping fails!");
                 }
             }
         } catch (Exception e)
         {
             e.printStackTrace();
 
-            discoveryTest = false;
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
+        }
+    }
+
+    public Boolean sshTypeTest(String ip)
+    {
+        boolean sshTypeTest = false;
+
+        SshConnection sshConnection = null;
+
+        Database database = null;
+
+        try
+        {
+            //QueryStart
+
+            database = new Database();
+
+            String query = "select * from credential where ip=?";
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(ip));
+
+            List<HashMap<String, String>> data = database.select(query, values);
+
+            database.releaseConnection();
+
+            //QueryEnd
+
+            if (!data.isEmpty())
+            {
+                //credential
+
+                String password = Cipher.decode(data.get(0).get("password"));
+
+                if (password == null) throw new NullPointerException();
+
+                ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, data.get(0).get("username"), password));
+
+                sshConnection = new SshConnection(credential);
+
+                //command
+
+                ArrayList<String> commands = new ArrayList<>();
+
+                commands.add("uname\n");
+
+                //execute
+
+                String output = sshConnection.executeCommands(commands);
+
+                sshConnection.close();
+
+                //check
+
+                String monitorType = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
+
+                if (monitorType.trim().equals("Linux"))
+                {
+                    sshTypeTest = true;
+                }
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
 
         } finally
         {
@@ -104,7 +168,7 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
                 sshConnection.close();
             }
         }
-        return discoveryTest;
+        return sshTypeTest;
     }
 
     public boolean ping(String ip)
@@ -129,7 +193,7 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
 
             String line, answer = "";
 
-            if(!reader.ready())
+            if (!reader.ready())
             {
                 Thread.sleep(5000);
             }
@@ -176,4 +240,5 @@ public class DiscoveryThread extends RecursiveTask<Boolean>
         }
         return packetLoss <= 25;
     }
+
 }

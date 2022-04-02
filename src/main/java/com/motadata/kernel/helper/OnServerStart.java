@@ -1,9 +1,10 @@
 package com.motadata.kernel.helper;
 
 import com.motadata.kernel.dao.ConnectionPool;
+import com.motadata.kernel.helper.discovery.Consumer;
+import com.motadata.kernel.helper.discovery.Producer;
 import com.motadata.kernel.helper.polling.PollingScheduler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 public class OnServerStart extends HttpServlet
@@ -18,11 +19,19 @@ public class OnServerStart extends HttpServlet
 
             if (size != 10) throw new Exception("Connectionpool is not created");
 
+            //polling
+
             PollingScheduler pollingScheduler = new PollingScheduler();
 
             pollingScheduler.createScheduler();
 
             pollingScheduler.startScheduler();
+
+            //nsq
+
+            Producer.startProducer();
+
+            Consumer.startConsumer();
 
         } catch (Exception e)
         {

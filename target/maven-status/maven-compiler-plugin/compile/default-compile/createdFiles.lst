@@ -1,8 +1,9 @@
-com/motadata/kernel/helper/DiscoveryThread.class
+com/motadata/kernel/helper/discovery/Producer.class
 com/motadata/kernel/executor/LoginExecutor.class
 com/motadata/kernel/action/MonitorAction.class
 com/motadata/kernel/bean/LoginBean.class
 com/motadata/kernel/helper/PoolUtil.class
+com/motadata/kernel/helper/discovery/Consumer.class
 com/motadata/kernel/bean/PollingMonitorBean.class
 com/motadata/kernel/dao/ConnectionPool.class
 com/motadata/kernel/helper/SshConnection.class
@@ -11,6 +12,7 @@ com/motadata/kernel/bean/PollingSshBean.class
 com/motadata/kernel/bean/PollingPingBean.class
 com/motadata/kernel/helper/polling/PingThread.class
 com/motadata/kernel/helper/polling/PollingThread.class
+com/motadata/kernel/helper/discovery/Nsq.class
 com/motadata/kernel/executor/PollingMonitorExecutor.class
 com/motadata/kernel/bean/DashboardBean.class
 com/motadata/kernel/action/LoginAction.class
@@ -23,6 +25,7 @@ com/motadata/kernel/action/PollingMonitorAction.class
 com/motadata/kernel/bean/MonitorBean.class
 com/motadata/kernel/executor/MonitorExecutor.class
 com/motadata/kernel/helper/SessionInterceptor.class
+com/motadata/kernel/helper/discovery/DiscoveryThread.class
 com/motadata/kernel/helper/polling/PollingJob.class
 com/motadata/kernel/helper/GetData.class
 com/motadata/kernel/helper/polling/PollingScheduler.class

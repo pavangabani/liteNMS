@@ -4,27 +4,21 @@ import com.github.brainlag.nsq.NSQProducer;
 
 public class Producer
 {
-    private static NSQProducer producer = null;
+    public static NSQProducer producer = null;
 
-    public static NSQProducer getProducer()
+    public static void startProducer()
     {
         try
         {
-            if (producer == null)
-            {
-                producer = new NSQProducer();
+            producer = new NSQProducer().addAddress("localhost", 4150).start();
 
-                producer.setConfig(Nsq.getDeflateConfig());
+            String id = "-1";
 
-                producer.addAddress(Nsq.getNsqdHost(), 4150);
-
-                producer.start();
-            }
+            Producer.producer.produce("Discovery", id.getBytes());
 
         } catch (Exception e)
         {
             e.printStackTrace();
         }
-        return producer;
     }
 }

@@ -1,10 +1,8 @@
 package com.motadata.kernel.executor;
 
-import com.github.brainlag.nsq.NSQProducer;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
 import com.motadata.kernel.helper.*;
-import com.motadata.kernel.helper.discovery.Consumer;
 import com.motadata.kernel.helper.discovery.Producer;
 
 import java.util.*;
@@ -92,16 +90,9 @@ public class MonitorExecutor
     {
         try
         {
-            NSQProducer producer = Producer.getProducer();
-
             String id = monitorBean.getId();
 
-            producer.produce("Discovery", id.getBytes());
-
-            if (!Consumer.isStart)
-            {
-                Consumer.startConsumer();
-            }
+            Producer.producer.produce("Discovery", id.getBytes());
 
             monitorBean.setStatus("Monitor Queued for Discovery");
 
