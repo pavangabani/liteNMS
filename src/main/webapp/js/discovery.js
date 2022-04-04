@@ -52,7 +52,7 @@ var discoverymain = {
         }
     },
 
-    addforpolling: function (that)
+    adddiscovery: function (that)
     {
         let id = $(that).data("id");
 
@@ -66,7 +66,7 @@ var discoverymain = {
 
             data: sdata,
 
-            callback: discoverycallback.addforpolling,
+            callback: discoverycallback.adddiscovery,
         };
         helperMain.ajaxpost(request);
     },
@@ -158,8 +158,6 @@ var discoverymain = {
 
     deletemonitor: function (id)
     {
-
-
         let sdata = {
             id: id,
         };
@@ -173,7 +171,6 @@ var discoverymain = {
             callback: discoverycallback.deletemonitor,
         };
         helperMain.ajaxpost(request);
-
     }
 };
 
@@ -183,7 +180,7 @@ var discoveryhelper = {
     {
         $.each(data.monitorList, function ()
         {
-            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='discoverymain.addforpolling(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='discoverymain.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='discoveryhelper.deleteconfirm(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
+            table.row.add([this.name, this.ip, this.type, this.tag, "<button onclick='discoverymain.adddiscovery(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Provision</button><button onclick='discoverymain.edit(this)' data-id='" + this.id + "' data-type='" + this.type + "' class='btn' style='margin-left: 5px'>Edit</button><button onclick='discoveryhelper.deleteconfirm(this)' data-id='" + this.id + "' class='btn' style='margin-left: 5px'>Delete</button>"]).draw();
         });
     },
 
@@ -301,12 +298,13 @@ var discoverycallback = {
     {
         profilemain.discovery();
 
-        profilemain.allalert(data.status);
+        toastr.success(data.status);
     },
 
-    addforpolling: function (data)
+    adddiscovery: function (data)
     {
-        profilemain.allalert(data.status);
+        toastr.success(data.status);
+
     },
 
     update: function ()
@@ -318,7 +316,7 @@ var discoverycallback = {
     {
         profilemain.discovery();
 
-        profilemain.allalert(data.status);
+        toastr.success(data.status);
     },
 }
 

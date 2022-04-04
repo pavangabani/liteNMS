@@ -3,15 +3,9 @@ package com.motadata.kernel.helper.discovery;
 import com.github.brainlag.nsq.NSQConsumer;
 import com.github.brainlag.nsq.lookup.DefaultNSQLookup;
 import com.github.brainlag.nsq.lookup.NSQLookup;
-import com.motadata.kernel.helper.PoolUtil;
-
 
 public class Consumer
 {
-    private static NSQLookup lookup = null;
-
-    private static NSQConsumer consumer = null;
-
     public static void startConsumer()
     {
         try
@@ -20,11 +14,11 @@ public class Consumer
 
             lookup.addLookupAddress("localhost", 4161);
 
-            consumer = new NSQConsumer(lookup, "Discovery", "First", (message) ->
+            NSQConsumer consumer = new NSQConsumer(lookup, "Discovery", "First", (message) ->
             {
                 String id = new String(message.getMessage());
 
-                PoolUtil.discoveryForkJoinPool.execute(new DiscoveryThread(id));
+                new Discovery(id).discover();
 
                 message.finished();
             });
@@ -34,6 +28,8 @@ public class Consumer
         } catch (Exception e)
         {
             e.printStackTrace();
+
+            System.exit(-1);
         }
     }
 }

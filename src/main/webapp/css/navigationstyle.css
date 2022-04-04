@@ -102,7 +102,9 @@ form .profile {
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     font-size: 17px;
 }
-
+#toast-container > div {
+    opacity:1;
+}
 .allalert {
     position: fixed;
     right: 10px;

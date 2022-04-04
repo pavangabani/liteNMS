@@ -24,9 +24,9 @@ public class MonitorAction implements ModelDriven<MonitorBean>
         return "ADDED";
     }
 
-    public String addPolling()
+    public String addDiscovery()
     {
-        monitorExecutor.addPolling(monitorBean);
+        monitorExecutor.addDiscovery(monitorBean);
 
         return "ADDED";
     }

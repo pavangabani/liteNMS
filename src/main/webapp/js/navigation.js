@@ -1,6 +1,9 @@
 $(document).ready(function ()
 {
     profilemain.dashboard();
+
+    socket.createSocket();
+
 });
 
 var profilemain = {
@@ -51,18 +54,6 @@ var profilemain = {
         dashboardmain.onload();
     },
 
-    allalert: function (message)
-    {
-        $("#status").show();
-
-        $("#message").text(message);
-
-        setTimeout(function ()
-        {
-            $("#status").hide();
-
-        }, 3000);
-    },
 };
 
 var profilecallback = {

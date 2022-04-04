@@ -17,7 +17,7 @@ public class OnServerStart extends HttpServlet
         {
             int size = ConnectionPool.createFixedSizePool(10);
 
-            if (size != 10) throw new Exception("Connectionpool is not created");
+            if (size != 10) System.exit(-1);
 
             //polling
 

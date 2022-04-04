@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="css/navigationstyle.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a29a3484d3.js" crossorigin="anonymous" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -10,6 +13,7 @@
 <script src="js/discovery.js"></script>
 <script src="js/monitor.js"></script>
 <script src="js/helper/helper.js"></script>
+<script src="js/helper/socket.js"></script>
 
 <nav class="navbar">
     <div class="logo">&nbsp;&nbsp;LiteNMS</div>

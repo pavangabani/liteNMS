@@ -2,10 +2,14 @@
 <body>
 
 <link rel="stylesheet" href="css/loginstyle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="js/login.js"></script>
 <script src="js/helper/helper.js"></script>
+
 
 <div id="bg"></div>
 <form method="POST">
@@ -44,6 +48,9 @@
             </div>
         </form>
     </div>
+</div>
+<div id="status" class="allalert" style="display:none;">
+    <p id="message" style="padding-left:50px;padding-right:50px;color: black;font-weight: bold"></p>
 </div>
 </body>
 </html>

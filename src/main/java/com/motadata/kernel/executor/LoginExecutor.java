@@ -79,15 +79,12 @@ public class LoginExecutor
 
             if (affectedRow == 1)
             {
-                loginBean.setStatus("User Registered!");
-
-            } else if (affectedRow == -1)
-            {
-                loginBean.setStatus("Username is Invalid!");
+                loginBean.setStatus("1");
 
             } else
             {
-                loginBean.setStatus("Fail to Register!");
+                loginBean.setStatus("-1");
+
             }
         } catch (Exception e)
         {

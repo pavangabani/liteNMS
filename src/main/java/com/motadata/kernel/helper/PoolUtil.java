@@ -8,6 +8,4 @@ public class PoolUtil
 
     public static final ForkJoinPool forkJoinPool = new ForkJoinPool(processorCount);
 
-    public static final ForkJoinPool discoveryForkJoinPool = new ForkJoinPool(processorCount);
-
 }

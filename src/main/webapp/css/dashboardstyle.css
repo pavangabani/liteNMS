@@ -1,6 +1,9 @@
 * {
     font-family: sans-serif;
 }
+#toast-container > div {
+    opacity:1;
+}
 .wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

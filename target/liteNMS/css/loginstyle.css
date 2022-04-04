@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+#toast-container > div {
+  opacity:1;
+}
 #loading {
   display: block;
   position: absolute;
@@ -173,4 +176,14 @@ form .btn {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+.allalert {
+  position: fixed;
+  top:80px;
+  right: 41%;
+  top:67%;
+  background-color: cornflowerblue;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
 }

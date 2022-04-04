@@ -11,19 +11,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
 
-public class DiscoveryThread extends RecursiveAction
+public class Discovery
 {
     String id;
 
-    public DiscoveryThread(String id)
+    public Discovery(String id)
     {
         this.id = id;
     }
 
-    @Override
-    protected void compute()
+    protected void discover()
     {
         Database database = null;
 
@@ -68,19 +66,19 @@ public class DiscoveryThread extends RecursiveAction
 
                     if (affectedRow == -1)
                     {
-                        System.out.println("Monitor already added");
+                        ServerEndPoint.send("-1");
                     }
                     else if (affectedRow > 0)
                     {
-                        System.out.println("Monitor added");
+                        ServerEndPoint.send("1");
 
                     } else
                     {
-                        System.out.println("Monitor not added");
+                        ServerEndPoint.send("0");
                     }
                 } else
                 {
-                    System.out.println("ping fails!");
+                    ServerEndPoint.send("-2");
                 }
             }
         } catch (Exception e)

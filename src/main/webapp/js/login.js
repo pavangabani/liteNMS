@@ -110,7 +110,7 @@ var logincallback = {
     {
         if (data.status == "Success")
         {
-            window.location.href ='Navigation';
+            window.location.href = 'Navigation';
 
         } else
         {
@@ -120,6 +120,14 @@ var logincallback = {
 
     register: function (data)
     {
-        alert(data.status);
+        if (data.status == "-1")
+        {
+            toastr.error("Invalid Username", { fadeAway: 1000 });
+
+        } else
+        {
+            toastr.success("User Registered");
+        }
+
     }
 }

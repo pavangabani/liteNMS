@@ -27,7 +27,7 @@ var helperMain={
             },
             error: function ()
             {
-                alert("Some error occured.");
+                toastr.info("some error occurred");
             },
             timeout: 15000
         });

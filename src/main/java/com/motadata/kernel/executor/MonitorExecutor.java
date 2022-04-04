@@ -86,7 +86,7 @@ public class MonitorExecutor
         }
     }
 
-    public void addPolling(MonitorBean monitorBean)
+    public void addDiscovery(MonitorBean monitorBean)
     {
         try
         {
