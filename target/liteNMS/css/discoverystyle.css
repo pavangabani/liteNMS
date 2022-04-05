@@ -1,4 +1,6 @@
-
+#toast-container > div {
+    opacity:1;
+}
 * {
     font-family: sans-serif;
 }

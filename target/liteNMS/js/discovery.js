@@ -73,46 +73,23 @@ var discoverymain = {
 
     edit: function (that)
     {
-        $("#myModalUpdate").show();
-
-        let tagElement = $(that).parent().prev();
-
-        let typeElement = tagElement.prev();
-
-        let ipElement = typeElement.prev();
-
-        let nameElement = ipElement.prev();
-
-        //-----------------------------------------------------------------------------------------------
-
         let id = $(that).data("id");
 
-        let name = nameElement.text();
+        let sdata = {
+            id: id
+        };
 
-        let ip = ipElement.text();
+        let request = {
 
-        let type = typeElement.text();
+            url: "EditData",
 
-        let tag = tagElement.text();
+            data: sdata,
 
-        $("#rawid").val(id);
+            callback: discoverycallback.editdata,
+        };
+        helperMain.ajaxpost(request);
 
-        $("#updateip").val(ip);
-
-        $("#updatename").val(name);
-
-        $("#updatetype").val(type);
-
-        $("#updatetag").val(tag);
-
-        if (type == "ssh")
-        {
-            $("#updatesshdivision").show();
-
-        } else
-        {
-            $("#updatesshdivision").hide();
-        }
+        $("#myModalUpdate").show();
     },
 
     update: function ()
@@ -305,6 +282,38 @@ var discoverycallback = {
     {
         toastr.success(data.status);
 
+    },
+
+    editdata: function (data)
+    {
+        let id =data.id ;
+
+        let name = data.name;
+
+        let ip = data.ip;
+
+        let type = data.type;
+
+        let tag = data.tag;
+
+        $("#rawid").val(id);
+
+        $("#updateip").val(ip);
+
+        $("#updatename").val(name);
+
+        $("#updatetype").val(type);
+
+        $("#updatetag").val(tag);
+
+        if (type == "ssh")
+        {
+            $("#updatesshdivision").show();
+
+        } else
+        {
+            $("#updatesshdivision").hide();
+        }
     },
 
     update: function ()

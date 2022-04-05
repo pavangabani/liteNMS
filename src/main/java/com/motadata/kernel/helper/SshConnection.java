@@ -4,7 +4,7 @@ import com.jcraft.jsch.*;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Properties;
 
 public class SshConnection
@@ -81,7 +81,7 @@ public class SshConnection
         return session;
     }
 
-    private void sendCommands(Channel channel, List<String> commands)
+    private void sendCommands(Channel channel, String commands)
     {
         BufferedWriter bufferedWriter = null;
 
@@ -89,10 +89,8 @@ public class SshConnection
         {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(channel.getOutputStream()));
 
-            for (String command : commands)
-            {
-                bufferedWriter.write(command);
-            }
+            bufferedWriter.write(commands);
+
             bufferedWriter.write("exit\n");
 
             bufferedWriter.flush();
@@ -128,7 +126,7 @@ public class SshConnection
 
             String temp;
 
-            while ((temp = bufferedReader.readLine())!=null && !temp.contains("logout"))
+            while ((temp = bufferedReader.readLine()) != null && !temp.contains("logout"))
             {
                 answer += temp;
             }
@@ -146,7 +144,7 @@ public class SshConnection
         return answer;
     }
 
-    public String executeCommands(List<String> commands)
+    public String executeCommands(String commands)
     {
         try
         {

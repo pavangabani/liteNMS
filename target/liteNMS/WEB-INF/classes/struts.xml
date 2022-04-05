@@ -6,6 +6,8 @@
 
 <struts>
 
+    <constant name="struts.action.excludePattern" value=".*server-endpoint"/>
+
     <package name="Start" namespace="/" extends="struts-default">
         <interceptors>
             <interceptor name="userSession" class="com.motadata.kernel.helper.SessionInterceptor" />
@@ -60,13 +62,17 @@
             <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>
         </action>
-        <action name="AddPolling" class="com.motadata.kernel.action.MonitorAction" method="addPolling">
+        <action name="AddPolling" class="com.motadata.kernel.action.MonitorAction" method="addDiscovery">
             <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>
         </action>
         <action name="Edit" class="com.motadata.kernel.action.MonitorAction" method="edit">
             <interceptor-ref name="loginSession"/>
             <result name="EDITED" type="json"/>
+        </action>
+        <action name="EditData" class="com.motadata.kernel.action.MonitorAction" method="editData">
+            <interceptor-ref name="loginSession"/>
+            <result name="EDITDATA" type="json"/>
         </action>
         <action name="Delete" class="com.motadata.kernel.action.MonitorAction" method="delete">
             <interceptor-ref name="loginSession"/>

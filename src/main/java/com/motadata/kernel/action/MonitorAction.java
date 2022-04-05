@@ -31,6 +31,13 @@ public class MonitorAction implements ModelDriven<MonitorBean>
         return "ADDED";
     }
 
+    public String editData()
+    {
+        monitorExecutor.editData(monitorBean);
+
+        return "EDITDATA";
+    }
+
     public String edit()
     {
         monitorExecutor.edit(monitorBean);

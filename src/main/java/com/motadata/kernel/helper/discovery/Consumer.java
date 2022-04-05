@@ -14,7 +14,7 @@ public class Consumer
 
             lookup.addLookupAddress("localhost", 4161);
 
-            NSQConsumer consumer = new NSQConsumer(lookup, "Discovery", "First", (message) ->
+            NSQConsumer consumer = new NSQConsumer(lookup, "Discovery", "Main", (message) ->
             {
                 String id = new String(message.getMessage());
 

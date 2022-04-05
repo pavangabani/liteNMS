@@ -646,19 +646,7 @@ public class GetData
 
                 ArrayList<String> credential = new ArrayList<>(Arrays.asList(ip, username, password));
 
-                List<String> commands = new ArrayList<>();
-
-                commands.add("free -m | grep Mem | awk '{print $3}'\n");
-
-                commands.add("free -m | grep Mem | awk '{print $2}'\n");
-
-                commands.add("df -hT /home | grep dev | awk '{print $6}' \n");
-
-                commands.add("df -hT /home | grep dev | awk '{print $3}' \n");
-
-                commands.add("top -bn  2 | grep Cpu\n");
-
-                commands.add("uptime -p\n");
+                String commands = "free -m | grep Mem | awk '{print $3}'\nfree -m | grep Mem | awk '{print $2}'\ndf -hT /home | grep dev | awk '{print $6}' \ndf -hT /home | grep dev | awk '{print $3}' \ntop -bn  2 | grep Cpu\nuptime -p\n";
 
                 sshConnection = new SshConnection(credential);
 
@@ -669,12 +657,12 @@ public class GetData
                 try
                 {
                     //1.
-                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $3}'") + commands.get(0).length() - 1);
+                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $3}'") + "free -m | grep Mem | awk '{print $3}'\n".length() - 1);
 
                     String usedMemory = output.substring(0, output.indexOf(username + "@"));
 
                     //2.
-                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $2}'") + commands.get(1).length() - 1);
+                    output = output.substring(output.lastIndexOf("free -m | grep Mem | awk '{print $2}'") + "free -m | grep Mem | awk '{print $2}'\n".length() - 1);
 
                     String totalMemory = output.substring(0, output.indexOf(username + "@"));
 
@@ -700,14 +688,14 @@ public class GetData
                 try
                 {
                     //3.
-                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'") + commands.get(2).length() - 1);
+                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $6}'") + "df -hT /home | grep dev | awk '{print $6}' \n".length() - 1);
 
                     String usedDisk = output.substring(0, output.indexOf(username + "@"));
 
                     usedDisk = usedDisk.substring(0, usedDisk.indexOf("%"));
 
                     //4.
-                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'") + commands.get(3).length() - 1);
+                    output = output.substring(output.lastIndexOf("df -hT /home | grep dev | awk '{print $3}'") + "df -hT /home | grep dev | awk '{print $3}' \n".length() - 1);
 
                     String totalDisk = output.substring(0, output.indexOf(username + "@"));
 
@@ -727,7 +715,7 @@ public class GetData
                 try
                 {
                     //5.
-                    output = output.substring(output.lastIndexOf("top -bn  2 | grep Cpu") + commands.get(4).length() - 1);
+                    output = output.substring(output.lastIndexOf("top -bn  2 | grep Cpu") + "top -bn  2 | grep Cpu\n".length() - 1);
 
                     output = output.substring(output.indexOf("id") + 2);
 
@@ -745,7 +733,7 @@ public class GetData
                 try
                 {
                     //6.
-                    output = output.substring(output.lastIndexOf("uptime -p") + commands.get(5).length() - 1);
+                    output = output.substring(output.lastIndexOf("uptime -p") + "uptime -p\n".length() - 1);
 
                     String upTime = output.substring(0, output.indexOf(username + "@"));
 

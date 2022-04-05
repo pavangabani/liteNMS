@@ -2,15 +2,14 @@ package com.motadata.kernel.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class ConnectionPool
 {
     private static BlockingQueue<Connection> connectionsPool;
 
-    private static final ArrayList<Connection> usedConnection = new ArrayList<>();
+    private static final BlockingQueue<Connection> usedConnection = new LinkedBlockingDeque<>();
 
     public static int createFixedSizePool(Integer size)
     {
@@ -18,7 +17,7 @@ public class ConnectionPool
         {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            connectionsPool = new ArrayBlockingQueue<>(size);
+            connectionsPool = new LinkedBlockingDeque<>(size);
 
             for (int i = 0; i < size; i++)
             {

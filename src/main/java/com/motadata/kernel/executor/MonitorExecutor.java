@@ -88,18 +88,81 @@ public class MonitorExecutor
 
     public void addDiscovery(MonitorBean monitorBean)
     {
+        Database database = null;
         try
         {
             String id = monitorBean.getId();
 
             Producer.producer.produce("Discovery", id.getBytes());
 
-            monitorBean.setStatus("Monitor Queued for Discovery");
+            //QueryStart
+
+            database = new Database();
+
+            String query = "select ip from monitor where id=?";
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
+
+            List<HashMap<String, String>> data = database.select(query, values);
+
+            database.releaseConnection();
+
+            //QueryEnd
+
+            if (!data.isEmpty())
+            {
+                monitorBean.setStatus(data.get(0).get("ip") + " Queued for Discovery");
+            }
 
         } catch (Exception e)
         {
             e.printStackTrace();
 
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
+        }
+    }
+
+    public void editData(MonitorBean monitorBean)
+    {
+        Database database = null;
+
+        try
+        {
+            database = new Database();
+
+            String query = "select * from monitor where id=?";
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(monitorBean.getId()));
+
+            List<HashMap<String, String>> data = database.select(query, values);
+
+            database.releaseConnection();
+
+            if (!data.isEmpty())
+            {
+                monitorBean.setName(data.get(0).get("name"));
+
+                monitorBean.setIp(data.get(0).get("ip"));
+
+                monitorBean.setType(data.get(0).get("type"));
+
+                monitorBean.setTag(data.get(0).get("tag"));
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 

@@ -56,5 +56,5 @@
     <input type="button"  value="No" onclick="monitorhelper.no()"/>
     <p style="display: none" id="deleteidm"></p>
 </div>
-<div id="change"></div>
+<div id="mainDiv"></div>
 

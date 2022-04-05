@@ -41,9 +41,9 @@ public class Discovery
 
             if (!data.isEmpty())
             {
-                String ip=data.get(0).get("ip");
+                String ip = data.get(0).get("ip");
 
-                String type=data.get(0).get("type");
+                String type = data.get(0).get("type");
 
                 boolean discoveryTest = ping(ip);
 
@@ -66,19 +66,19 @@ public class Discovery
 
                     if (affectedRow == -1)
                     {
-                        ServerEndPoint.send("-1");
-                    }
-                    else if (affectedRow > 0)
+                        ServerEndPoint.send("-1 "+ data.get(0).get("ip")+" Already Added!");
+
+                    } else if (affectedRow > 0)
                     {
-                        ServerEndPoint.send("1");
+                        ServerEndPoint.send("+1"+ data.get(0).get("ip")+" Added");
 
                     } else
                     {
-                        ServerEndPoint.send("0");
+                        ServerEndPoint.send("+0"+ data.get(0).get("ip")+" Not Added");
                     }
                 } else
                 {
-                    ServerEndPoint.send("-2");
+                    ServerEndPoint.send("-2"+ data.get(0).get("ip")+" Discovery Fails!");
                 }
             }
         } catch (Exception e)
@@ -132,9 +132,7 @@ public class Discovery
 
                 //command
 
-                ArrayList<String> commands = new ArrayList<>();
-
-                commands.add("uname\n");
+                String commands = "uname\n";
 
                 //execute
 
@@ -144,7 +142,9 @@ public class Discovery
 
                 //check
 
-                String monitorType = output.substring(output.lastIndexOf("uname") + commands.get(0).length() - 1, output.lastIndexOf("uname") + commands.get(0).length() + 4);
+                output = output.substring(output.lastIndexOf("uname") + "uname\n".length() - 1);
+
+                String monitorType = output.substring(0, output.indexOf(data.get(0).get("username") + "@"));
 
                 if (monitorType.trim().equals("Linux"))
                 {

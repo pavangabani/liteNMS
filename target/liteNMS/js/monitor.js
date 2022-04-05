@@ -263,7 +263,7 @@ var monitorcallback = {
     {
         profilemain.monitor();
 
-        profilemain.allalert(data.status);
+        toastr.success(data.status);
     },
 
     showsshdata: function (data)
