@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class ConnectionPool
 {
-    private static BlockingQueue<Connection> connectionsPool;
+    private static final BlockingQueue<Connection> connectionsPool= new LinkedBlockingDeque<>();
 
     private static final BlockingQueue<Connection> usedConnection = new LinkedBlockingDeque<>();
 
@@ -16,8 +16,6 @@ public class ConnectionPool
         try
         {
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connectionsPool = new LinkedBlockingDeque<>(size);
 
             for (int i = 0; i < size; i++)
             {

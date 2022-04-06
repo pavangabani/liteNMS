@@ -14,15 +14,15 @@ public class LoginExecutor
 
         try
         {
+            String password = Cipher.encode(loginBean.getPassword());
+
+            if (password == null) throw new NullPointerException();
+
             //QueryStart
 
             database = new Database();
 
             String query = "select * from login where user=? AND pass=?";
-
-            String password = Cipher.encode(loginBean.getPassword());
-
-            if (password == null) throw new NullPointerException();
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), password));
 
@@ -59,15 +59,15 @@ public class LoginExecutor
 
         try
         {
+            String password = Cipher.encode(loginBean.getPassword());
+
+            if (password == null) throw new NullPointerException();
+
             //QueryStart
 
             database = new Database();
 
             String query = "insert into login values(?,?)";
-
-            String password = Cipher.encode(loginBean.getPassword());
-
-            if (password == null) throw new NullPointerException();
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), password));
 
@@ -84,7 +84,6 @@ public class LoginExecutor
             } else
             {
                 loginBean.setStatus("-1");
-
             }
         } catch (Exception e)
         {

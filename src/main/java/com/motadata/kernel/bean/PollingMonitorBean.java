@@ -101,8 +101,7 @@ public class PollingMonitorBean
         return pollingMonitorBeanList;
     }
 
-    public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList)
-    {
+    public void setPollingMonitorBeanList(List<PollingMonitorBean> pollingMonitorBeanList) {
         this.pollingMonitorBeanList = pollingMonitorBeanList;
     }
 

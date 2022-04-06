@@ -66,19 +66,19 @@ public class Discovery
 
                     if (affectedRow == -1)
                     {
-                        ServerEndPoint.send("-1 "+ data.get(0).get("ip")+" Already Added!");
+                        ServerEndPoint.send("-1 "+ ip+" Already Added!");
 
                     } else if (affectedRow > 0)
                     {
-                        ServerEndPoint.send("+1"+ data.get(0).get("ip")+" Added");
+                        ServerEndPoint.send("+1"+ ip+" Added");
 
                     } else
                     {
-                        ServerEndPoint.send("+0"+ data.get(0).get("ip")+" Not Added");
+                        ServerEndPoint.send("+0"+ ip+" Not Added");
                     }
                 } else
                 {
-                    ServerEndPoint.send("-2"+ data.get(0).get("ip")+" Discovery Fails!");
+                    ServerEndPoint.send("-2"+ ip+" Discovery Fails!");
                 }
             }
         } catch (Exception e)
@@ -191,15 +191,9 @@ public class Discovery
 
             String line, answer = "";
 
-            if (!reader.ready())
-            {
-                Thread.sleep(5000);
-            }
+            if (!reader.ready()) Thread.sleep(5000);
 
-            while (reader.ready() && (line = reader.readLine()) != null)
-            {
-                answer += line;
-            }
+            while (reader.ready() && (line = reader.readLine()) != null)  answer += line;
 
             //check
 
@@ -238,5 +232,4 @@ public class Discovery
         }
         return packetLoss <= 25;
     }
-
 }

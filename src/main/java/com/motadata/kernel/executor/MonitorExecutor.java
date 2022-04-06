@@ -51,13 +51,13 @@ public class MonitorExecutor
 
                 if (monitorBean.getType().equals("ssh"))
                 {
-                    //QueryStart
-
-                    query = "insert into credential (ip,username,password) values(?,?,?)";
-
                     String password = Cipher.encode(monitorBean.getPassword());
 
                     if (password == null) throw new NullPointerException();
+
+                    //QueryStart
+
+                    query = "insert into credential (ip,username,password) values(?,?,?)";
 
                     ArrayList<Object> credentialValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), password));
 
@@ -89,6 +89,7 @@ public class MonitorExecutor
     public void addDiscovery(MonitorBean monitorBean)
     {
         Database database = null;
+
         try
         {
             String id = monitorBean.getId();
@@ -196,15 +197,15 @@ public class MonitorExecutor
 
                 //QueryEnd
 
+                String password = Cipher.encode(monitorBean.getPassword());
+
+                if (password == null) throw new NullPointerException();
+
                 if (!data.isEmpty())
                 {
                     //QueryStart
 
                     query = "update credential set username=?,password=? where ip=?";
-
-                    String password = Cipher.encode(monitorBean.getPassword());
-
-                    if (password == null) throw new NullPointerException();
 
                     ArrayList<Object> updateValues = new ArrayList<>(Arrays.asList(monitorBean.getUsername(), password, monitorBean.getIp()));
 
@@ -217,10 +218,6 @@ public class MonitorExecutor
                     //QueryStart
 
                     query = "insert into credential (ip,username,password) values(?,?,?)";
-
-                    String password = Cipher.encode(monitorBean.getPassword());
-
-                    if (password == null) throw new NullPointerException();
 
                     ArrayList<Object> insertValues = new ArrayList<>(Arrays.asList(monitorBean.getIp(), monitorBean.getUsername(), password));
 

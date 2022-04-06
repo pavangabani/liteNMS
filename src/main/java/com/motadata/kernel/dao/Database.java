@@ -17,7 +17,7 @@ public class Database
 
         try
         {
-            if (!connection.isClosed())
+            if (connection != null && !connection.isClosed())
             {
                 //Set Prepare statement
 
@@ -90,28 +90,30 @@ public class Database
 
         try
         {
-            preparedStatement = connection.prepareStatement(query);
-
-            int i = 1;
-
-            for (Object value : values)
+            if (connection != null && !connection.isClosed())
             {
-                if (value.getClass() == Integer.class)
-                {
-                    preparedStatement.setInt(i, (Integer) value);
+                preparedStatement = connection.prepareStatement(query);
 
-                } else if (value.getClass() == String.class)
-                {
-                    preparedStatement.setString(i, (String) value);
+                int i = 1;
 
-                } else if (value.getClass() == Timestamp.class)
+                for (Object value : values)
                 {
-                    preparedStatement.setTimestamp(i, (Timestamp) value);
+                    if (value.getClass() == Integer.class)
+                    {
+                        preparedStatement.setInt(i, (Integer) value);
+
+                    } else if (value.getClass() == String.class)
+                    {
+                        preparedStatement.setString(i, (String) value);
+
+                    } else if (value.getClass() == Timestamp.class)
+                    {
+                        preparedStatement.setTimestamp(i, (Timestamp) value);
+                    }
+                    i++;
                 }
-                i++;
+                affectedRow = preparedStatement.executeUpdate();
             }
-            affectedRow = preparedStatement.executeUpdate();
-
         } catch (SQLIntegrityConstraintViolationException e)
         {
             return -1;
@@ -138,7 +140,7 @@ public class Database
 
     public void releaseConnection()
     {
-        if (!ConnectionPool.isAvailable(connection))
+        if (connection!=null && !ConnectionPool.isAvailable(connection))
         {
             ConnectionPool.releaseConnection(connection);
         }

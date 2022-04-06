@@ -535,16 +535,10 @@ public class GetData
 
             String line, outputString = "";
 
-            if (!reader.ready())
-            {
-                Thread.sleep(5000);
-            }
+            if (!reader.ready()) Thread.sleep(5000);
 
-            while (reader.ready() && (line = reader.readLine()) != null)
-            {
-                outputString += line;
-            }
-
+            while (reader.ready() && (line = reader.readLine()) != null) outputString += line;
+            
             if (outputString.contains("statistics"))
             {
                 outputString = outputString.substring(outputString.indexOf("statistics"));

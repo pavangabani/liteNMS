@@ -12,9 +12,7 @@ public class Producer
         {
             producer = new NSQProducer().addAddress("localhost", 4150).start();
 
-            String id = "-1";
-
-            Producer.producer.produce("Discovery", id.getBytes());
+            Producer.producer.produce("Discovery", "-1".getBytes());
 
         } catch (Exception e)
         {
