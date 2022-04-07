@@ -8,11 +8,9 @@ public class DashboardAction implements ModelDriven<DashboardBean>
 {
     DashboardBean dashboardBean = new DashboardBean();
 
-    DashboardExecutor dashboardExecutor = new DashboardExecutor();
-
     public String load()
     {
-        dashboardExecutor.load(dashboardBean);
+        DashboardExecutor.load(dashboardBean);
 
         return "LOADED";
     }

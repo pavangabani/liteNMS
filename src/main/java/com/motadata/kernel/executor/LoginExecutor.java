@@ -8,7 +8,7 @@ import java.util.*;
 
 public class LoginExecutor
 {
-    public void login(LoginBean loginBean)
+    public static void login(LoginBean loginBean)
     {
         Database database = null;
 
@@ -53,7 +53,7 @@ public class LoginExecutor
         }
     }
 
-    public void register(LoginBean loginBean)
+    public static void register(LoginBean loginBean)
     {
         Database database = null;
 

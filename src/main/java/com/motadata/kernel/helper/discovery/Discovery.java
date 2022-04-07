@@ -21,7 +21,7 @@ public class Discovery
         this.id = id;
     }
 
-    protected void discover()
+    public void discover()
     {
         Database database = null;
 

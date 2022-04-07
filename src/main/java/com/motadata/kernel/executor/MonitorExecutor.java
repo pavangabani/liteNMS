@@ -9,7 +9,7 @@ import java.util.*;
 
 public class MonitorExecutor
 {
-    public void load(MonitorBean monitorBean)
+    public static void load(MonitorBean monitorBean)
     {
         try
         {
@@ -23,7 +23,7 @@ public class MonitorExecutor
         }
     }
 
-    public void add(MonitorBean monitorBean)
+    public static void add(MonitorBean monitorBean)
     {
         Database database = null;
 
@@ -86,7 +86,7 @@ public class MonitorExecutor
         }
     }
 
-    public void addDiscovery(MonitorBean monitorBean)
+    public static void addDiscovery(MonitorBean monitorBean)
     {
         Database database = null;
 
@@ -128,7 +128,7 @@ public class MonitorExecutor
         }
     }
 
-    public void editData(MonitorBean monitorBean)
+    public static void editData(MonitorBean monitorBean)
     {
         Database database = null;
 
@@ -167,7 +167,7 @@ public class MonitorExecutor
         }
     }
 
-    public void edit(MonitorBean monitorBean)
+    public static void edit(MonitorBean monitorBean)
     {
         Database database = null;
 
@@ -239,7 +239,7 @@ public class MonitorExecutor
         }
     }
 
-    public void delete(MonitorBean monitorBean)
+    public static void delete(MonitorBean monitorBean)
     {
         Database database = null;
 

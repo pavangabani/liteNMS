@@ -2,9 +2,9 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.executor.LoginExecutor;
+import com.motadata.kernel.helper.SessionManager;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
-import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
@@ -13,38 +13,54 @@ public class LoginAction implements ModelDriven<LoginBean>, SessionAware
 {
     LoginBean loginBean = new LoginBean();
 
-    LoginExecutor loginExecutor = new LoginExecutor();
-
-    SessionMap<String, Object> session;
+    Map<String, Object> session;
 
     public String login()
     {
-        loginExecutor.login(loginBean);
+        LoginExecutor.login(loginBean);
 
         session.put("user", loginBean.getUsername());
+
+        SessionManager.sessions.put(loginBean.getUsername(), session);
 
         return "LOGIN";
     }
 
     public String register()
     {
-        loginExecutor.register(loginBean);
+        LoginExecutor.register(loginBean);
 
         return "REGISTER";
     }
 
     public String logout()
     {
-        session.invalidate();
+        try
+        {
+            System.out.println(SessionManager.sessions);
 
+            SessionManager.sessions.remove(loginBean.getProfileName());
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "LOGOUT";
     }
 
     public String profile()
     {
-        Map session = (Map) ActionContext.getContext().get("session");
+        try
+        {
+            Map session = (Map) ActionContext.getContext().getSession();
 
-        loginBean.setProfileName((String) session.get("user"));
+            loginBean.setProfileName((String) session.get("user"));
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
 
         return "PROFILE";
     }
@@ -58,6 +74,6 @@ public class LoginAction implements ModelDriven<LoginBean>, SessionAware
     @Override
     public void setSession(Map<String, Object> session)
     {
-        this.session = (SessionMap<String, Object>) session;
+        this.session =  session;
     }
 }

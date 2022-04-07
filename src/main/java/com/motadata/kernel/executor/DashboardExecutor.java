@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DashboardExecutor
 {
-    public void load(DashboardBean dashboardBean)
+    public static void load(DashboardBean dashboardBean)
     {
         try
         {

@@ -2,7 +2,7 @@ var socket = {
 
     createSocket: function ()
     {
-        var webSocket = new WebSocket("wss://localhost:8443/liteNMS/server-endpoint");
+        var webSocket = new WebSocket("wss://10.20.40.139:8443/liteNMS/server-endpoint");
 
         webSocket.onmessage = function (message)
         {

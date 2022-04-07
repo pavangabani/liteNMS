@@ -27,7 +27,20 @@ var profilemain = {
 
     logout: function ()
     {
-        window.location = "Logout";
+        profileName = $("#profilename").text();
+
+        let sdata = {
+            profileName: profileName,
+        };
+        let request = {
+
+            url: "Logout",
+
+            data: sdata,
+
+            callback: profilecallback.logoutcallback,
+        }
+        helperMain.ajaxpost(request);
     },
 
     discovery: function ()
@@ -60,5 +73,10 @@ var profilecallback = {
     profilecallback: function (data)
     {
         $("#profilename").text(data.profileName);
+    },
+
+    logoutcallback: function ()
+    {
+        window.location = "LoginPage";
     },
 };

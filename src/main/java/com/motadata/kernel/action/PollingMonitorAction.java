@@ -8,25 +8,23 @@ public class PollingMonitorAction implements ModelDriven<PollingMonitorBean>
 {
     PollingMonitorBean pollingMonitorBean = new PollingMonitorBean();
 
-    PollingMonitorExecutor pollingMonitorExecutor = new PollingMonitorExecutor();
-
     public String load()
     {
-        pollingMonitorExecutor.load(pollingMonitorBean);
+        PollingMonitorExecutor.load(pollingMonitorBean);
 
         return "LOADED";
     }
 
     public String show()
     {
-        pollingMonitorExecutor.show(pollingMonitorBean);
+        PollingMonitorExecutor.show(pollingMonitorBean);
 
         return "SHOW";
     }
 
     public String delete()
     {
-        pollingMonitorExecutor.delete(pollingMonitorBean);
+        PollingMonitorExecutor.delete(pollingMonitorBean);
 
         return "DELETED";
     }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class PollingMonitorExecutor
 {
-    public void load(PollingMonitorBean pollingMonitorBean)
+    public static void load(PollingMonitorBean pollingMonitorBean)
     {
         try
         {
@@ -23,7 +23,7 @@ public class PollingMonitorExecutor
         }
     }
 
-    public void show(PollingMonitorBean pollingMonitorBean)
+    public static void show(PollingMonitorBean pollingMonitorBean)
     {
         try
         {
@@ -44,7 +44,7 @@ public class PollingMonitorExecutor
         }
     }
 
-    public void delete(PollingMonitorBean pollingMonitorBean)
+    public static void delete(PollingMonitorBean pollingMonitorBean)
     {
         Database database = null;
 
