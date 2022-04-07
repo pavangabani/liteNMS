@@ -1,9 +1,9 @@
 package com.motadata.kernel.helper;
 
-import java.util.Map;
+import javax.websocket.Session;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager
 {
-    public static ConcurrentHashMap<String, Map> sessions=new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Session> sessions=new ConcurrentHashMap<>();
 }

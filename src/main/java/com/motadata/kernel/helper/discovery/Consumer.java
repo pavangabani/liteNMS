@@ -16,9 +16,16 @@ public class Consumer
 
             NSQConsumer consumer = new NSQConsumer(lookup, "Discovery", "Main", (message) ->
             {
-                String id = new String(message.getMessage());
+                String messageText = new String(message.getMessage());
 
-                new Discovery(id).discover();
+                if (messageText.contains("sessionId:"))
+                {
+                    String id = messageText.substring(0, messageText.indexOf("sessionId:"));
+
+                    String sessionId = messageText.substring(messageText.indexOf("sessionId:")+"sessionId:".length());
+
+                    new Discovery(id, sessionId).discover();
+                }
 
                 message.finished();
             });

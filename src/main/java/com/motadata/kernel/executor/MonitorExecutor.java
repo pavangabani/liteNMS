@@ -4,7 +4,10 @@ import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
 import com.motadata.kernel.helper.*;
 import com.motadata.kernel.helper.discovery.Producer;
+import org.apache.struts2.ServletActionContext;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 public class MonitorExecutor
@@ -94,7 +97,9 @@ public class MonitorExecutor
         {
             String id = monitorBean.getId();
 
-            Producer.producer.produce("Discovery", id.getBytes());
+            String message = id + "sessionId:" + ServletActionContext.getRequest().getSession().getId();
+
+            Producer.producer.produce("Discovery", message.getBytes());
 
             //QueryStart
 

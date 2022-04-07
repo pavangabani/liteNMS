@@ -2,6 +2,8 @@ package com.motadata.kernel.bean;
 
 public class LoginBean
 {
+    private String sessionId;
+
     private String profileName;
 
     private String username;
@@ -48,6 +50,16 @@ public class LoginBean
     public void setProfileName(String profileName)
     {
         this.profileName = profileName;
+    }
+
+    public String getSessionId()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId)
+    {
+        this.sessionId = sessionId;
     }
 
 }

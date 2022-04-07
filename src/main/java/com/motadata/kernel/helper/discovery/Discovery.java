@@ -16,9 +16,13 @@ public class Discovery
 {
     String id;
 
-    public Discovery(String id)
+    String sessionId;
+
+    public Discovery(String id,String sessionId)
     {
         this.id = id;
+
+        this.sessionId=sessionId;
     }
 
     public void discover()
@@ -66,19 +70,19 @@ public class Discovery
 
                     if (affectedRow == -1)
                     {
-                        ServerEndPoint.send("-1 "+ ip+" Already Added!");
+                        ServerEndPoint.send("-1 "+ ip+" Already Added!",sessionId);
 
                     } else if (affectedRow > 0)
                     {
-                        ServerEndPoint.send("+1"+ ip+" Added");
+                        ServerEndPoint.send("+1"+ ip+" Added",sessionId);
 
                     } else
                     {
-                        ServerEndPoint.send("+0"+ ip+" Not Added");
+                        ServerEndPoint.send("+0"+ ip+" Not Added",sessionId);
                     }
                 } else
                 {
-                    ServerEndPoint.send("-2"+ ip+" Discovery Fails!");
+                    ServerEndPoint.send("-2"+ ip+" Discovery Fails!",sessionId);
                 }
             }
         } catch (Exception e)

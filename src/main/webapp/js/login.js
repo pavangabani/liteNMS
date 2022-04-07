@@ -112,6 +112,8 @@ var logincallback = {
         {
             window.location.href = 'Navigation';
 
+            sessionStorage.setItem("sessionId",data.sessionId);
+
         } else
         {
             loginhelper.customalert("#failure")

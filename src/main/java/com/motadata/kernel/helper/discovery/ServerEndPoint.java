@@ -1,21 +1,22 @@
 package com.motadata.kernel.helper.discovery;
 
+import com.motadata.kernel.helper.SessionManager;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/server-endpoint")
 public class ServerEndPoint
 {
-    static ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
-
     static Session session;
 
-    public static void send(String msg)
+    public static void send(String msg, String sessionId)
     {
         try
         {
+            session = SessionManager.sessions.get(sessionId);
+
             session.getBasicRemote().sendText(msg);
 
         } catch (IOException e)
@@ -24,11 +25,12 @@ public class ServerEndPoint
         }
     }
 
-    @OnOpen
-    public void openConnection(Session session)
+    @OnMessage
+    public void openConnection(Session session, String message)
     {
+        ServerEndPoint.session = session;
 
-        this.session = session;
+        SessionManager.sessions.put(message, session);
     }
 
     @OnError

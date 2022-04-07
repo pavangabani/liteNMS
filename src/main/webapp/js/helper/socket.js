@@ -2,7 +2,18 @@ var socket = {
 
     createSocket: function ()
     {
-        var webSocket = new WebSocket("wss://10.20.40.139:8443/liteNMS/server-endpoint");
+        let protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+        let host = window.location.host;
+
+        let path = '/liteNMS/server-endpoint';
+
+        let webSocket = new WebSocket(protocol + host + path);
+
+        webSocket.onopen = function ()
+        {
+            webSocket.send(sessionStorage.getItem("sessionId"));
+        };
 
         webSocket.onmessage = function (message)
         {
@@ -45,5 +56,5 @@ var sockethelper = {
     processError: function (message)
     {
         toastr.info(message.data);
-    }
+    },
 };
