@@ -22,21 +22,24 @@ public class Consumer
                 {
                     String id = messageText.substring(0, messageText.indexOf("sessionId:"));
 
-                    String sessionId = messageText.substring(messageText.indexOf("sessionId:")+"sessionId:".length());
+                    String sessionId = messageText.substring(messageText.indexOf("sessionId:") + "sessionId:".length());
 
                     new Discovery(id, sessionId).discover();
                 }
-
                 message.finished();
             });
 
-            consumer.start();
+            try
+            {
+                consumer.start();
 
+            } catch (Exception e)
+            {
+                System.exit(-1);
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
-
-            System.exit(-1);
         }
     }
 }

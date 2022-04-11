@@ -14,7 +14,7 @@ import java.util.*;
 
 public class GetData
 {
-    private static final int packetlosspercentage = 25;
+    private static final int PACKET_LOSS = 25;
 
     //GetData_From_Database
 
@@ -156,7 +156,7 @@ public class GetData
 
             if (!data.isEmpty())
             {
-                int up = 0, down = 0, unrechable = 0, total = 0;
+                int up = 0, down = 0, unrechable = 0, total;
 
                 for (HashMap<String, String> row : data)
                 {
@@ -196,7 +196,7 @@ public class GetData
 
             if (!data.isEmpty())
             {
-                int pingUp = 0, pingDown = 0, pingTotal = 0, sshUp = 0, sshDown = 0, sshTotal = 0;
+                int pingUp = 0, pingDown = 0, pingTotal, sshUp = 0, sshDown = 0, sshTotal;
 
                 for (HashMap<String, String> row : data)
                 {
@@ -350,7 +350,7 @@ public class GetData
 
                 //3. Live Data (Matrixs)
 
-                pingStatistic.put("matrix", new ArrayList(Arrays.asList(barData.get(0).get("sentpackets"), barData.get(0).get("receivepackets"), barData.get(0).get("packetloss"), barData.get(0).get("rtt"))));
+                pingStatistic.put("matrix", new ArrayList<>(Arrays.asList(barData.get(0).get("sentpackets"), barData.get(0).get("receivepackets"), barData.get(0).get("packetloss"), barData.get(0).get("rtt"))));
             }
             //End
 
@@ -477,7 +477,7 @@ public class GetData
                 {
                     int packetloss = Integer.parseInt(row.get("packetloss"));
 
-                    if (packetloss <= packetlosspercentage)
+                    if (packetloss <= PACKET_LOSS)
                     {
                         pieUp += Integer.parseInt(row.get("count(*)"));
 

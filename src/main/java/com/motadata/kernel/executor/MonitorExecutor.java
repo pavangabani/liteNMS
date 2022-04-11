@@ -6,7 +6,6 @@ import com.motadata.kernel.helper.*;
 import com.motadata.kernel.helper.discovery.Producer;
 import org.apache.struts2.ServletActionContext;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -97,31 +96,37 @@ public class MonitorExecutor
         {
             String id = monitorBean.getId();
 
-            String message = id + "sessionId:" + ServletActionContext.getRequest().getSession().getId();
+            HttpSession session = ServletActionContext.getRequest().getSession();
 
-            Producer.producer.produce("Discovery", message.getBytes());
-
-            //QueryStart
-
-            database = new Database();
-
-            String query = "select ip from monitor where id=?";
-
-            ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
-
-            List<HashMap<String, String>> data = database.select(query, values);
-
-            database.releaseConnection();
-
-            //QueryEnd
-
-            if (!data.isEmpty())
+            if (session != null && id != null)
             {
-                monitorBean.setStatus(data.get(0).get("ip") + " Queued for Discovery");
-            }
+                String message = id + "sessionId:" + session.getId();
 
+                Producer.producer.produce("Discovery", message.getBytes());
+
+                //QueryStart
+
+                database = new Database();
+
+                String query = "select ip from monitor where id=?";
+
+                ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
+
+                List<HashMap<String, String>> data = database.select(query, values);
+
+                database.releaseConnection();
+
+                //QueryEnd
+
+                if (!data.isEmpty())
+                {
+                    monitorBean.setStatus(data.get(0).get("ip") + " Queued for Discovery");
+                }
+            }
         } catch (Exception e)
         {
+            monitorBean.setStatus("Queued for Discovery Fails!");
+
             e.printStackTrace();
 
         } finally

@@ -15,6 +15,13 @@
 <script src="js/helper/helper.js"></script>
 <script src="js/helper/socket.js"></script>
 
+
+<%
+    response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"); //HTTP 1.1
+    response.setHeader("Pragma","no-cache"); // HTTP 1.0
+    response.setHeader("Expires","0"); // Proxies
+%>
+
 <nav class="navbar">
     <div class="logo">&nbsp;&nbsp;LiteNMS</div>
     <ul class="nav-links">
