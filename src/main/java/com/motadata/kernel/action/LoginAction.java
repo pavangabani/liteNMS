@@ -2,19 +2,27 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.executor.LoginExecutor;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.SessionMap;
+import org.apache.struts2.interceptor.SessionAware;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
-public class LoginAction implements ModelDriven<LoginBean>
+public class LoginAction implements ModelDriven<LoginBean>, SessionAware
 {
     LoginBean loginBean = new LoginBean();
+
+    SessionMap<String, Object> sessionMain;
 
     public String login()
     {
         LoginExecutor.login(loginBean);
+
+        //For_WebSocket--------------------------------
 
         HttpServletRequest request = ServletActionContext.getRequest();
 
@@ -23,6 +31,10 @@ public class LoginAction implements ModelDriven<LoginBean>
         session.setAttribute("uname", loginBean.getUsername());
 
         loginBean.setSessionId(session.getId());
+
+        //WebSocket--------------------------------
+
+        sessionMain.put("user", loginBean.getUsername());
 
         return "LOGIN";
     }
@@ -38,9 +50,7 @@ public class LoginAction implements ModelDriven<LoginBean>
     {
         try
         {
-            HttpServletRequest request = ServletActionContext.getRequest();
-
-            request.getSession().invalidate();
+            sessionMain.invalidate();
 
         } catch (Exception e)
         {
@@ -53,13 +63,9 @@ public class LoginAction implements ModelDriven<LoginBean>
     {
         try
         {
-            final HttpServletRequest request = ServletActionContext.getRequest();
+            Map session = (Map) ActionContext.getContext().getSession();
 
-            HttpSession session = request.getSession(false);
-
-            String profileName = (String) session.getAttribute("uname");
-
-            loginBean.setProfileName(profileName);
+            loginBean.setProfileName((String) session.get("user"));
 
         } catch (Exception e)
         {
@@ -75,4 +81,9 @@ public class LoginAction implements ModelDriven<LoginBean>
         return loginBean;
     }
 
+    @Override
+    public void setSession(Map<String, Object> session)
+    {
+        this.sessionMain = (SessionMap<String, Object>) session;
+    }
 }
