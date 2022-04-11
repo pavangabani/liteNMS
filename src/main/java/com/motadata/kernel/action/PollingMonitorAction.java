@@ -10,22 +10,40 @@ public class PollingMonitorAction implements ModelDriven<PollingMonitorBean>
 
     public String load()
     {
-        PollingMonitorExecutor.load(pollingMonitorBean);
+        try
+        {
+            PollingMonitorExecutor.load(pollingMonitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "LOADED";
     }
 
     public String show()
     {
-        PollingMonitorExecutor.show(pollingMonitorBean);
+        try
+        {
+            PollingMonitorExecutor.show(pollingMonitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "SHOW";
     }
 
     public String delete()
     {
-        PollingMonitorExecutor.delete(pollingMonitorBean);
+        try
+        {
+            PollingMonitorExecutor.delete(pollingMonitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "DELETED";
     }
 

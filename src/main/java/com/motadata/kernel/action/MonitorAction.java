@@ -10,43 +10,79 @@ public class MonitorAction implements ModelDriven<MonitorBean>
 
     public String load()
     {
-        MonitorExecutor.load(monitorBean);
+        try
+        {
+            MonitorExecutor.load(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "LOADED";
     }
 
     public String add()
     {
-        MonitorExecutor.add(monitorBean);
+        try
+        {
+            MonitorExecutor.add(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "ADDED";
     }
 
     public String addDiscovery()
     {
-        MonitorExecutor.addDiscovery(monitorBean);
+        try
+        {
+            MonitorExecutor.addDiscovery(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "ADDED";
     }
 
     public String editData()
     {
-        MonitorExecutor.editData(monitorBean);
+        try
+        {
+            MonitorExecutor.editData(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "EDITDATA";
     }
 
     public String edit()
     {
-        MonitorExecutor.edit(monitorBean);
+        try
+        {
+            MonitorExecutor.edit(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "EDITED";
     }
 
     public String delete()
     {
-        MonitorExecutor.delete(monitorBean);
+        try
+        {
+            MonitorExecutor.delete(monitorBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "DELETED";
     }
 

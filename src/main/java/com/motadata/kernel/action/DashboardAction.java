@@ -10,8 +10,14 @@ public class DashboardAction implements ModelDriven<DashboardBean>
 
     public String load()
     {
-        DashboardExecutor.load(dashboardBean);
+        try
+        {
+            DashboardExecutor.load(dashboardBean);
 
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "LOADED";
     }
 

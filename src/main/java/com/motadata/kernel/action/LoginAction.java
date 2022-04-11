@@ -2,47 +2,50 @@ package com.motadata.kernel.action;
 
 import com.motadata.kernel.bean.LoginBean;
 import com.motadata.kernel.executor.LoginExecutor;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.dispatcher.SessionMap;
-import org.apache.struts2.interceptor.SessionAware;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
-public class LoginAction implements ModelDriven<LoginBean>, SessionAware
+public class LoginAction implements ModelDriven<LoginBean>
 {
     LoginBean loginBean = new LoginBean();
 
-    SessionMap<String, Object> sessionMain;
-
     public String login()
     {
-        LoginExecutor.login(loginBean);
+        try
+        {
+            LoginExecutor.login(loginBean);
 
-        //For_WebSocket--------------------------------
+            if(loginBean.getStatus().equals("Success")){
 
-        HttpServletRequest request = ServletActionContext.getRequest();
+                HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session = request.getSession();
+                HttpSession session = request.getSession();
 
-        session.setAttribute("uname", loginBean.getUsername());
+                session.setAttribute("uname", loginBean.getUsername());
 
-        loginBean.setSessionId(session.getId());
+                loginBean.setSessionId(session.getId());
+            }
 
-        //WebSocket--------------------------------
-
-        sessionMain.put("user", loginBean.getUsername());
-
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "LOGIN";
     }
 
     public String register()
     {
-        LoginExecutor.register(loginBean);
-
+        try
+        {
+            LoginExecutor.register(loginBean);
+            
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return "REGISTER";
     }
 
@@ -50,7 +53,9 @@ public class LoginAction implements ModelDriven<LoginBean>, SessionAware
     {
         try
         {
-            sessionMain.invalidate();
+            final HttpServletRequest request = ServletActionContext.getRequest();
+
+            request.getSession().invalidate();
 
         } catch (Exception e)
         {
@@ -63,13 +68,16 @@ public class LoginAction implements ModelDriven<LoginBean>, SessionAware
     {
         try
         {
-            Map session = (Map) ActionContext.getContext().getSession();
+            HttpServletRequest request = ServletActionContext.getRequest();
 
-            loginBean.setProfileName((String) session.get("user"));
+            HttpSession session = request.getSession(false);
+
+            String profileName = (String) session.getAttribute("uname");
+
+            loginBean.setProfileName(profileName);
 
         } catch (Exception e)
         {
-
             e.printStackTrace();
         }
         return "PROFILE";
@@ -81,9 +89,4 @@ public class LoginAction implements ModelDriven<LoginBean>, SessionAware
         return loginBean;
     }
 
-    @Override
-    public void setSession(Map<String, Object> session)
-    {
-        this.sessionMain = (SessionMap<String, Object>) session;
-    }
 }
