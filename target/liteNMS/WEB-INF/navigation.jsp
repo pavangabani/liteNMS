@@ -38,7 +38,7 @@
         <span id="close" onclick="profilemain.close()">&times;</span>
         <h2>
             <p style="font-weight: bold;margin-right: 10px">Hello!</p>
-            <p id="profilename">Pavan</p>
+            <p id="profilename"></p>
         </h2>
         <form id="Logout">
             <div class="form-field">

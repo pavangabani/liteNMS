@@ -55,6 +55,8 @@ var sockethelper = {
 
     processError: function (message)
     {
-        toastr.info(message.data);
+        if(message===""){
+            toastr.info(message.data);
+        }
     },
 };

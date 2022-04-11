@@ -1,5 +1,6 @@
 package com.motadata.kernel.helper;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.Interceptor;
@@ -7,6 +8,7 @@ import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 public class SessionInterceptor implements Interceptor
 {
@@ -26,20 +28,11 @@ public class SessionInterceptor implements Interceptor
     @Override
     public String intercept(ActionInvocation actionInvocation) throws Exception
     {
-        HttpServletRequest request = ServletActionContext.getRequest();
-
-        HttpSession session = request.getSession(false);
-
-        String uname = null;
-
-        if (session != null)
-        {
-            uname = (String) session.getAttribute("uname");
-        }
+        Map<String, Object> sessionMain = ActionContext.getContext().getSession();
 
         boolean result = false;
 
-        if (uname != null)
+        if (sessionMain.get("user") != null)
         {
             actionInvocation.invoke();
 
