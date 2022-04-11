@@ -17,7 +17,10 @@ public class ServerEndPoint
         {
             session = SessionManager.sessions.get(sessionId);
 
-            session.getBasicRemote().sendText(msg);
+            if (session != null)
+            {
+                session.getBasicRemote().sendText(msg);
+            }
 
         } catch (IOException e)
         {

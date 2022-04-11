@@ -2,14 +2,16 @@ package com.motadata.kernel.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConnectionPool
 {
-    private static final BlockingQueue<Connection> connectionsPool= new LinkedBlockingDeque<>();
+    private static final BlockingQueue<Connection> connectionsPool= new LinkedBlockingQueue<>();
 
-    private static final BlockingQueue<Connection> usedConnection = new LinkedBlockingDeque<>();
+    private static final Queue<Connection> usedConnection = new LinkedList<>();
 
     public static int createFixedSizePool(Integer size)
     {

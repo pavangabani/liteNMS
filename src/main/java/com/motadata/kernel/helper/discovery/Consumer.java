@@ -16,30 +16,32 @@ public class Consumer
 
             NSQConsumer consumer = new NSQConsumer(lookup, "Discovery", "Main", (message) ->
             {
-                String messageText = new String(message.getMessage());
-
-                if (messageText.contains("sessionId:"))
+                try
                 {
-                    String id = messageText.substring(0, messageText.indexOf("sessionId:"));
+                    String messageText = new String(message.getMessage());
 
-                    String sessionId = messageText.substring(messageText.indexOf("sessionId:") + "sessionId:".length());
+                    if (messageText.contains("sessionId:"))
+                    {
+                        String id = messageText.substring(0, messageText.indexOf("sessionId:"));
 
-                    new Discovery(id, sessionId).discover();
+                        String sessionId = messageText.substring(messageText.indexOf("sessionId:") + "sessionId:".length());
+
+                        new Discovery(id, sessionId).discover();
+                    }
+                    message.finished();
+
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
                 }
-                message.finished();
             });
+            consumer.start();
 
-            try
-            {
-                consumer.start();
-
-            } catch (Exception e)
-            {
-                System.exit(-1);
-            }
         } catch (Exception e)
         {
             e.printStackTrace();
+
+            System.exit(-1);
         }
     }
 }
