@@ -15,34 +15,19 @@ var discoverymain = {
 
     add: function ()
     {
-        let name = $("#name").val();
+        let param = $('#monitor').serializeArray().reduce(function (finalParam, currentValue)
+        {
+            finalParam[currentValue.name] = currentValue.value;
+            return finalParam;
+        }, {})
 
-        let ip = $("#ip").val();
-
-        let type = $("#type").val();
-
-        let tag = $("#tag").val();
-
-        let password = $("#password").val();
-
-        let username = $("#username").val();
-
-        let sdata = {
-            username: username,
-            password: password,
-            name: name,
-            ip: ip,
-            type: type,
-            tag: tag
-        };
-
-        if (discoveryhelper.validate(name, ip, type, tag, username, password))
+        if (discoveryhelper.validate(param.name, param.ip, param.type, param.tag, param.username, param.password))
         {
             let request = {
 
                 url: "Add",
 
-                data: sdata,
+                data: param,
 
                 callback: discoverycallback.add,
             };
@@ -96,34 +81,21 @@ var discoverymain = {
     {
         let id = $("#rawid").val();
 
-        let name = $("#updatename").val();
+        let param = $('form').serializeArray().reduce(function (finalParam, currentValue)
+        {
+            finalParam[currentValue.name] = currentValue.value;
+            return finalParam;
+        }, {})
 
-        let ip = $("#updateip").val();
+        param.id = id;
 
-        let type = $("#updatetype").val();
-
-        let tag = $("#updatetag").val();
-
-        let password = $("#updatepassword").val();
-
-        let username = $("#updateusername").val();
-
-        let sdata = {
-            id: id,
-            username: username,
-            password: password,
-            name: name,
-            ip: ip,
-            type: type,
-            tag: tag
-        };
-        if (discoveryhelper.validate(name, ip, type, tag, username, password))
+        if (discoveryhelper.validate(param.name, param.ip, param.type, param.tag, param.username, param.password))
         {
             let request = {
 
                 url: "Edit",
 
-                data: sdata,
+                data: param,
 
                 callback: discoverycallback.update,
             };
@@ -286,7 +258,7 @@ var discoverycallback = {
 
     editdata: function (data)
     {
-        let id =data.id ;
+        let id = data.id;
 
         let name = data.name;
 
