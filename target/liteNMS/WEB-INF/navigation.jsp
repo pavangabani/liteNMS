@@ -12,6 +12,7 @@
 <script src="js/dashboard.js"></script>
 <script src="js/discovery.js"></script>
 <script src="js/monitor.js"></script>
+<script src="js/alerts.js"></script>
 <script src="js/helper/helper.js"></script>
 <script src="js/helper/socket.js"></script>
 
@@ -28,6 +29,7 @@
         <div class="menu">
             <a onclick="profilemain.discovery()" style="text-decoration: none;">Discovery</a>
             <a onclick="profilemain.monitor()" style="text-decoration: none;">Monitors</a>
+            <a onclick="profilemain.alerts()" style="text-decoration: none;">Alerts</a>
             <a onclick="profilemain.dashboard()" style="text-decoration: none;">Dashboard</a>
             <a onclick="profilemain.profile()" style="margin-right: 20px">Profile</a>
         </div>

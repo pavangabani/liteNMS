@@ -85,7 +85,7 @@ var discoverymain = {
         {
             finalParam[currentValue.name] = currentValue.value;
             return finalParam;
-        }, {})
+        }, {});
 
         param.id = id;
 

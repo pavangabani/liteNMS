@@ -21,25 +21,49 @@
 }
 #one{
     color: #000;
-    background-color: orangered;
+    background-color: #ff7848;
     margin: 10px;
     padding: 50px;
 }
 #two{
     color: #000;
-    background-color: lawngreen;
+    background-color: #9efc41;
     margin: 10px;
     padding: 50px;
 }
 #three{
     color: #000;
-    background-color: yellow;
+    background-color: #ffff46;
     margin: 10px;
     padding: 50px;
 }
 #four{
     color: #000;
-    background-color: lightgray;
+    background-color: #dedede;
+    margin: 10px;
+    padding: 50px;
+}
+#one1{
+    color: #000;
+    background-color: #ff2600;
+    margin: 10px;
+    padding: 50px;
+}
+#two1{
+    color: #000;
+    background-color: #ff9900;
+    margin: 10px;
+    padding: 50px;
+}
+#three1{
+    color: #000;
+    background-color: #ffea00;
+    margin: 10px;
+    padding: 50px;
+}
+#four1{
+    color: #000000;
+    background-color: #72ff00;
     margin: 10px;
     padding: 50px;
 }

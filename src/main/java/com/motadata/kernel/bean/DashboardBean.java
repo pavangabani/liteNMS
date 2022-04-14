@@ -8,6 +8,8 @@ public class DashboardBean {
 
     List<Integer> availability=new ArrayList<>(4);
 
+    List<Integer> health=new ArrayList<>(4);
+
     List<HashMap<String,String>> topRtt =new ArrayList<>();
 
     List<HashMap<String,String>> topCpu =new ArrayList<>();
@@ -74,5 +76,15 @@ public class DashboardBean {
     public void setMonitorGroup(List<HashMap<String, String>> monitorGroup)
     {
         this.monitorGroup = monitorGroup;
+    }
+
+    public List<Integer> getHealth()
+    {
+        return health;
+    }
+
+    public void setHealth(List<Integer> health)
+    {
+        this.health = health;
     }
 }

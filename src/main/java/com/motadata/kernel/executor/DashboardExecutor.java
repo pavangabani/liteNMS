@@ -30,6 +30,8 @@ public class DashboardExecutor
 
             dashboardBean.setTopDisk((List<HashMap<String, String>>) data.get(5));
 
+            dashboardBean.setHealth((List<Integer>) data.get(6));
+
         } catch (Exception e)
         {
             e.printStackTrace();

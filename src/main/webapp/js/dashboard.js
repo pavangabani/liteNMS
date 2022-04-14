@@ -26,6 +26,14 @@ var dashboardhelper = {
 
         $("#four").append("<h1>" + data.availability[3] + "</h1>");
 
+        $("#one1").append("<h1>" + data.health[0] + "</h1>");
+
+        $("#two1").append("<h1>" + data.health[1] + "</h1>");
+
+        $("#three1").append("<h1>" + data.health[2] + "</h1>");
+
+        $("#four1").append("<h1>" + data.health[3] + "</h1>");
+
         let tdata="";
 
         $.each(data.topRtt, function (){

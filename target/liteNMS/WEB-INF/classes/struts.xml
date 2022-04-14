@@ -78,6 +78,18 @@
             <interceptor-ref name="loginSession"/>
             <result name="DELETED" type="json"/>
         </action>
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+        <action name="AlertLoad" class="com.motadata.kernel.action.AlertAction" method="load">
+            <result name="LOADED" type="json"/>
+        </action>
+        <action name="AlertAdd" class="com.motadata.kernel.action.AlertAction" method="add">
+            <result name="ADDED" type="json"/>
+        </action>
+        <action name="AlertDelete" class="com.motadata.kernel.action.AlertAction" method="delete">
+            <result name="DELETED" type="json"/>
+        </action>
 
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 

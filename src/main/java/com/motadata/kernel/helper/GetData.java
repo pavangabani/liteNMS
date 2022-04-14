@@ -1,9 +1,6 @@
 package com.motadata.kernel.helper;
 
-import com.motadata.kernel.bean.MonitorBean;
-import com.motadata.kernel.bean.PollingMonitorBean;
-import com.motadata.kernel.bean.PollingPingBean;
-import com.motadata.kernel.bean.PollingSshBean;
+import com.motadata.kernel.bean.*;
 import com.motadata.kernel.dao.Database;
 
 import java.io.BufferedReader;
@@ -132,6 +129,68 @@ public class GetData
         return monitorList;
     }
 
+    public List<AlertBean> getAllAlerts()
+    {
+        List<AlertBean> alertList = null;
+
+        Database database = null;
+
+        try
+        {
+            //QueryStart
+
+            database = new Database();
+
+            String query = "select * from alerts";
+
+            List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
+
+            database.releaseConnection();
+
+            //QueryEnd
+
+            if (!data.isEmpty())
+            {
+                alertList = new ArrayList<>();
+
+                for (HashMap<String, String> row : data)
+                {
+                    AlertBean alertBean = new AlertBean();
+
+                    alertBean.setId(row.get("id"));
+
+                    alertBean.setName(row.get("name"));
+
+                    alertBean.setStatus(row.get("status"));
+
+                    alertBean.setType(row.get("type"));
+
+                    alertBean.setMetric(row.get("metric"));
+
+                    alertBean.setCritical(Integer.valueOf(row.get("critical")));
+
+                    alertBean.setWarning(Integer.valueOf(row.get("warning")));
+
+                    alertBean.setClear(Integer.valueOf(row.get("clear")));
+
+                    alertList.add(alertBean);
+                }
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
+        }
+        return alertList;
+    }
+
     public ArrayList<Object> getDashboardData()
     {
         ArrayList<Object> dashboardData = new ArrayList<>();
@@ -140,7 +199,7 @@ public class GetData
 
         try
         {
-            //1. Monitor Availability
+            //1 Monitor Availability
 
             //QueryStart
 
@@ -152,11 +211,13 @@ public class GetData
 
             //QueryEnd
 
+            int down = 0;
+
             List<Integer> availability = null;
 
             if (!data.isEmpty())
             {
-                int up = 0, down = 0, unrechable = 0, total;
+                int up = 0, unrechable = 0, total;
 
                 for (HashMap<String, String> row : data)
                 {
@@ -287,6 +348,76 @@ public class GetData
             List<HashMap<String, String>> dataTopDisk = database.select(query, new ArrayList<>());
 
             dashboardData.add(dataTopDisk);
+
+            // 6. monitor health
+
+            int unreachable = 0, critical = 0, warning = 0, clear = 0;
+
+            query = "select max(rtt) as rtt from pollingmonitor inner join pingdump on pollingmonitor.id=pingdump.id where type='ping' and pollingtime in (select max(pollingtime) from pingdump inner join pollingmonitor on pingdump.id=pollingmonitor.id group by pollingmonitor.ip) group by pingdump.id";
+
+            List<HashMap<String, String>> pingTypeHealth = database.select(query, new ArrayList<>());
+
+            query = "select * from alerts where type='ping'";
+
+            List<HashMap<String, String>> criteria = database.select(query, new ArrayList<>());
+
+            for (HashMap<String, String> row : pingTypeHealth)
+            {
+                if (!criteria.isEmpty())
+                {
+                    if (Integer.parseInt(row.get("rtt")) > Integer.parseInt(criteria.get(0).get("critical")))
+                    {
+                        critical++;
+
+                    } else if (Integer.parseInt(row.get("rtt")) > Integer.parseInt(criteria.get(0).get("warning")))
+                    {
+                        warning++;
+
+                    } else
+                    {
+                        clear++;
+                    }
+                }
+            }
+
+            query = "select max(cpu) as cpu from pollingmonitor inner join sshdump on pollingmonitor.id=sshdump.id where type='ssh' and pollingtime in (select max(pollingtime) from sshdump inner join pollingmonitor on sshdump.id=pollingmonitor.id group by pollingmonitor.ip) group by sshdump.id";
+
+            List<HashMap<String, String>> sshTypeHealth = database.select(query, new ArrayList<>());
+
+            query = "select * from alerts where type='ssh' and metric='CPU'";
+
+            criteria = database.select(query, new ArrayList<>());
+
+            for (HashMap<String, String> row : sshTypeHealth)
+            {
+                if (!criteria.isEmpty())
+                {
+                    if (Integer.parseInt(row.get("cpu")) > Integer.parseInt(criteria.get(0).get("critical")))
+                    {
+                        critical++;
+
+                    } else if (Integer.parseInt(row.get("cpu")) > Integer.parseInt(criteria.get(0).get("warning")))
+                    {
+                        warning++;
+
+                    } else
+                    {
+                        clear++;
+                    }
+                }
+            }
+
+            ArrayList<Object> health=new ArrayList<>();
+
+            health.add(down);
+
+            health.add(critical);
+
+            health.add(warning);
+
+            health.add(clear);
+
+            dashboardData.add(health);
 
         } catch (Exception e)
         {
@@ -538,7 +669,7 @@ public class GetData
             if (!reader.ready()) Thread.sleep(5000);
 
             while (reader.ready() && (line = reader.readLine()) != null) outputString += line;
-            
+
             if (outputString.contains("statistics"))
             {
                 outputString = outputString.substring(outputString.indexOf("statistics"));
@@ -758,4 +889,5 @@ public class GetData
         }
         return pollingSshBean;
     }
+
 }
