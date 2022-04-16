@@ -3,9 +3,12 @@ package com.motadata.kernel.executor;
 import com.motadata.kernel.bean.MonitorBean;
 import com.motadata.kernel.dao.Database;
 import com.motadata.kernel.helper.*;
+import com.motadata.kernel.helper.autodiscovery.AutoDiscover;
 import com.motadata.kernel.helper.discovery.Producer;
+import org.apache.commons.net.util.SubnetUtils;
 import org.apache.struts2.ServletActionContext;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -22,6 +25,49 @@ public class MonitorExecutor
         } catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public static void autoDiscover(MonitorBean monitorBean)
+    {
+
+        SubnetUtils utils = new SubnetUtils(monitorBean.getIpWithCider());
+
+        String[] allIps = utils.getInfo().getAllAddresses();
+
+        Database database = null;
+
+        try
+        {
+            database = new Database();
+
+            for (String ip : allIps)
+            {
+                String query = "select * from monitor where ip=? and type=?";
+
+                ArrayList<Object> values = new ArrayList<>(Arrays.asList(ip, "ping"));
+
+                List<HashMap<String, String>> data = database.select(query, values);
+
+                if (data.isEmpty())
+                {
+                    HttpServletRequest request = ServletActionContext.getRequest();
+
+                    HttpSession session = request.getSession(false);
+
+                    PoolUtil.forkJoinPoolDiscover.execute(new AutoDiscover(ip,session.getId()));
+                }
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
         }
     }
 

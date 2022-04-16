@@ -13,6 +13,26 @@ var discoverymain = {
         helperMain.ajaxpost(request);
     },
 
+    autodiscover: function ()
+    {
+        var ipWithCider = $('#ipwithcider').val();
+
+        let param = {
+            ipWithCider: ipWithCider,
+        };
+
+        let request = {
+
+            url: "autodiscover",
+
+            data: param,
+
+            callback: discoverycallback.autodiscover,
+        };
+        helperMain.ajaxpost(request);
+
+        $("#myModalDiscover").hide();
+    },
     add: function ()
     {
         let param = $('#monitor').serializeArray().reduce(function (finalParam, currentValue)
@@ -39,6 +59,7 @@ var discoverymain = {
 
     adddiscovery: function (that)
     {
+        $("#au")
         let id = $(that).data("id");
 
         let sdata = {
@@ -200,11 +221,20 @@ var discoveryhelper = {
         $("#myModal").show();
     },
 
+    autodiscover: function ()
+    {
+        $("#myModalDiscover").show();
+    },
+
     closeadd: function ()
     {
         $("#myModal").hide();
     },
 
+    closediscover: function ()
+    {
+        $("#myModalDiscover").hide();
+    },
     closeupdate: function ()
     {
         $("#myModalUpdate").hide();
@@ -250,6 +280,12 @@ var discoverycallback = {
         toastr.success(data.status);
     },
 
+    autodiscover: function ()
+    {
+        profilemain.discovery();
+
+        toastr.success(data.status);
+    },
     adddiscovery: function (data)
     {
         toastr.success(data.status);

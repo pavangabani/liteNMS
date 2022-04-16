@@ -21,6 +21,8 @@ public class MonitorBean
 
     private String status;
 
+    private String ipWithCider;
+
     List<MonitorBean> monitorList = new ArrayList<>();
 
     public String getId()
@@ -46,6 +48,16 @@ public class MonitorBean
     public String getIp()
     {
         return ip;
+    }
+
+    public String getIpWithCider()
+    {
+        return ipWithCider;
+    }
+
+    public void setIpWithCider(String ipWithCider)
+    {
+        this.ipWithCider = ipWithCider;
     }
 
     public void setIp(String ip)

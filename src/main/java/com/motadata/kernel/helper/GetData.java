@@ -400,7 +400,7 @@ public class GetData
                     {
                         warning++;
 
-                    } else
+                    } else if (Integer.parseInt(row.get("cpu"))>0 && Integer.parseInt(row.get("cpu")) < Integer.parseInt(criteria.get(0).get("clear")))
                     {
                         clear++;
                     }
@@ -415,10 +415,9 @@ public class GetData
 
             health.add(warning);
 
-            health.add(clear);
+            health.add(clear-down);
 
             dashboardData.add(health);
-
         } catch (Exception e)
         {
             e.printStackTrace();

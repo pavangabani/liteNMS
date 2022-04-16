@@ -34,6 +34,14 @@ public class MonitorAction implements ModelDriven<MonitorBean>
         return "ADDED";
     }
 
+    public String autoDiscover()
+    {
+
+        MonitorExecutor.autoDiscover(monitorBean);
+
+        return "DISCOVERED";
+    }
+
     public String addDiscovery()
     {
         try

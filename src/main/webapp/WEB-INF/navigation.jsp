@@ -52,7 +52,7 @@
 <div id="status" class="allalert" style="display:none;">
     <p id="message" style="padding-left:30px;padding-right:50px;color: black"></p>
 </div>
-<div id="deletebox" class="allalert" style="display:none;">
+<div id="deletebox" class="allalert" style="display:none;position: absolute;">
     <span>Do you want to delete?</span>
     <input type="button" id="yes" value="Yes" onclick="discoveryhelper.yes()"/>
     <input type="button" id="no" value="No" onclick="discoveryhelper.no()"/>
@@ -65,5 +65,6 @@
     <input type="button"  value="No" onclick="monitorhelper.no()"/>
     <p style="display: none" id="deleteidm"></p>
 </div>
+<div id="autodiscovery" class="allalert" style="display:none;"><input type="button"  value="Auto Discovery" onclick="monitorhelper.yes()"/></div>
 <div id="mainDiv"></div>
 

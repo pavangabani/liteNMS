@@ -4,6 +4,7 @@ com/motadata/kernel/action/MonitorAction.class
 com/motadata/kernel/bean/LoginBean.class
 com/motadata/kernel/helper/PoolUtil.class
 com/motadata/kernel/helper/discovery/Consumer.class
+com/motadata/kernel/bean/AlertBean.class
 com/motadata/kernel/bean/PollingMonitorBean.class
 com/motadata/kernel/dao/ConnectionPool.class
 com/motadata/kernel/helper/discovery/Discovery.class
@@ -22,11 +23,14 @@ com/motadata/kernel/helper/discovery/ServerEndPoint.class
 com/motadata/kernel/action/DashboardAction.class
 com/motadata/kernel/helper/polling/SshThread.class
 com/motadata/kernel/helper/Cipher.class
+com/motadata/kernel/helper/autodiscovery/AutoDiscover.class
 com/motadata/kernel/dao/Database.class
 com/motadata/kernel/action/PollingMonitorAction.class
+com/motadata/kernel/action/AlertAction.class
 com/motadata/kernel/bean/MonitorBean.class
 com/motadata/kernel/executor/MonitorExecutor.class
 com/motadata/kernel/helper/SessionInterceptor.class
 com/motadata/kernel/helper/polling/PollingJob.class
 com/motadata/kernel/helper/GetData.class
+com/motadata/kernel/executor/AlertExecutor.class
 com/motadata/kernel/helper/polling/PollingScheduler.class

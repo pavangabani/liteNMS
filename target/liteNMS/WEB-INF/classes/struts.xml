@@ -62,6 +62,10 @@
             <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>
         </action>
+        <action name="autodiscover" class="com.motadata.kernel.action.MonitorAction" method="autoDiscover">
+            <interceptor-ref name="loginSession"/>
+            <result name="DISCOVERED" type="json"/>
+        </action>
         <action name="AddPolling" class="com.motadata.kernel.action.MonitorAction" method="addDiscovery">
             <interceptor-ref name="loginSession"/>
             <result name="ADDED" type="json"/>

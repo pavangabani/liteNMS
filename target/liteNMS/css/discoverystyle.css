@@ -14,6 +14,15 @@
     border-radius: 4px;
     box-sizing: border-box;
 }
+#myModalDiscover input,#myModalDiscover select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 #myModalUpdate input, #myModalUpdate select {
     width: 100%;
     padding: 12px 20px;
@@ -162,6 +171,33 @@ button:hover {
     transition: opacity 0.6s;
     margin-bottom: 15px;
 }
-
+#autodiscovery {
+    position: fixed;
+    right: 10px;
+    top:90px;
+    padding: 0px 0px;
+    background-color: lightgray;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+}
 .alert.success {background-color: #04AA6D;}
 .alert.warning {background-color: #ff9800;}
+
+#autodiscoveryb {
+    transition: all .5s ease;
+    color: black;
+    border: 2px solid midnightblue;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1;
+    font-size: 12px;
+    background-color : transparent;
+    padding: 10px;
+    outline: none;
+    border-radius: 2px;
+}
+button:hover {
+    color: #001F3F;
+    background-color: darkgray;
+}
