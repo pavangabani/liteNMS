@@ -44,6 +44,36 @@ public class PollingMonitorExecutor
         }
     }
 
+    public static void emailAlerts(PollingMonitorBean pollingMonitorBean)
+    {
+        Database database = null;
+
+        try
+        {
+            //QueryStart
+
+            database = new Database();
+
+            String query = "update emailalerts set email=? where id=1";
+
+            ArrayList<Object> values = new ArrayList<>(Arrays.asList(pollingMonitorBean.getEmail()));
+
+            database.update(query, values);
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+
+        } finally
+        {
+            if (database != null)
+            {
+                database.releaseConnection();
+            }
+        }
+    }
+
+
     public static void delete(PollingMonitorBean pollingMonitorBean)
     {
         Database database = null;
@@ -83,7 +113,7 @@ public class PollingMonitorExecutor
         {
             e.printStackTrace();
 
-        }finally
+        } finally
         {
             if (database != null)
             {

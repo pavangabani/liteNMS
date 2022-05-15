@@ -48,6 +48,26 @@ var monitormain = {
             callback: monitorcallback.deletemonitor,
         };
         helperMain.ajaxpost(request);
+    },
+    emailalerts:function () {
+
+        var email = $('#email').val();
+
+        let param = {
+            email: email,
+        };
+
+        let request = {
+
+            url: "emailalerts",
+
+            data: param,
+
+            callback: monitorcallback.emailalerts,
+        };
+        helperMain.ajaxpost(request);
+
+        $("#myalertsmodal").hide();
     }
 };
 
@@ -132,6 +152,14 @@ var monitorhelper = {
         $("#myModalStatistic").show();
     },
 
+    emailalerts : function ()
+    {
+        $("#myalertsmodal").show();
+    },
+    closealert : function ()
+    {
+        $("#myalertsmodal").hide();
+    },
     close: function ()
     {
         $("#myModalStatistic").hide();

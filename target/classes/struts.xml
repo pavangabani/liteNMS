@@ -101,6 +101,10 @@
             <interceptor-ref name="loginSession"/>
             <result name="LOADED" type="json"/>
         </action>
+        <action name="emailalerts" class="com.motadata.kernel.action.PollingMonitorAction" method="emailAlerts">
+            <interceptor-ref name="loginSession"/>
+            <result name="EMAILUPDATED" type="json"/>
+        </action>
         <action name="PollingStatistic" class="com.motadata.kernel.action.PollingMonitorAction" method="show">
             <interceptor-ref name="loginSession"/>
             <result name="SHOW" type="json"/>

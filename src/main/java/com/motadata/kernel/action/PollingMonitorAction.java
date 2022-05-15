@@ -33,6 +33,18 @@ public class PollingMonitorAction implements ModelDriven<PollingMonitorBean>
         }
         return "SHOW";
     }
+    public String emailAlerts()
+    {
+        try
+        {
+            PollingMonitorExecutor.emailAlerts(pollingMonitorBean);
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "EMAILUPDATED";
+    }
 
     public String delete()
     {

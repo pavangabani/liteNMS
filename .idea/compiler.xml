@@ -9,5 +9,8 @@
         <module name="liteNMS" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="liteNMS" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

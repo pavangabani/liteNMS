@@ -20,6 +20,8 @@ public class PollingMonitorBean
 
     private String availability;
 
+    private String email;
+
     private List<PollingMonitorBean> pollingMonitorBeanList = new ArrayList<>();
 
     private HashMap<String, Object> pingStatistic = new HashMap<>();
@@ -125,4 +127,13 @@ public class PollingMonitorBean
         this.sshStatistic = sshStatistic;
     }
 
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
 }

@@ -400,14 +400,14 @@ public class GetData
                     {
                         warning++;
 
-                    } else if (Integer.parseInt(row.get("cpu"))>0 && Integer.parseInt(row.get("cpu")) < Integer.parseInt(criteria.get(0).get("clear")))
+                    } else if (Integer.parseInt(row.get("cpu")) > 0 && Integer.parseInt(row.get("cpu")) < Integer.parseInt(criteria.get(0).get("clear")))
                     {
                         clear++;
                     }
                 }
             }
 
-            ArrayList<Object> health=new ArrayList<>();
+            ArrayList<Object> health = new ArrayList<>();
 
             health.add(down);
 
@@ -415,9 +415,35 @@ public class GetData
 
             health.add(warning);
 
-            health.add(clear-down);
+            if (clear > 1)
+            {
+               new Thread(()->{
+
+                   String subject = "Alert From LiteNMS";
+
+                   String message = "More than 1 monitor clear";
+
+                   Mail mailer = new Mail();
+
+                   try
+                   {
+                       mailer.sendPlainTextEmail(subject, message);
+
+                       System.out.println("Email sent.");
+
+                   } catch (Exception ex)
+                   {
+                       System.out.println("Failed to sent email.");
+
+                       ex.printStackTrace();
+                   }
+
+               }).start();
+            }
+            health.add(clear - down);
 
             dashboardData.add(health);
+
         } catch (Exception e)
         {
             e.printStackTrace();

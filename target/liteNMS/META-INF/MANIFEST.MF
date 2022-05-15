@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
+Built-By: root
 Created-By: IntelliJ IDEA
-Built-By: pavan
-Build-Jdk: Oracle OpenJDK version 1.8.0_251
+Build-Jdk: 1.8.0_251
 
