@@ -17,13 +17,13 @@ public class ConnectionPool
     {
         try
         {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.h2.Driver");
 
             for (int i = 0; i < size; i++)
             {
                 try
                 {
-                    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/liteNMS", "root", "Mind@123");
+                    Connection connection = DriverManager.getConnection("jdbc:h2:/home/pavan/Desktop/Motadata/pavan/Project/liteNMS;DATABASE_TO_UPPER=false;IGNORECASE=FALSE;", "pavan", "pavan");
 
                     connectionsPool.add(connection);
 

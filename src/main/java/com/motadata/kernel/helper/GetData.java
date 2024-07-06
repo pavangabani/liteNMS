@@ -205,7 +205,7 @@ public class GetData
 
             database = new Database();
 
-            String query = "select count(*), availability from pollingmonitor group by availability;";
+            String query = "select COUNT(*), availability from pollingmonitor group by availability;";
 
             List<HashMap<String, String>> data = database.select(query, new ArrayList<>());
 
@@ -225,15 +225,15 @@ public class GetData
 
                     if (status.equals("UP"))
                     {
-                        up = Integer.parseInt(row.get("count(*)"));
+                        up = Integer.parseInt(row.get("COUNT(*)"));
                     }
                     if (status.equals("DOWN"))
                     {
-                        down = Integer.parseInt(row.get("count(*)"));
+                        down = Integer.parseInt(row.get("COUNT(*)"));
                     }
                     if (status.equals("Unknown"))
                     {
-                        unrechable = Integer.parseInt(row.get("count(*)"));
+                        unrechable = Integer.parseInt(row.get("COUNT(*)"));
                     }
                 }
                 total = up + down + unrechable;
@@ -247,7 +247,7 @@ public class GetData
 
             //QueryStart
 
-            query = "select count(*),availability,type from pollingmonitor group by type, availability";
+            query = "select COUNT(*),availability,type from pollingmonitor group by type, availability";
 
             data = database.select(query, new ArrayList<>());
 
@@ -267,21 +267,21 @@ public class GetData
                     {
                         if (row.get("availability").equals("UP"))
                         {
-                            pingUp += Integer.parseInt(row.get("count(*)"));
+                            pingUp += Integer.parseInt(row.get("COUNT(*)"));
 
                         } else if (row.get("availability").equals("DOWN"))
                         {
-                            pingDown += Integer.parseInt(row.get("count(*)"));
+                            pingDown += Integer.parseInt(row.get("COUNT(*)"));
                         }
                     } else
                     {
                         if (row.get("availability").equals("UP"))
                         {
-                            sshUp += Integer.parseInt(row.get("count(*)"));
+                            sshUp += Integer.parseInt(row.get("COUNT(*)"));
 
                         } else if (row.get("availability").equals("DOWN"))
                         {
-                            sshDown += Integer.parseInt(row.get("count(*)"));
+                            sshDown += Integer.parseInt(row.get("COUNT(*)"));
                         }
                     }
                 }
@@ -615,7 +615,7 @@ public class GetData
 
             database = new Database();
 
-            String query = "select count(*),packetloss from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=? group by packetloss";
+            String query = "select COUNT(*),packetloss from pingdump where pollingtime BETWEEN '" + lastDayTimestamp + "' AND '" + currentTimeStamp + "' AND id=? group by packetloss";
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(id));
 
@@ -635,11 +635,11 @@ public class GetData
 
                     if (packetloss <= PACKET_LOSS)
                     {
-                        pieUp += Integer.parseInt(row.get("count(*)"));
+                        pieUp += Integer.parseInt(row.get("COUNT(*)"));
 
                     } else
                     {
-                        pieDown += Integer.parseInt(row.get("count(*)"));
+                        pieDown += Integer.parseInt(row.get("COUNT(*)"));
                     }
                 }
 

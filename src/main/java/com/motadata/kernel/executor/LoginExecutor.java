@@ -22,7 +22,7 @@ public class LoginExecutor
 
             database = new Database();
 
-            String query = "select * from login where user=? AND pass=?";
+            String query = "select * from login where `user`=? AND pass=?";
 
             ArrayList<Object> values = new ArrayList<>(Arrays.asList(loginBean.getUsername(), password));
 
